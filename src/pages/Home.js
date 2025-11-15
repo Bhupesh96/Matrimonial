@@ -1,4 +1,4 @@
-import React from "react";
+import React, { useState, useEffect } from "react"; // <-- 1. Import hooks
 import Footer from "../components/Footer";
 import Preloader from "../components/Preloader";
 import PoopUpSearch from "../components/PoopUpSearch";
@@ -25,9 +25,29 @@ import FindMatchSection from "../components/FindMatchSection";
 import CopyRight from "../components/CopyRight";
 
 const Home = () => {
+  // 2. Add loading state, default to true
+  const [loading, setLoading] = useState(true);
+
+  // 3. Use useEffect to run code once when the component mounts
+  useEffect(() => {
+    // This simulates a 1.5 second page load (1500 milliseconds)
+    const timer = setTimeout(() => {
+      setLoading(false);
+    }, 1500);
+
+    // This is a cleanup function to prevent memory leaks
+    return () => clearTimeout(timer);
+  }, []); // The empty array [] means this effect runs only once
+
+  // 4. If loading is true, show ONLY the preloader
+  if (loading) {
+    return <Preloader />;
+  }
+
+  // 5. When loading is false, show the full page
   return (
     <div>
-      <Preloader />
+      {/* <Preloader /> <-- Removed from here */}
       <PoopUpSearch />
       <TopMenu />
       <MenuPopUp />

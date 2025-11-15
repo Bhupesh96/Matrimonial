@@ -12,7 +12,7 @@ const FindMatchSection = () => {
                   fringilla. Lorem Ipsum is simply dummy text of the printing
                   and typesetting industry.
                 </p>
-                <a href="sign-up.html" className="cta-3">
+                <a href="/sign-up" className="cta-3">
                   Register Now
                 </a>
                 <a href="sign-up.html" className="cta-4">

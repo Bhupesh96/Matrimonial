@@ -11,13 +11,13 @@ const TopMenu = () => {
                 </a>
               </li>
               <li>
-                <a href="about.html">About</a>
+                <a href="/about">About</a>
               </li>
-              <li>
+              {/* <li>
                 <a href="faq.html">FAQ</a>
-              </li>
+              </li> */}
               <li>
-                <a href="contact.html">Contact</a>
+                <a href="/contact">Contact</a>
               </li>
             </ul>
           </div>

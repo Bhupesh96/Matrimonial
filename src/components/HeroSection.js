@@ -1,6 +1,35 @@
-import React from "react";
+import React, { useState, useEffect } from "react";
 
+// Base API URL for all master data lookups
+import { fetchMasterData } from "../api";
 const HeroSection = () => {
+  // 1. State for Genders, Religions, and Cities
+  const [genders, setGenders] = useState([]);
+  const [religions, setReligions] = useState([]);
+  const [cities, setCities] = useState([]);
+
+  // 2. useEffect to fetch data on component mount
+  useEffect(() => {
+    // Fetch Genders for the "I'm looking for" dropdown
+    fetchMasterData("genders").then(setGenders);
+
+    // Fetch Religions
+    fetchMasterData("religions").then(setReligions);
+
+    // Fetch Cities
+    fetchMasterData("cities").then(setCities);
+  }, []); // The empty dependency array [] ensures this runs only once
+
+  // Function to render dropdown options dynamically
+  const renderOptions = (data) => {
+    // Assuming each item in the data array has 'id' and 'name' properties
+    return data.map((item) => (
+      <option key={item.id} value={item.id}>
+        {item.name}
+      </option>
+    ));
+  };
+
   return (
     <section>
       <div className="str">
@@ -23,17 +52,18 @@ const HeroSection = () => {
                 <div className="ban-search chosenini">
                   <form>
                     <ul>
+                      {/* --- I'm looking for (Genders) --- */}
                       <li className="sr-look">
                         <div className="form-group">
                           <label>I'm looking for</label>
                           <select className="chosen-select">
                             <option value="">I'm looking for</option>
-                            <option value="Men">Men</option>
-                            <option value="Women">Women</option>
+                            {renderOptions(genders)}
                           </select>
                         </div>
                       </li>
 
+                      {/* --- Age (Stays static as it's not from the master API) --- */}
                       <li className="sr-age">
                         <div className="form-group">
                           <label>Age</label>
@@ -51,30 +81,28 @@ const HeroSection = () => {
                         </div>
                       </li>
 
+                      {/* --- Religion --- */}
                       <li className="sr-reli">
                         <div className="form-group">
                           <label>Religion</label>
                           <select className="chosen-select">
-                            <option>Religion</option>
-                            <option>Any</option>
-                            <option>Hindu</option>
-                            <option>Muslim</option>
-                            <option>Jain</option>
-                            <option>Christian</option>
+                            <option value="">Religion</option>
+                            {/* Static 'Any' option for convenience */}
+                            <option value="Any">Any</option>
+                            {renderOptions(religions)}
                           </select>
                         </div>
                       </li>
 
+                      {/* --- City --- */}
                       <li className="sr-cit">
                         <div className="form-group">
                           <label>City</label>
                           <select className="chosen-select">
-                            <option>Location</option>
-                            <option>Any location</option>
-                            <option>Chennai</option>
-                            <option>New York</option>
-                            <option>Perth</option>
-                            <option>London</option>
+                            <option value="">Location</option>
+                            {/* Static 'Any location' option for convenience */}
+                            <option value="Any location">Any location</option>
+                            {renderOptions(cities)}
                           </select>
                         </div>
                       </li>
