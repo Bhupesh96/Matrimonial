@@ -11,6 +11,10 @@ import Contact from "./pages/Contact";
 import { ToastContainer } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
 import UserProfileEdit from "./pages/UserProfileEdit";
+import "slick-carousel/slick/slick.css";
+import "slick-carousel/slick/slick-theme.css";
+import UserProfile from "./pages/UserProfile";
+
 function App() {
   return (
     <Router>
@@ -37,6 +41,7 @@ function App() {
         <Route path="/contact" element={<Contact />} />
         <Route path="/all-profiles" element={<AllProfiles />} />
         <Route path="/blog-detail" element={<BolgDetail />} />
+        <Route path="/user-profile" element={<UserProfile />} />
         <Route path="/user-profile-edit" element={<UserProfileEdit />} />
         {/* Catch-all route for invalid paths */}
         <Route path="*" element={<InvalidRoute />} />

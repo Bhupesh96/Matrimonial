@@ -34,7 +34,7 @@ const AboutSection2 = () => {
                     loading="lazy"
                   />
                   <h4>Most trusted</h4>
-                  <p>The most trusted wedding matrimony brand lorem</p>
+                  <p>The most trusted Dewangan Shadi brand lorem</p>
                 </div>
               </li>
               <li>

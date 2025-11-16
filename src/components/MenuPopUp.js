@@ -16,9 +16,9 @@ const MenuPopUp = () => {
         />
 
         <p>
-          <strong>Best Wedding Matrimony</strong> lacinia viverra lectus. Fusce
-          imperdiet ullamcorper metus eu fringilla. Lorem Ipsum is simply dummy
-          text of the printing and typesetting industry.
+          <strong>Best Dewangan Shadi Platform</strong> lacinia viverra lectus.
+          Fusce imperdiet ullamcorper metus eu fringilla. Lorem Ipsum is simply
+          dummy text of the printing and typesetting industry.
         </p>
 
         <ul className="menu-pop-info">

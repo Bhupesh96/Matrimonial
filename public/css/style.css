@@ -1,8 +1,8 @@
 /*-----------------------------------------
  [MASTER STYLE SHEET]
- * THEME NAME - Wedding Matrimony HTML5 Template
+ * THEME NAME - Dewangan Shadi HTML5 Template
  * Author: RN53 Themes
- * Descriptios: Wedding Matrimony HTML5 Template. Can be Used For Various Perposes.
+ * Descriptios: Dewangan Shadi HTML5 Template. Can be Used For Various Perposes.
  * Version: v1
  -----------------------------------------------*/
 /*-------------------------------------------------
@@ -699,8 +699,10 @@ img {
 }
 
 .hom-nav .ic-logo {
-  width: 230px;
-  padding-top: 2px;
+  width: 180px;
+  height: 50px;
+  padding-top: 0px;
+  margin-left: 10px;
 }
 
 .hom-nav .bl {

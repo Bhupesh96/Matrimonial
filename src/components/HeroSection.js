@@ -46,7 +46,14 @@ const HeroSection = () => {
                     <br />
                     <b>Right Match</b> here
                   </h1>
-                  <p>Most trusted Matrimony Brand in the World.</p>
+                  <p>
+                    The Most Trusted Matrimony Brand—Where Relationships Begin
+                    with Trust.
+                  </p>
+                  <p style={{ marginTop: "-15px" }}>
+                    सबसे विश्वसनीय विवाह मंच — जहाँ रिश्ते भरोसे से शुरू होते
+                    हैं।
+                  </p>
                 </div>
 
                 <div className="ban-search chosenini">

@@ -105,3 +105,18 @@ export const updateProfile = async (profileData) => {
 
   return data;
 };
+// ---------------------------
+// GET ALL PROFILES LIST
+// ---------------------------
+export const fetchAllProfiles = async () => {
+  const url = `/api?api=get_list`;
+
+  const res = await fetch(url);
+  const data = await res.json();
+
+  if (!res.ok || data.status !== 200) {
+    throw new Error(data.message || "Failed to fetch profiles");
+  }
+
+  return data.data || [];
+};

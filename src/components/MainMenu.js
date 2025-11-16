@@ -1,6 +1,14 @@
-import React from "react";
+import React, { useEffect, useState } from "react";
 
 const MainMenu = () => {
+  const [profileName, setProfileName] = useState("");
+  useEffect(() => {
+    const name = localStorage.getItem("profileName");
+    if (name) {
+      setProfileName(name);
+    }
+  }, []);
+
   return (
     <div className="hom-top">
       <div className="container">
@@ -41,7 +49,7 @@ const MainMenu = () => {
                               </h5>
                               <span className="explor-cta">More details</span>
                               <a
-                                href="all-profiles.html"
+                                href="/all-profiles"
                                 className="fclick"
                               ></a>
                             </div>
@@ -70,150 +78,10 @@ const MainMenu = () => {
                                 Join Now <span>Lorem ipsum dummy</span>
                               </h5>
                               <span className="explor-cta">More details</span>
-                              <a href="plans.html" className="fclick"></a>
+                              <a href="/sign-up" className="fclick"></a>
                             </div>
                           </li>
                         </ul>
-                      </div>
-                    </div>
-                  </div>
-                </li>
-
-                <li className="smenu-pare">
-                  <span className="smenu">All pages</span>
-                  <div className="smenu-open smenu-multi">
-                    <div className="container">
-                      <div className="row">
-                        <div className="multi-col">
-                          <div className="inn">
-                            <h4>Page sets 1</h4>
-                            <ul>
-                              <li>
-                                <a href="all-profiles.html">All profiles</a>
-                              </li>
-                              <li>
-                                <a href="profile-details.html">
-                                  Profile details
-                                </a>
-                              </li>
-                              <li>
-                                <a href="wedding.html">Wedding</a>
-                              </li>
-                              <li>
-                                <a href="wedding-video.html">Wedding video</a>
-                              </li>
-                              <li>
-                                <a href="services.html">Our Services</a>
-                              </li>
-                            </ul>
-                          </div>
-                        </div>
-
-                        <div className="multi-col">
-                          <div className="inn">
-                            <h4>Page sets 2</h4>
-                            <ul>
-                              <li>
-                                <a href="plans.html">Pricing plans</a>
-                              </li>
-                              <li>
-                                <a href="login.html">Login</a>
-                              </li>
-                              <li>
-                                <a href="sign-up.html">Sign-up</a>
-                              </li>
-                              <li>
-                                <a href="photo-gallery.html">Photo gallery</a>
-                              </li>
-                              <li>
-                                <a href="photo-gallery-1.html">
-                                  Photo gallery 1
-                                </a>
-                              </li>
-                            </ul>
-                          </div>
-                        </div>
-
-                        <div className="multi-col">
-                          <div className="inn">
-                            <h4>Page sets 3</h4>
-                            <ul>
-                              <li>
-                                <a href="contact.html">Contact</a>
-                              </li>
-                              <li>
-                                <a href="about.html">About</a>
-                              </li>
-                              <li>
-                                <a href="blog.html">Blog</a>
-                              </li>
-                              <li>
-                                <a href="blog-detail.html">Blog detail</a>
-                              </li>
-                            </ul>
-                          </div>
-                        </div>
-
-                        <div className="multi-col">
-                          <div className="inn">
-                            <h4>Page sets 4</h4>
-                            <ul>
-                              <li>
-                                <a href="enquiry.html">Ask your doubts</a>
-                              </li>
-                              <li>
-                                <a href="make-reservation.html">
-                                  Make Reservation
-                                </a>
-                              </li>
-                              <li>
-                                <a href="faq.html">FAQ</a>
-                              </li>
-                              <li>
-                                <a href="coming-soon.html" target="_blank">
-                                  Coming soon
-                                </a>
-                              </li>
-                              <li>
-                                <a href="404.html">404</a>
-                              </li>
-                            </ul>
-                          </div>
-                        </div>
-
-                        <div className="multi-col full">
-                          <div className="inn">
-                            <h4>User dashboard pages</h4>
-                            <ul>
-                              <li>
-                                <a href="user-dashboard.html">Dashboard</a>
-                              </li>
-                              <li>
-                                <a href="user-profile.html">My profile</a>
-                              </li>
-                              <li>
-                                <a href="user-interests.html">Interests</a>
-                              </li>
-                              <li>
-                                <a href="user-chat.html">Chat lists</a>
-                              </li>
-                              <li>
-                                <a href="user-plan.html">My plan details</a>
-                              </li>
-                              <li>
-                                <a href="user-setting.html">Profile settings</a>
-                              </li>
-                              <li>
-                                <a href="user-profile-edit">
-                                  Edit full profile
-                                </a>
-                              </li>
-                              <li>
-                                <a href="login.html">Sign in</a>
-                              </li>
-                            </ul>
-                          </div>
-                        </div>
                       </div>
                     </div>
                   </div>
@@ -305,15 +173,26 @@ const MainMenu = () => {
             </div>
 
             {/* USER PROFILE */}
-            <div className="al">
-              <div className="head-pro">
-                <img src="images/profiles/1.jpg" alt="" loading="lazy" />
-                <b>Advisor</b>
-                <br />
-                <h4>Ashley emyy</h4>
-                <span className="fclick"></span>
+            {profileName && (
+              <div className="al">
+                <div className="head-pro">
+                  <img src="images/default.png" alt="" loading="lazy" />
+                  <b>User</b>
+                  <br />
+                  <h4
+                    style={{
+                      whiteSpace: "nowrap",
+                      overflow: "visible",
+                      textOverflow: "unset",
+                    }}
+                  >
+                    {profileName}
+                  </h4>
+
+                  <span className="fclick"></span>
+                </div>
               </div>
-            </div>
+            )}
 
             {/* MOBILE MENU */}
             <div className="mob-menu">

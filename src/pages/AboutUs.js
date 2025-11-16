@@ -56,21 +56,21 @@ const AboutUs = () => {
                   <div>
                     <img src="images/icon/prize.png" alt="" />
                     <h4>Genuine profiles</h4>
-                    <p>The most trusted wedding matrimony brand</p>
+                    <p>The most trusted Dewangan Shadi brand</p>
                   </div>
                 </li>
                 <li>
                   <div>
                     <img src="images/icon/trust.png" alt="" />
                     <h4>Most trusted</h4>
-                    <p>The most trusted wedding matrimony brand</p>
+                    <p>The most trusted Dewangan Shadi brand</p>
                   </div>
                 </li>
                 <li>
                   <div>
                     <img src="images/icon/rings.png" alt="" />
                     <h4>2000+ weddings</h4>
-                    <p>The most trusted wedding matrimony brand</p>
+                    <p>The most trusted Dewangan Shadi brand</p>
                   </div>
                 </li>
               </ul>
@@ -95,12 +95,12 @@ const AboutUs = () => {
                 <div className="ab-wel-rhs">
                   <div className="ab-wel-tit">
                     <h2>
-                      Welcome to <em>Wedding matrimony</em>
+                      Welcome to <em>Dewangan Shadi</em>
                     </h2>
                     <p>
-                      Best wedding matrimony It is a long established fact that
-                      a reader will be distracted by the readable content of a
-                      page when looking at its layout.
+                      Best Dewangan Shadi Platform It is a long established fact
+                      that a reader will be distracted by the readable content
+                      of a page when looking at its layout.
                     </p>
                     <p>
                       <a href="plans.html">Click here to</a> Start you matrimony
@@ -109,10 +109,21 @@ const AboutUs = () => {
                   </div>
                   <div className="ab-wel-tit-1">
                     <p>
-                      There are many variations of passages of Lorem Ipsum
-                      available, but the majority have suffered alteration in
-                      some form, by injected humour, or randomised words which
-                      don't look even slightly believable.
+                      There are many ways people describe their partner
+                      preferences, but the true essence of a relationship cannot
+                      be expressed through random words or generic descriptions.
+                      Every profile on our platform reflects real individuals,
+                      real families, and real expectations. We ensure that the
+                      information provided is authentic, meaningful, and helpful
+                      for making the right life decisions.
+                    </p>
+                    <p>
+                      लोग अपने जीवनसाथी की पसंद को कई तरीकों से व्यक्त करते हैं,
+                      लेकिन रिश्ते का वास्तविक मूल्य कुछ यादृच्छिक शब्दों से
+                      नहीं समझा जा सकता। हमारे प्लेटफ़ॉर्म पर हर प्रोफ़ाइल किसी
+                      असली व्यक्ति, असली परिवार और असली उम्मीदों को दर्शाती है।
+                      हम सुनिश्चित करते हैं कि दी गई जानकारी विश्वसनीय, उपयोगी
+                      और आपके जीवन के सही निर्णय में सहायक हो।
                     </p>
                   </div>
                   <div className="ab-wel-tit-2">
@@ -154,21 +165,21 @@ const AboutUs = () => {
                   <div>
                     <img src="images/icon/prize.png" alt="Genuine profiles" />
                     <h4>Genuine profiles</h4>
-                    <p>The most trusted wedding matrimony brand</p>
+                    <p>The most trusted Dewangan Shadi brand</p>
                   </div>
                 </li>
                 <li>
                   <div>
                     <img src="images/icon/trust.png" alt="Most trusted" />
                     <h4>Most trusted</h4>
-                    <p>The most trusted wedding matrimony brand</p>
+                    <p>The most trusted Dewangan Shadi brand</p>
                   </div>
                 </li>
                 <li>
                   <div>
                     <img src="images/icon/rings.png" alt="2000+ weddings" />
                     <h4>2000+ weddings</h4>
-                    <p>The most trusted wedding matrimony brand</p>
+                    <p>The most trusted Dewangan Shadi brand</p>
                   </div>
                 </li>
               </ul>
