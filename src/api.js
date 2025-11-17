@@ -14,44 +14,44 @@ export const fetchMasterData = async (masterType) => {
 };
 
 // ---------------------------
-// CREATE PROFILE
+// CREATE PROFILE  (POST → FormData)
 // ---------------------------
 export const createProfile = async (profileData) => {
+  const formData = new FormData();
+
+  for (let key in profileData) {
+    formData.append(key, profileData[key]);
+  }
+
   const url = `${API_BASE_URL}?api=create_profile`;
 
   const res = await fetch(url, {
     method: "POST",
-    headers: { "Content-Type": "application/json" },
-    body: JSON.stringify(profileData),
+    body: formData,
   });
 
   const data = await res.json();
   if (!res.ok) throw new Error(data.message);
-
   return data;
 };
 
 // ---------------------------
-// LOGIN USER
+// LOGIN USER (POST → FormData)
 // ---------------------------
 export const loginUser = async (credentials) => {
-  const url = `${process.env.REACT_APP_API_URL}?api=user_login`;
+  const formData = new FormData();
+  formData.append("identifier", credentials.identifier);
+  formData.append("password", credentials.password);
+
+  const url = `${API_BASE_URL}?api=user_login`;
 
   const res = await fetch(url, {
     method: "POST",
-    headers: {
-      "Content-Type": "application/json",
-    },
-    body: JSON.stringify({
-      identifier: credentials.identifier,
-      password: credentials.password,
-    }),
+    body: formData,
   });
 
   const data = await res.json();
-
   if (!res.ok) throw new Error(data.message);
-
   return data;
 };
 
@@ -86,36 +86,38 @@ export const getProfileDetails = async () => {
 };
 
 // ---------------------------
-// UPDATE PROFILE
+// UPDATE PROFILE (POST → FormData)
 // ---------------------------
 export const updateProfile = async (profileData) => {
   const profileID = localStorage.getItem("profileID");
   const userID = localStorage.getItem("userID");
 
-  const url = `${API_BASE_URL}?api=update_profile`;
+  const formData = new FormData();
 
-  const body = {
-    ...profileData,
-    ProfileID: profileID,
-    UserID: userID,
-  };
+  for (let key in profileData) {
+    formData.append(key, profileData[key]);
+  }
+
+  formData.append("ProfileID", profileID);
+  formData.append("UserID", userID);
+
+  const url = `${API_BASE_URL}?api=update_profile`;
 
   const res = await fetch(url, {
     method: "POST",
-    headers: { "Content-Type": "application/json" },
-    body: JSON.stringify(body),
+    body: formData,
   });
 
   const data = await res.json();
   if (!res.ok) throw new Error(data.message);
-
   return data;
 };
+
 // ---------------------------
 // GET ALL PROFILES LIST
 // ---------------------------
 export const fetchAllProfiles = async () => {
-  const url = `/api?api=get_list`;
+  const url = `${API_BASE_URL}?api=get_list`;
 
   const res = await fetch(url);
   const data = await res.json();
