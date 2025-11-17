@@ -4,7 +4,7 @@ const ChatBox = () => {
   return (
     <div className="chatbox">
       <span className="comm-msg-pop-clo">
-        <i className="fa fa-times" aria-hidden="true"></i>
+      
       </span>
 
       <div className="inn">
