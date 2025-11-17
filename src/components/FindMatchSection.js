@@ -1,3 +1,5 @@
+import { Link } from "react-router-dom";
+
 const FindMatchSection = () => {
   return (
     <section>
@@ -22,9 +24,8 @@ const FindMatchSection = () => {
                   मैसेजिंग और बेहतर मैच सुझावों के साथ आपका खोज सफ़र अब और भी
                   सुगम और सुरक्षित है।
                 </p>
-                <a href="/sign-up" className="cta-3">
-                  Register Now
-                </a>
+               <Link to="sign-up">Register</Link>
+
                 <a href="/contact" className="cta-4">
                   Help & Support
                 </a>

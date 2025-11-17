@@ -10,6 +10,7 @@ import ProfileListing from "./ProfilesData";
 import Footer from "../components/Footer";
 import CopyRight from "../components/CopyRight";
 import ChatBox from "../components/ChatBox";
+import { Link } from "react-router-dom";
 
 const AllProfiles = () => {
   return (
@@ -26,10 +27,10 @@ const AllProfiles = () => {
           <div className="container">
             <div className="row">
               <h1>Lakhs of Happy Marriages</h1>
-              <a href="/sign-up.html">
-                Join now for Free{" "}
+              <Link to="sign-up">
+                Register Join now for Free{" "}
                 <i className="fa fa-handshake-o" aria-hidden="true"></i>
-              </a>
+              </Link>
             </div>
           </div>
         </div>

@@ -49,10 +49,7 @@ const MainMenu = () => {
                                 <span>1200+ Verified profiles</span>
                               </h5>
                               <span className="explor-cta">More details</span>
-                              <a
-                                href="/all-profiles"
-                                className="fclick"
-                              ></a>
+                              <a href="/all-profiles" className="fclick"></a>
                             </div>
                           </li>
                           <li>
@@ -80,7 +77,6 @@ const MainMenu = () => {
                               </h5>
                               <span className="explor-cta">More details</span>
                               <Link to="sign-up">Register</Link>
-
                             </div>
                           </li>
                         </ul>
@@ -124,7 +120,7 @@ const MainMenu = () => {
                         <a href="login.html">Login</a>
                       </li>
                       <li>
-                        <a href="sign-up.html">Sign-up</a>
+                        <Link to="sign-up">Register</Link>
                       </li>
                       <li>
                         <a href="plans.html">Pricing plans</a>
@@ -137,7 +133,7 @@ const MainMenu = () => {
                   <a href="plans.html">Plans</a>
                 </li>
                 <li>
-                  <a href="/sign-up">Register</a>
+                  <Link to="sign-up">Register</Link>
                 </li>
 
                 <li className="smenu-pare">
