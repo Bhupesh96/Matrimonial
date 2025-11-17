@@ -1,4 +1,5 @@
 import React, { useEffect, useState } from "react";
+import { Link } from "react-router-dom";
 
 const MainMenu = () => {
   const [profileName, setProfileName] = useState("");
@@ -78,7 +79,8 @@ const MainMenu = () => {
                                 Join Now <span>Lorem ipsum dummy</span>
                               </h5>
                               <span className="explor-cta">More details</span>
-                              <a href="/sign-up" className="fclick"></a>
+                              <Link to="sign-up">Register</Link>
+
                             </div>
                           </li>
                         </ul>
