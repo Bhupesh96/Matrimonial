@@ -83,7 +83,7 @@ const CustomerReviews = () => {
                     </div>
                     <p>
                       Lorem Ipsum is simply dummy text of the printing and
-                      typesetting industry. Lorem Ipsum has been the industry's
+                      typesetting izdustry. Lorem Ipsum has been the industry's
                       standard dummy text ever since the 1500s,
                     </p>
                     <h5>Jack danial</h5>

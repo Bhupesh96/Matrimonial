@@ -35,15 +35,21 @@ export const createProfile = async (profileData) => {
 // LOGIN USER
 // ---------------------------
 export const loginUser = async (credentials) => {
-  const url = `${API_BASE_URL}?api=user_login`;
+  const url = `${process.env.REACT_APP_API_URL}?api=user_login`;
 
   const res = await fetch(url, {
     method: "POST",
-    headers: { "Content-Type": "application/json" },
-    body: JSON.stringify(credentials),
+    headers: {
+      "Content-Type": "application/json",
+    },
+    body: JSON.stringify({
+      identifier: credentials.identifier,
+      password: credentials.password,
+    }),
   });
 
   const data = await res.json();
+
   if (!res.ok) throw new Error(data.message);
 
   return data;
