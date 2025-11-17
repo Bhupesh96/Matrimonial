@@ -17,7 +17,7 @@ import UserProfile from "./pages/UserProfile";
 
 function App() {
   return (
-    <Router>
+    <Router basename="/matro">
       <ToastContainer
         position="top-right"
         autoClose={3000}
@@ -28,12 +28,11 @@ function App() {
         newestOnTop
         theme="colored"
         style={{
-          marginTop: "80px", // keeps toast below navbar
+          marginTop: "80px",
         }}
       />
 
       <Routes>
-        {/* Default route */}
         <Route path="/" element={<Home />} />
         <Route path="/sign-up" element={<SignUp />} />
         <Route path="/login" element={<Login />} />
@@ -43,7 +42,6 @@ function App() {
         <Route path="/blog-detail" element={<BolgDetail />} />
         <Route path="/user-profile" element={<UserProfile />} />
         <Route path="/user-profile-edit" element={<UserProfileEdit />} />
-        {/* Catch-all route for invalid paths */}
         <Route path="*" element={<InvalidRoute />} />
       </Routes>
     </Router>
