@@ -33,15 +33,15 @@ function App() {
       />
 
       <Routes>
-        <Route path="/" element={<Home />} />
-        <Route path="/sign-up" element={<SignUp />} />
-        <Route path="/login" element={<Login />} />
-        <Route path="/about" element={<AboutUs />} />
-        <Route path="/contact" element={<Contact />} />
-        <Route path="/all-profiles" element={<AllProfiles />} />
-        <Route path="/blog-detail" element={<BolgDetail />} />
-        <Route path="/user-profile" element={<UserProfile />} />
-        <Route path="/user-profile-edit" element={<UserProfileEdit />} />
+        <Route index element={<Home />} />
+        <Route path="sign-up" element={<SignUp />} />
+        <Route path="login" element={<Login />} />
+        <Route path="about" element={<AboutUs />} />
+        <Route path="contact" element={<Contact />} />
+        <Route path="all-profiles" element={<AllProfiles />} />
+        <Route path="blog-detail" element={<BolgDetail />} />
+        <Route path="user-profile" element={<UserProfile />} />
+        <Route path="user-profile-edit" element={<UserProfileEdit />} />
         <Route path="*" element={<InvalidRoute />} />
       </Routes>
     </Router>
