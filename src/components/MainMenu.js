@@ -22,14 +22,14 @@ const MainMenu = () => {
                 <i></i>
                 <i></i>
               </span>
-              <a href="/" className="logo-brand">
+              <Link to="/" className="logo-brand">
                 <img
                   src="images/logo-b.png"
                   alt=""
                   loading="lazy"
                   className="ic-logo"
                 />
-              </a>
+              </Link>
             </div>
 
             {/* EXPLORE MENU */}

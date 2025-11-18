@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from "react";
-import { useNavigate } from "react-router-dom";
+import { Link, useNavigate } from "react-router-dom";
 
 // 1. Import API functions (ADJUST THIS PATH)
 import { createProfile, fetchMasterData, fetchNextUserID } from "../api"; // <-- Verify this path!
@@ -232,7 +232,7 @@ const SignUp = () => {
                       <h4>Start for free</h4>
                       <h1>Create Your Matrimony Profile</h1>
                       <p>
-                        Already a member? <a href="/login">Login</a>
+                        Already a member? <Link to="/login">Login</Link>
                       </p>
                     </div>
 
