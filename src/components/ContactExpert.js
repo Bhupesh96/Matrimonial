@@ -72,7 +72,7 @@ const ContactExpert = () => {
                 <h5>Long established fact that a reader distracted</h5>
                 <span className="ic-date">12 Dec 2023</span>
               </div>
-              <Link to="/blog-detail" className="fclick"></Link>
+              <Link to="blog-detail" className="fclick"></Link>
             </li>
             <li>
               <div className="rel-pro-img">
@@ -82,7 +82,7 @@ const ContactExpert = () => {
                 <h5>Long established fact that a reader distracted</h5>
                 <span className="ic-date">12 Dec 2023</span>
               </div>
-              <Link to="/blog-detail" className="fclick"></Link>
+              <Link to="blog-detail" className="fclick"></Link>
             </li>
             <li>
               <div className="rel-pro-img">
@@ -92,7 +92,7 @@ const ContactExpert = () => {
                 <h5>Long established fact that a reader distracted</h5>
                 <span className="ic-date">12 Dec 2023</span>
               </div>
-              <Link to="/blog-detail" className="fclick"></Link>
+              <Link to="blog-detail" className="fclick"></Link>
             </li>
           </ul>
         </div>

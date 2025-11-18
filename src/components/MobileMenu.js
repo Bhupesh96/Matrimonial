@@ -14,7 +14,7 @@ const MobileMenu = () => {
         </h4>
         <ul>
           <li>
-            <Link to="/all-profiles">All profiles</Link>
+            <Link to="all-profiles">All profiles</Link>
           </li>
           <li>
             <a href="wedding.html">Wedding page</a>
@@ -32,7 +32,7 @@ const MobileMenu = () => {
         </h4>
         <ul>
           <li>
-           <Link to="/all-profiles">All profiles</Link>
+            <Link to="all-profiles">All profiles</Link>
           </li>
           <li>
             <a href="profile-details.html">Profile details</a>
@@ -50,10 +50,10 @@ const MobileMenu = () => {
             <a href="plans.html">Pricing plans</a>
           </li>
           <li>
-            <Link to="/login">Login</Link>
+            <Link to="login">Login</Link>
           </li>
           <li>
-            <Link to="/sign-up">Sign-up</Link>
+            <Link to="sign-up">Sign-up</Link>
           </li>
           <li>
             <a href="photo-gallery.html">Photo gallery</a>
@@ -62,16 +62,16 @@ const MobileMenu = () => {
             <a href="photo-gallery-1.html">Photo gallery 1</a>
           </li>
           <li>
-            <Link to="/contact">Contact</Link>
+            <Link to="contact">Contact</Link>
           </li>
           <li>
-            <Link to="/about">About</Link>
+            <Link to="about">About</Link>
           </li>
           <li>
             <a href="blog.html">Blog</a>
           </li>
           <li>
-            <Link to="/blog-detail">Blog detail</Link>
+            <Link to="blog-detail">Blog detail</Link>
           </li>
           <li>
             <a href="enquiry.html">Ask your doubts</a>
@@ -156,7 +156,7 @@ const MobileMenu = () => {
                 <h5>Long established fact that a reader distracted</h5>
                 <span className="ic-date">12 Dec 2023</span>
               </div>
-              <Link to="/blog-detail" className="fclick"></Link>
+              <Link to="blog-detail" className="fclick"></Link>
             </li>
             <li>
               <div className="rel-pro-img">
@@ -166,7 +166,7 @@ const MobileMenu = () => {
                 <h5>Long established fact that a reader distracted</h5>
                 <span className="ic-date">12 Dec 2023</span>
               </div>
-              <Link to="/blog-detail" className="fclick"></Link>
+              <Link to="blog-detail" className="fclick"></Link>
             </li>
             <li>
               <div className="rel-pro-img">
@@ -176,7 +176,7 @@ const MobileMenu = () => {
                 <h5>Long established fact that a reader distracted</h5>
                 <span className="ic-date">12 Dec 2023</span>
               </div>
-              <Link to="/blog-detail" className="fclick"></Link>
+              <Link to="blog-detail" className="fclick"></Link>
             </li>
           </ul>
         </div>

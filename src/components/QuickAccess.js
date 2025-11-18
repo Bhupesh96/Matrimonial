@@ -34,7 +34,7 @@ const QuickAccess = () => {
                       <img src="images/icon/user.png" alt="" loading="lazy" />
                       <h4>Browse Profiles</h4>
                       <p>1200+ Profiles</p>
-                      <Link to="/all-profiles">View more</Link>
+                      <Link to="all-profiles">View more</Link>
                     </div>
                   </div>
                 </li>

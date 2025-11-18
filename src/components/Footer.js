@@ -77,7 +77,7 @@ const Footer = () => {
           <p>
             Company name Site - Trusted by over thousands of Boys & Girls for
             successful marriage.{" "}
-            <Link to="/sign-up" className="btn btn-primary btn-sm">
+            <Link to="sign-up" className="btn btn-primary btn-sm">
               Join us today!
             </Link>
           </p>
