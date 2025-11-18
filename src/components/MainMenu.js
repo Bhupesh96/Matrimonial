@@ -90,7 +90,7 @@ const MainMenu = () => {
                   <div className="smenu-open smenu-single">
                     <ul>
                       <li>
-                        <a href="all-profiles.html">All profiles</a>
+                        <Link to="/all-profiles">All profiles</Link>
                       </li>
                       <li>
                         <a href="profile-details.html">Profile details</a>
@@ -102,13 +102,13 @@ const MainMenu = () => {
                         <a href="blog.html">Blog</a>
                       </li>
                       <li>
-                        <a href="blog-detail.html">Blog detail</a>
+                        <Link to="/blog-detail">Blog detail</Link>
                       </li>
                       <li>
-                        <a href="about.html">About</a>
+                        <Link to="/about">About</Link>
                       </li>
                       <li>
-                        <a href="contact.html">Contact</a>
+                        <Link to="/contact">Contact</Link>
                       </li>
                       <li>
                         <a href="photo-gallery.html">Photo gallery</a>
@@ -117,10 +117,10 @@ const MainMenu = () => {
                         <a href="photo-gallery-1.html">Photo gallery 1</a>
                       </li>
                       <li>
-                        <a href="login.html">Login</a>
+                        <Link to="/login">Login</Link>
                       </li>
                       <li>
-                        <Link to="sign-up">Register</Link>
+                        <Link to="/sign-up">Register</Link>
                       </li>
                       <li>
                         <a href="plans.html">Pricing plans</a>
@@ -144,7 +144,7 @@ const MainMenu = () => {
                         <a href="user-dashboard.html">Dashboard</a>
                       </li>
                       <li>
-                        <a href="user-profile.html">My profile</a>
+                        <Link to="/user-profile">My profile</Link>
                       </li>
                       <li>
                         <a href="user-interests.html">Interests</a>
@@ -159,10 +159,10 @@ const MainMenu = () => {
                         <a href="user-setting.html">Profile settings</a>
                       </li>
                       <li>
-                        <a href="user-profile-edit">Edit full profile</a>
+                        <Link to="/user-profile-edit">Edit full profile</Link>
                       </li>
                       <li>
-                        <a href="login.html">Sign in</a>
+                        <Link to="/login">Login</Link>
                       </li>
                     </ul>
                   </div>

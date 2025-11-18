@@ -1,4 +1,5 @@
 import React from "react";
+import { Link } from "react-router-dom";
 
 const QuickAccess = () => {
   return (
@@ -33,7 +34,7 @@ const QuickAccess = () => {
                       <img src="images/icon/user.png" alt="" loading="lazy" />
                       <h4>Browse Profiles</h4>
                       <p>1200+ Profiles</p>
-                      <a href="all-profiles.html">View more</a>
+                      <Link to="/all-profiles">View more</Link>
                     </div>
                   </div>
                 </li>

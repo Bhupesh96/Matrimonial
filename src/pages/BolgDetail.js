@@ -9,6 +9,7 @@ import MobileMenu from "../components/MobileMenu";
 import DashboardMenu from "../components/DashBoardMenu";
 import Footer from "../components/Footer";
 import CopyRight from "../components/CopyRight";
+import { Link } from "react-router-dom";
 
 const BolgDetail = () => {
   return (
@@ -257,7 +258,7 @@ const BolgDetail = () => {
                             <div className="hot-page2-hom-pre-2">
                               <h5>Post Title {i + 1}</h5>
                             </div>
-                            <a href="blog-detail.html" className="fclick"></a>
+                            <Link to="/blog-detail" className="fclick"></Link>
                           </li>
                         ))}
                       </ul>

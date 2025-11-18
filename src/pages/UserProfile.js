@@ -10,6 +10,7 @@ import MobileMenu from "../components/MobileMenu";
 import DashboardMenu from "../components/DashBoardMenu";
 import Footer from "../components/Footer";
 import CopyRight from "../components/CopyRight";
+import { Link } from "react-router-dom";
 
 const API = "/api";
 
@@ -235,8 +236,8 @@ const UserProfile = () => {
           </div>
 
           <div className="col-md-3 text-end mt-4 mt-md-0">
-            <a
-              href="/user-profile-edit"
+            <Link
+              to="/user-profile-edit"
               className="btn text-white fw-semibold px-4 py-2"
               style={{
                 background: "linear-gradient(90deg,#d32163,#ff5a8f)",
@@ -244,7 +245,7 @@ const UserProfile = () => {
               }}
             >
               Edit Profile
-            </a>
+            </Link>
             <br />
             <a
               href="/"

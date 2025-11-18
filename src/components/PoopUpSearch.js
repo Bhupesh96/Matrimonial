@@ -1,3 +1,5 @@
+import { Link } from "react-router-dom";
+
 const PoopUpSearch = () => {
   return (
     <div className="pop-search">
@@ -8,10 +10,10 @@ const PoopUpSearch = () => {
         </form>
         <div className="rel-sear">
           <h4>Top searches:</h4>
-          <a href="all-profiles.html">Browse all profiles</a>
-          <a href="all-profiles.html">Mens profile</a>
-          <a href="all-profiles.html">Female profile</a>
-          <a href="all-profiles.html">New profiles</a>
+          <Link to="/all-profiles">Browse all profiles</Link>
+          <Link to="/all-profiles">Mens profile</Link>
+          <Link to="/all-profiles">Female profile</Link>
+          <Link to="/all-profiles">New profiles</Link>
         </div>
       </div>
     </div>

@@ -1,4 +1,5 @@
 import React from "react";
+import { Link } from "react-router-dom";
 
 const MobileMenu = () => {
   return (
@@ -13,7 +14,7 @@ const MobileMenu = () => {
         </h4>
         <ul>
           <li>
-            <a href="all-profiles.html">Browse profiles</a>
+            <Link to="/all-profiles">All profiles</Link>
           </li>
           <li>
             <a href="wedding.html">Wedding page</a>
@@ -31,7 +32,7 @@ const MobileMenu = () => {
         </h4>
         <ul>
           <li>
-            <a href="all-profiles.html">All profiles</a>
+           <Link to="/all-profiles">All profiles</Link>
           </li>
           <li>
             <a href="profile-details.html">Profile details</a>
@@ -49,10 +50,10 @@ const MobileMenu = () => {
             <a href="plans.html">Pricing plans</a>
           </li>
           <li>
-            <a href="login.html">Login</a>
+            <Link to="/login">Login</Link>
           </li>
           <li>
-            <a href="sign-up.html">Sign-up</a>
+            <Link to="/sign-up">Sign-up</Link>
           </li>
           <li>
             <a href="photo-gallery.html">Photo gallery</a>
@@ -61,16 +62,16 @@ const MobileMenu = () => {
             <a href="photo-gallery-1.html">Photo gallery 1</a>
           </li>
           <li>
-            <a href="contact.html">Contact</a>
+            <Link to="/contact">Contact</Link>
           </li>
           <li>
-            <a href="about.html">About</a>
+            <Link to="/about">About</Link>
           </li>
           <li>
             <a href="blog.html">Blog</a>
           </li>
           <li>
-            <a href="blog-detail.html">Blog detail</a>
+            <Link to="/blog-detail">Blog detail</Link>
           </li>
           <li>
             <a href="enquiry.html">Ask your doubts</a>
@@ -155,7 +156,7 @@ const MobileMenu = () => {
                 <h5>Long established fact that a reader distracted</h5>
                 <span className="ic-date">12 Dec 2023</span>
               </div>
-              <a href="blog-detail.html" className="fclick"></a>
+              <Link to="/blog-detail" className="fclick"></Link>
             </li>
             <li>
               <div className="rel-pro-img">
@@ -165,7 +166,7 @@ const MobileMenu = () => {
                 <h5>Long established fact that a reader distracted</h5>
                 <span className="ic-date">12 Dec 2023</span>
               </div>
-              <a href="blog-detail.html" className="fclick"></a>
+              <Link to="/blog-detail" className="fclick"></Link>
             </li>
             <li>
               <div className="rel-pro-img">
@@ -175,7 +176,7 @@ const MobileMenu = () => {
                 <h5>Long established fact that a reader distracted</h5>
                 <span className="ic-date">12 Dec 2023</span>
               </div>
-              <a href="blog-detail.html" className="fclick"></a>
+              <Link to="/blog-detail" className="fclick"></Link>
             </li>
           </ul>
         </div>

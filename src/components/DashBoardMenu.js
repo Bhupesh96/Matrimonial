@@ -1,4 +1,5 @@
 import React from "react";
+import { Link } from "react-router-dom";
 
 const DashboardMenu = () => {
   return (
@@ -15,16 +16,16 @@ const DashboardMenu = () => {
         </div>
         <ul>
           <li>
-            <a href="login.html">Login</a>
+            <Link to="/login">Login</Link>
           </li>
           <li>
-            <a href="sign-up.html">Sign-up</a>
+            <Link to="/sign-up">Sign-up</Link>
           </li>
           <li>
-            <a href="plans.html">Pricing plans</a>
+            <Link to="/plans">Pricing plans</Link>
           </li>
           <li>
-            <a href="all-profiles.html">Browse profiles</a>
+            <Link to="/all-profiles">Browse profiles</Link>
           </li>
         </ul>
       </div>

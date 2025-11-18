@@ -1,4 +1,5 @@
 import React from "react";
+import { Link } from "react-router-dom";
 
 const Footer = () => {
   return (
@@ -76,9 +77,9 @@ const Footer = () => {
           <p>
             Company name Site - Trusted by over thousands of Boys & Girls for
             successful marriage.{" "}
-            <a href="sign-up.html" className="btn btn-primary btn-sm">
+            <Link to="/sign-up" className="btn btn-primary btn-sm">
               Join us today!
-            </a>
+            </Link>
           </p>
         </div>
       </div>
