@@ -39,12 +39,13 @@ const Login = () => {
     try {
       // 4. Call the API
       const data = await loginUser({ identifier, password });
-
+      console.log("LOGIN API RESPONSE:", data);
       // 5. On successful login:
 
       // --- THIS IS THE MOST IMPORTANT PART ---
       // Your PHP script returns the user in a 'data' object.
       if (data.data && data.data.ProfileID) {
+        console.log("Saving to LocalStorage:", data.data);
         localStorage.setItem("profileID", data.data.ProfileID);
         localStorage.setItem("userID", data.data.UserID);
         localStorage.setItem("profileName", data.data.ProfileName);

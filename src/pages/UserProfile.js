@@ -12,7 +12,7 @@ import Footer from "../components/Footer";
 import CopyRight from "../components/CopyRight";
 import { Link } from "react-router-dom";
 
-const API = "/api";
+const API = process.env.REACT_APP_API_URL;
 
 // master types (lowercase)
 const masterTypes = [
