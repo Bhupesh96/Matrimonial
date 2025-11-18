@@ -17,8 +17,7 @@ import UserProfile from "./pages/UserProfile";
 
 function App() {
   return (
-    // <Router>
-      <Router basename={process.env.REACT_APP_BASENAME}>
+    <Router basename={process.env.REACT_APP_BASENAME}>
       <ToastContainer
         position="top-right"
         autoClose={3000}

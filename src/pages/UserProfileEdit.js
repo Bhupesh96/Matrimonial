@@ -12,7 +12,12 @@ import CopyRight from "../components/CopyRight";
 import Footer from "../components/Footer";
 import Preloader from "../components/Preloader";
 
-import { getProfileDetails, updateProfile, fetchMasterData } from "../api";
+import {
+  getProfileDetails,
+  updateProfile,
+  fetchMasterData,
+  updateProfilePicture,
+} from "../api";
 
 import AlertService from "../services/AlertServices";
 
@@ -31,6 +36,8 @@ const UserProfileEdit = () => {
   const [submitting, setSubmitting] = useState(false);
 
   const [profileData, setProfileData] = useState({});
+  const [profilePhoto, setProfilePhoto] = useState(null);
+  const [galleryImages, setGalleryImages] = useState([]);
 
   const [dropdowns, setDropdowns] = useState({
     cities: [],
@@ -124,10 +131,22 @@ const UserProfileEdit = () => {
     setSubmitting(true);
 
     try {
-      const result = await updateProfile(profileData);
+      // 1️⃣ SEND ONLY TEXT FIELDS TO update_profile
+      const cleanData = { ...profileData };
+      delete cleanData.ProfilePhotoURL;
+      delete cleanData.ProfilePhoto;
+      delete cleanData.profilePhoto;
+      delete cleanData.image; // (if added accidentally)
+
+      await updateProfile(cleanData);
+
+      // 2️⃣ UPLOAD PHOTO SEPARATELY
+      if (profilePhoto) {
+        await updateProfilePicture(profilePhoto);
+      }
 
       AlertService.showSuccessAndRedirect(
-        result.message || "Profile updated!",
+        "Profile updated successfully!",
         navigate,
         "/"
       );
@@ -154,131 +173,183 @@ const UserProfileEdit = () => {
         className="container"
         style={{ marginTop: "7rem", marginBottom: "6rem" }}
       >
+        {/* PAGE HEADING */}
+        <div
+          className="edit-pro-parti mb-5"
+          style={{ marginTop: "8rem", textAlign: "center" }}
+        >
+          <h3>Edit Profile</h3>
+        </div>
+
         <form onSubmit={handleSubmit}>
           {/* ---------------- BASIC DETAILS ---------------- */}
+
           <div className="edit-pro-parti mb-5">
             <h4>Basic Details</h4>
+
             <div className="row mt-3">
-              <div className="col-md-3 mb-3">
-                <label>Title</label>
-                <select
-                  className="form-select"
-                  name="Title"
-                  value={profileData.Title || ""}
-                  onChange={handleChange}
+              {/* LEFT SIDE — Form Fields */}
+              <div className="col-md-9">
+                <div className="row">
+                  <div className="col-md-3 mb-3">
+                    <label>Title</label>
+                    <select
+                      className="form-select"
+                      name="Title"
+                      value={profileData.Title || ""}
+                      onChange={handleChange}
+                    >
+                      <option value="">Select Title</option>
+                      <option value="Mr.">Mr.</option>
+                      <option value="Mrs.">Mrs.</option>
+                      <option value="Ms.">Ms.</option>
+                      <option value="Dr.">Dr.</option>
+                    </select>
+                  </div>
+
+                  <div className="col-md-3 mb-3">
+                    <label>Firstname</label>
+                    <input
+                      className="form-control"
+                      required
+                      name="firstname"
+                      value={profileData.firstname || ""}
+                      onChange={handleChange}
+                    />
+                  </div>
+
+                  <div className="col-md-3 mb-3">
+                    <label>Middlename</label>
+                    <input
+                      className="form-control"
+                      name="MiddleName"
+                      value={profileData.MiddleName || ""}
+                      onChange={handleChange}
+                    />
+                  </div>
+
+                  <div className="col-md-3 mb-3">
+                    <label>Lastname</label>
+                    <input
+                      className="form-control"
+                      required
+                      name="lastname"
+                      value={profileData.lastname || ""}
+                      onChange={handleChange}
+                    />
+                  </div>
+                </div>
+
+                <div className="row">
+                  <div className="col-md-4 mb-3">
+                    <label>Date of Birth</label>
+                    <input
+                      type="date"
+                      className="form-control"
+                      name="DateOfBirth"
+                      value={profileData.DateOfBirth || ""}
+                      onChange={handleChange}
+                    />
+                  </div>
+
+                  <div className="col-md-4 mb-3">
+                    <label>Birth Place</label>
+                    <input
+                      className="form-control"
+                      name="BirthPlace"
+                      value={profileData.BirthPlace || ""}
+                      onChange={handleChange}
+                    />
+                  </div>
+
+                  <div className="col-md-4 mb-3">
+                    <label>Birth Time</label>
+                    <input
+                      type="time"
+                      className="form-control"
+                      name="BirthTime"
+                      value={profileData.BirthTime || ""}
+                      onChange={handleChange}
+                    />
+                  </div>
+                </div>
+
+                <div className="mb-3">
+                  <label>Birth Name</label>
+                  <input
+                    className="form-control"
+                    name="BirthName"
+                    value={profileData.BirthName || ""}
+                    onChange={handleChange}
+                  />
+                </div>
+              </div>
+
+              {/* RIGHT SIDE — Passport Photo */}
+              <div className="col-md-3 d-flex flex-column align-items-center">
+                <div
+                  style={{
+                    width: "180px",
+                    height: "230px",
+
+                    background: "#fff", // White background
+                    padding: "6px", // White passport border effect
+                    boxShadow: "0 3px 8px rgba(0,0,0,0.15)", // Soft depth
+                    border: "1px solid #ddd", // Light grey passport outline
+                    overflow: "hidden",
+                    marginBottom: "15px",
+                  }}
                 >
-                  <option value="">Select Title</option>
-                  <option value="Mr.">Mr.</option>
-                  <option value="Mrs.">Mrs.</option>
-                  <option value="Ms.">Ms.</option>
-                  <option value="Dr.">Dr.</option>
-                </select>
-              </div>
+                  <div
+                    style={{
+                      width: "100%",
+                      height: "100%",
 
-              <div className="col-md-3 mb-3">
-                <label>Firstname</label>
-                <input
-                  className="form-control"
-                  required
-                  name="firstname"
-                  value={profileData.firstname || ""}
-                  onChange={handleChange}
-                />
-              </div>
+                      overflow: "hidden",
+                    }}
+                  >
+                    <img
+                      src={
+                        profilePhoto
+                          ? URL.createObjectURL(profilePhoto)
+                          : profileData.ProfilePhotoURL || "/images/default.png"
+                      }
+                      alt="Profile"
+                      style={{
+                        width: "100%",
+                        height: "100%",
+                        objectFit: "cover",
+                      }}
+                    />
+                  </div>
+                </div>
 
-              <div className="col-md-3 mb-3">
-                <label>Middlename</label>
-                <input
-                  className="form-control"
-                  name="MiddleName"
-                  value={profileData.MiddleName || ""}
-                  onChange={handleChange}
-                />
-              </div>
-
-              <div className="col-md-3 mb-3">
-                <label>Lastname</label>
-                <input
-                  className="form-control"
-                  required
-                  name="lastname"
-                  value={profileData.lastname || ""}
-                  onChange={handleChange}
-                />
-              </div>
-            </div>
-
-            <div className="row">
-              <div className="col-md-4 mb-3">
-                <label>Date of Birth</label>
-                <input
-                  type="date"
-                  className="form-control"
-                  name="DateOfBirth"
-                  value={profileData.DateOfBirth || ""}
-                  onChange={handleChange}
-                />
-              </div>
-
-              <div className="col-md-4 mb-3">
-                <label>Birth Place</label>
-                <input
-                  className="form-control"
-                  name="BirthPlace"
-                  value={profileData.BirthPlace || ""}
-                  onChange={handleChange}
-                />
-              </div>
-
-              <div className="col-md-4 mb-3">
-                <label>Birth Time</label>
-                <input
-                  type="time"
-                  className="form-control"
-                  name="BirthTime"
-                  value={profileData.BirthTime || ""}
-                  onChange={handleChange}
-                />
-              </div>
-            </div>
-
-            <div className="mb-3">
-              <label>Birth Name</label>
-              <input
-                className="form-control"
-                name="BirthName"
-                value={profileData.BirthName || ""}
-                onChange={handleChange}
-              />
-            </div>
-
-            <div className="row">
-              <div className="col-md-6 mb-3">
-                <label>Manglik</label>
-                <select
-                  className="form-select"
-                  name="Manglik"
-                  value={profileData.Manglik || ""}
-                  onChange={handleChange}
+                <button
+                  type="button"
+                  onClick={() =>
+                    document.getElementById("passportPhotoInput").click()
+                  }
+                  style={{
+                    padding: "8px 20px",
+                    borderRadius: "30px",
+                    backgroundColor: "#007bff",
+                    color: "#fff",
+                    border: "none",
+                    fontSize: "14px",
+                    fontWeight: "500",
+                    cursor: "pointer",
+                  }}
                 >
-                  <option value="">Select</option>
-                  <option value="Yes">Yes</option>
-                  <option value="No">No</option>
-                  <option value="Don't Know">Don't Know</option>
-                </select>
-              </div>
+                  Upload Photo
+                </button>
 
-              <div className="col-md-6 mb-3">
-                <label>Rashi</label>
-                <select
-                  className="form-select"
-                  name="Rashi"
-                  value={profileData.Rashi || ""}
-                  onChange={handleChange}
-                >
-                  <option value="">Select Rashi</option>
-                  {renderOptions(dropdowns.rashis)}
-                </select>
+                <input
+                  type="file"
+                  id="passportPhotoInput"
+                  accept="image/*"
+                  style={{ display: "none" }}
+                  onChange={(e) => setProfilePhoto(e.target.files[0])}
+                />
               </div>
             </div>
           </div>

@@ -126,3 +126,25 @@ export const fetchAllProfiles = async () => {
 
   return data.data || [];
 };
+// ---------------------------
+// UPDATE PROFILE PHOTO (POST → FormData)
+// ---------------------------
+export const updateProfilePicture = async (file) => {
+  const profileID = localStorage.getItem("profileID");
+  const userID = localStorage.getItem("userID");
+
+  const formData = new FormData();
+  formData.append("ProfileID", profileID);
+  formData.append("UserID", userID);
+  formData.append("ProfilePhoto", file);
+
+  const res = await fetch(`${API_BASE_URL}?api=update_profile_picture`, {
+    method: "POST",
+    body: formData,
+  });
+
+  const data = await res.json();
+  if (!res.ok || data.status !== 200) throw new Error(data.message);
+
+  return data;
+};
