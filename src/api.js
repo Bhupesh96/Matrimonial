@@ -39,19 +39,17 @@ export const createProfile = async (profileData) => {
 // LOGIN USER (POST → FormData)
 // ---------------------------
 export const loginUser = async (credentials) => {
-  const formData = new FormData();
-  formData.append("identifier", credentials.identifier);
-  formData.append("password", credentials.password);
-
   const url = `${API_BASE_URL}?api=user_login`;
 
   const res = await fetch(url, {
     method: "POST",
-    body: formData,
+    headers: { "Content-Type": "application/json" },
+    body: JSON.stringify(credentials),
   });
 
   const data = await res.json();
   if (!res.ok) throw new Error(data.message);
+
   return data;
 };
 
