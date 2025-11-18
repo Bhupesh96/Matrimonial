@@ -34,7 +34,7 @@ const InvalidRoute = () => {
                     </h2>
                     <h5>We can't seem to find the page you are looking for.</h5>
                     {/* Use React Router's Link instead of <a href=""> */}
-                    <Link to="" className="cta-4">
+                    <Link to="//" className="cta-4">
                       Visit home page now
                     </Link>
                   </div>

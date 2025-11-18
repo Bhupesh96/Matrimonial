@@ -76,7 +76,7 @@ const MainMenu = () => {
                                 Join Now <span>Lorem ipsum dummy</span>
                               </h5>
                               <span className="explor-cta">More details</span>
-                              <Link to="sign-up">Register</Link>
+                              <Link to="/sign-up">Register</Link>
                             </div>
                           </li>
                         </ul>
@@ -90,7 +90,7 @@ const MainMenu = () => {
                   <div className="smenu-open smenu-single">
                     <ul>
                       <li>
-                        <Link to="all-profiles">All profiles</Link>
+                        <Link to="/all-profiles">All profiles</Link>
                       </li>
                       <li>
                         <a href="profile-details.html">Profile details</a>
@@ -102,13 +102,13 @@ const MainMenu = () => {
                         <a href="blog.html">Blog</a>
                       </li>
                       <li>
-                        <Link to="blog-detail">Blog detail</Link>
+                        <Link to="/blog-detail">Blog detail</Link>
                       </li>
                       <li>
-                        <Link to="about">About</Link>
+                        <Link to="/about">About</Link>
                       </li>
                       <li>
-                        <Link to="contact">Contact</Link>
+                        <Link to="/contact">Contact</Link>
                       </li>
                       <li>
                         <a href="photo-gallery.html">Photo gallery</a>
@@ -117,10 +117,10 @@ const MainMenu = () => {
                         <a href="photo-gallery-1.html">Photo gallery 1</a>
                       </li>
                       <li>
-                        <Link to="login">Login</Link>
+                        <Link to="/login">Login</Link>
                       </li>
                       <li>
-                        <Link to="sign-up">Register</Link>
+                        <Link to="/sign-up">Register</Link>
                       </li>
                       <li>
                         <a href="plans.html">Pricing plans</a>
@@ -133,7 +133,7 @@ const MainMenu = () => {
                   <a href="plans.html">Plans</a>
                 </li>
                 <li>
-                  <Link to="sign-up">Register</Link>
+                  <Link to="/sign-up">Register</Link>
                 </li>
 
                 <li className="smenu-pare">
@@ -144,7 +144,7 @@ const MainMenu = () => {
                         <a href="user-dashboard.html">Dashboard</a>
                       </li>
                       <li>
-                        <Link to="user-profile">My profile</Link>
+                        <Link to="/user-profile">My profile</Link>
                       </li>
                       <li>
                         <a href="user-interests.html">Interests</a>
@@ -159,10 +159,10 @@ const MainMenu = () => {
                         <a href="user-setting.html">Profile settings</a>
                       </li>
                       <li>
-                        <Link to="user-profile-edit">Edit full profile</Link>
+                        <Link to="/user-profile-edit">Edit full profile</Link>
                       </li>
                       <li>
-                        <Link to="login">Login</Link>
+                        <Link to="/login">Login</Link>
                       </li>
                     </ul>
                   </div>

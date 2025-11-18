@@ -24,7 +24,7 @@ const FindMatchSection = () => {
                   मैसेजिंग और बेहतर मैच सुझावों के साथ आपका खोज सफ़र अब और भी
                   सुगम और सुरक्षित है।
                 </p>
-               <Link to="sign-up">Register</Link>
+                <Link to="/sign-up">Register</Link>
 
                 <a href="/contact" className="cta-4">
                   Help & Support

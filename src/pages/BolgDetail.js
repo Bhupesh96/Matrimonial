@@ -258,7 +258,7 @@ const BolgDetail = () => {
                             <div className="hot-page2-hom-pre-2">
                               <h5>Post Title {i + 1}</h5>
                             </div>
-                            <Link to="blog-detail" className="fclick"></Link>
+                            <Link to="/blog-detail" className="fclick"></Link>
                           </li>
                         ))}
                       </ul>

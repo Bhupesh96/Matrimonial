@@ -27,7 +27,7 @@ const AllProfiles = () => {
           <div className="container">
             <div className="row">
               <h1>Lakhs of Happy Marriages</h1>
-              <Link to="sign-up">
+              <Link to="/sign-up">
                 Register Join now for Free{" "}
                 <i className="fa fa-handshake-o" aria-hidden="true"></i>
               </Link>

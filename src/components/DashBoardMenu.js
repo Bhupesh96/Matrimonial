@@ -16,16 +16,16 @@ const DashboardMenu = () => {
         </div>
         <ul>
           <li>
-            <Link to="login">Login</Link>
+            <Link to="/login">Login</Link>
           </li>
           <li>
-            <Link to="sign-up">Sign-up</Link>
+            <Link to="/sign-up">Sign-up</Link>
           </li>
           <li>
-            <Link to="plans">Pricing plans</Link>
+            <Link to="/plans">Pricing plans</Link>
           </li>
           <li>
-            <Link to="all-profiles">Browse profiles</Link>
+            <Link to="/all-profiles">Browse profiles</Link>
           </li>
         </ul>
       </div>

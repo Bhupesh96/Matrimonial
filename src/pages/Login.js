@@ -107,8 +107,7 @@ const Login = () => {
                       <h4>Start for free</h4>
                       <h1>Sign in to Matrimony</h1>
                       <p>
-                        Not a member? <Link to="sign-up">Register</Link>
-
+                        Not a member? <Link to="/sign-up">Register</Link>
                       </p>
                     </div>
                     <div className="form-login">
