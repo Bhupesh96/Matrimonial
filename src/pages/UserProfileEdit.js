@@ -12,16 +12,9 @@ import CopyRight from "../components/CopyRight";
 import Footer from "../components/Footer";
 import Preloader from "../components/Preloader";
 
-import {
-  getProfileDetails,
-  updateProfile,
-  fetchMasterData,
-  updateProfilePicture,
-} from "../api";
-
+import { getProfileDetails, updateProfile, fetchMasterData } from "../api";
 import AlertService from "../services/AlertServices";
 
-// Reusable dropdown renderer
 const renderOptions = (list) =>
   list?.map((item) => (
     <option key={item.id} value={item.id}>
@@ -37,7 +30,7 @@ const UserProfileEdit = () => {
 
   const [profileData, setProfileData] = useState({});
   const [profilePhoto, setProfilePhoto] = useState(null);
-  const [galleryImages, setGalleryImages] = useState([]);
+  const [profilePhotoName, setProfilePhotoName] = useState("");
 
   const [dropdowns, setDropdowns] = useState({
     cities: [],
@@ -48,9 +41,14 @@ const UserProfileEdit = () => {
     occupations: [],
     incomeRanges: [],
     diets: [],
+    preferenceMarriageAreas: [],
+    religions: [],
+    maritalStatuses: [],
+    motherTongues: [],
+    bloodGroups: [],
+    relationships: [],
   });
 
-  // Fetch profile + all master data
   useEffect(() => {
     const loadAll = async () => {
       const profileID = localStorage.getItem("profileID");
@@ -61,51 +59,85 @@ const UserProfileEdit = () => {
       }
 
       try {
-        const [
-          profile,
-          cities,
-          heights,
-          gotras,
-          rashis,
-          educationDegrees,
-          occupations,
-          incomeRanges,
-          diets,
-          preferenceMarriageAreas,
-        ] = await Promise.all([
-          getProfileDetails(),
+        const masters = [
+          "cities",
+          "heights",
+          "gotras",
+          "rashis",
+          "educationdegrees",
+          "occupations",
+          "incomeranges",
+          "diets",
+          "preference_marriage_area",
+          "religions",
+          "maritalstatuses",
+          "mothertongues",
+          "bloodgroups",
+          "relationships",
+        ];
 
-          fetchMasterData("cities"),
-          fetchMasterData("heights"),
-          fetchMasterData("gotras"),
-          fetchMasterData("rashis"),
-          fetchMasterData("educationdegrees"),
-          fetchMasterData("occupations"),
-          fetchMasterData("incomeranges"),
-          fetchMasterData("diets"),
-          fetchMasterData("preference_marriage_area"),
-        ]);
+        const masterResults = await Promise.all(
+          masters.map((m) => fetchMasterData(m))
+        );
 
-        // Fix date formatting
-        if (profile.DateOfBirth) {
-          profile.DateOfBirth = profile.DateOfBirth.split(" ")[0];
+        const profile = await getProfileDetails();
+
+        // Fix wrong DB value: OccupationDetail = ID
+        if (profile.OccupationDetail && !profile.OccupationID) {
+          profile.OccupationID = String(profile.OccupationDetail);
         }
 
-        setProfileData(profile || {});
+        if (profile.Diet && !profile.DietID && !isNaN(profile.Diet)) {
+          profile.DietID = String(profile.Diet);
+        }
+
+        if (
+          profile.AnnualIncome &&
+          !profile.AnnualIncomeID &&
+          !isNaN(profile.AnnualIncome)
+        ) {
+          profile.AnnualIncomeID = String(profile.AnnualIncome);
+        }
+
+        if (profile?.DateOfBirth) {
+          profile.DateOfBirth = String(profile.DateOfBirth).split(" ")[0];
+        }
 
         setDropdowns({
-          cities,
-          heights,
-          gotras,
-          rashis,
-          educationDegrees,
-          occupations,
-          incomeRanges,
-          diets,
-          preferenceMarriageAreas,
+          cities: masterResults[0],
+          heights: masterResults[1],
+          gotras: masterResults[2],
+          rashis: masterResults[3],
+          educationDegrees: masterResults[4],
+          occupations: masterResults[5],
+          incomeRanges: masterResults[6],
+          diets: masterResults[7],
+          preferenceMarriageAreas: masterResults[8],
+          religions: masterResults[9],
+          maritalStatuses: masterResults[10],
+          motherTongues: masterResults[11],
+          bloodGroups: masterResults[12],
+          relationships: masterResults[13],
         });
+
+        setProfileData(profile);
+        // Convert Rashi TEXT → ID
+        if (profile.Rashi) {
+          const found = masterResults[3].find(
+            (x) => x.name.toLowerCase() === profile.Rashi.toLowerCase()
+          );
+          if (found) profile.Rashi = String(found.id);
+        }
+        if (profile.PreferredAreaOfMarriage) {
+          const pref = masterResults[8].find(
+            (x) =>
+              x.name.toLowerCase() ===
+              String(profile.PreferredAreaOfMarriage).toLowerCase()
+          );
+          if (pref) profile.PreferredAreaOfMarriage = String(pref.id);
+        }
       } catch (e) {
-        AlertService.showError(e.message);
+        AlertService.showError("Failed to load data.");
         navigate("/");
       } finally {
         setLoading(false);
@@ -115,49 +147,110 @@ const UserProfileEdit = () => {
     loadAll();
   }, [navigate]);
 
-  // Handle input changes
   const handleChange = (e) => {
     const { name, value } = e.target;
+    setProfileData((prev) => ({ ...prev, [name]: value }));
+  };
+
+  const onPhotoChange = (e) => {
+    if (!e.target.files?.[0]) return;
+
+    setProfilePhoto(e.target.files[0]);
+    setProfilePhotoName(e.target.files[0].name);
 
     setProfileData((prev) => ({
       ...prev,
-      [name]: value,
+      ProfilePhoto: URL.createObjectURL(e.target.files[0]),
     }));
   };
 
-  // Submit updated profile
+  const buildPayload = () => {
+    const p = { ...profileData };
+
+    if (p.DateOfBirth?.length === 10) {
+      p.DateOfBirth = p.DateOfBirth + " 00:00:00";
+    }
+
+    const findText = (list, id) => {
+      const item = list.find((x) => String(x.id) === String(id));
+      return item ? item.name : "";
+    };
+
+    if (p.EducationDegreeID) {
+      p.EducationDegree = findText(
+        dropdowns.educationDegrees,
+        p.EducationDegreeID
+      );
+    }
+
+    if (p.OccupationID) {
+      p.OccupationDetail = findText(dropdowns.occupations, p.OccupationID);
+    }
+
+    if (p.AnnualIncomeID) {
+      p.AnnualIncome = findText(dropdowns.incomeRanges, p.AnnualIncomeID);
+    }
+
+    if (p.DietID) {
+      p.Diet = findText(dropdowns.diets, p.DietID);
+    }
+
+    if (p.ContactCityID) {
+      p.ContactCity = findText(dropdowns.cities, p.ContactCityID);
+    }
+
+    if (p.PreferredAreaOfMarriage) {
+      p.PreferredAreaOfMarriage = findText(
+        dropdowns.preferenceMarriageAreas,
+        p.PreferredAreaOfMarriage
+      );
+    }
+
+    if (p.Rashi) {
+      p.Rashi = findText(dropdowns.rashis, p.Rashi);
+    }
+
+    return p;
+  };
+
   const handleSubmit = async (e) => {
     e.preventDefault();
     setSubmitting(true);
 
     try {
-      // 1️⃣ SEND ONLY TEXT FIELDS TO update_profile
-      const cleanData = { ...profileData };
-      delete cleanData.ProfilePhotoURL;
-      delete cleanData.ProfilePhoto;
-      delete cleanData.profilePhoto;
-      delete cleanData.image; // (if added accidentally)
-
-      await updateProfile(cleanData);
-
-      // 2️⃣ UPLOAD PHOTO SEPARATELY
-      if (profilePhoto) {
-        await updateProfilePicture(profilePhoto);
-      }
+      const payload = buildPayload();
+      await updateProfile(payload, profilePhoto);
 
       AlertService.showSuccessAndRedirect(
         "Profile updated successfully!",
         navigate,
         "/"
       );
-    } catch (e) {
-      AlertService.showError(e.message);
+    } catch (err) {
+      AlertService.showError(err.message || "Update failed");
     } finally {
       setSubmitting(false);
     }
   };
 
   if (loading) return <Preloader />;
+
+  const {
+    cities,
+    heights,
+    gotras,
+    rashis,
+    educationDegrees,
+    occupations,
+    incomeRanges,
+    diets,
+    preferenceMarriageAreas,
+    religions,
+    maritalStatuses,
+    motherTongues,
+    bloodGroups,
+    relationships,
+  } = dropdowns;
 
   return (
     <div>
@@ -173,22 +266,23 @@ const UserProfileEdit = () => {
         className="container"
         style={{ marginTop: "7rem", marginBottom: "6rem" }}
       >
-        {/* PAGE HEADING */}
         <div
           className="edit-pro-parti mb-5"
           style={{ marginTop: "8rem", textAlign: "center" }}
         >
-          <h3>Edit Profile</h3>
+          <h3 style={{ fontWeight: 600, fontSize: 28, color: "#333" }}>
+            Edit Profile
+          </h3>
         </div>
 
         <form onSubmit={handleSubmit}>
-          {/* ---------------- BASIC DETAILS ---------------- */}
-
+          {/* -------------------------------------- */}
+          {/* BASIC DETAILS */}
+          {/* -------------------------------------- */}
           <div className="edit-pro-parti mb-5">
             <h4>Basic Details</h4>
 
             <div className="row mt-3">
-              {/* LEFT SIDE — Form Fields */}
               <div className="col-md-9">
                 <div className="row">
                   <div className="col-md-3 mb-3">
@@ -274,87 +368,149 @@ const UserProfileEdit = () => {
                   </div>
                 </div>
 
-                <div className="mb-3">
-                  <label>Birth Name</label>
-                  <input
-                    className="form-control"
-                    name="BirthName"
-                    value={profileData.BirthName || ""}
-                    onChange={handleChange}
-                  />
+                <div className="row">
+                  <div className="col-md-4 mb-3">
+                    <label>Birth Name</label>
+                    <input
+                      className="form-control"
+                      name="BirthName"
+                      value={profileData.BirthName || ""}
+                      onChange={handleChange}
+                    />
+                  </div>
+
+                  <div className="col-md-4 mb-3">
+                    <label>Mother Tongue</label>
+                    <select
+                      className="form-select"
+                      name="MotherTongueID"
+                      value={profileData.MotherTongueID || ""}
+                      onChange={handleChange}
+                    >
+                      <option value="">Select Tongue</option>
+                      {renderOptions(motherTongues)}
+                    </select>
+                  </div>
+
+                  <div className="col-md-4 mb-3">
+                    <label>Religion</label>
+                    <select
+                      className="form-select"
+                      name="ReligionID"
+                      value={profileData.ReligionID || ""}
+                      onChange={handleChange}
+                    >
+                      <option value="">Select Religion</option>
+                      {renderOptions(religions)}
+                    </select>
+                  </div>
+                </div>
+
+                <div className="row">
+                  <div className="col-md-4 mb-3">
+                    <label>Marital Status</label>
+                    <select
+                      className="form-select"
+                      name="MaritalStatusID"
+                      value={profileData.MaritalStatusID || ""}
+                      onChange={handleChange}
+                    >
+                      <option value="">Select Status</option>
+                      {renderOptions(maritalStatuses)}
+                    </select>
+                  </div>
+
+                  <div className="col-md-4 mb-3">
+                    <label>Gotra</label>
+                    <select
+                      className="form-select"
+                      name="GotraID"
+                      value={profileData.GotraID || ""}
+                      onChange={handleChange}
+                    >
+                      <option value="">Select Gotra</option>
+                      {renderOptions(gotras)}
+                    </select>
+                  </div>
+
+                  <div className="col-md-4 mb-3">
+                    <label>Rashi</label>
+                    <select
+                      className="form-select"
+                      name="Rashi"
+                      value={profileData.Rashi || ""}
+                      onChange={handleChange}
+                    >
+                      <option value="">Select Rashi</option>
+                      {renderOptions(rashis)}
+                    </select>
+                  </div>
                 </div>
               </div>
 
-              {/* RIGHT SIDE — Passport Photo */}
+              {/* PROFILE PHOTO */}
               <div className="col-md-3 d-flex flex-column align-items-center">
                 <div
                   style={{
                     width: "180px",
                     height: "230px",
-
-                    background: "#fff", // White background
-                    padding: "6px", // White passport border effect
-                    boxShadow: "0 3px 8px rgba(0,0,0,0.15)", // Soft depth
-                    border: "1px solid #ddd", // Light grey passport outline
+                    background: "#fff",
+                    padding: 6,
+                    boxShadow: "0 3px 8px rgba(0,0,0,0.15)",
+                    border: "1px solid #ddd",
                     overflow: "hidden",
-                    marginBottom: "15px",
+                    marginBottom: 12,
                   }}
                 >
-                  <div
+                  <img
+                    src={
+                      profileData.ProfilePhoto ||
+                      profileData.ProfileImageURL ||
+                      "/images/default.png"
+                    }
+                    alt="Profile"
                     style={{
                       width: "100%",
                       height: "100%",
-
-                      overflow: "hidden",
+                      objectFit: "cover",
                     }}
-                  >
-                    <img
-                      src={
-                        profilePhoto
-                          ? URL.createObjectURL(profilePhoto)
-                          : profileData.ProfilePhotoURL || "/images/default.png"
-                      }
-                      alt="Profile"
-                      style={{
-                        width: "100%",
-                        height: "100%",
-                        objectFit: "cover",
-                      }}
-                    />
-                  </div>
+                  />
                 </div>
 
-                <button
-                  type="button"
-                  onClick={() =>
-                    document.getElementById("passportPhotoInput").click()
-                  }
-                  style={{
-                    padding: "8px 20px",
-                    borderRadius: "30px",
-                    backgroundColor: "#007bff",
-                    color: "#fff",
-                    border: "none",
-                    fontSize: "14px",
-                    fontWeight: "500",
-                    cursor: "pointer",
-                  }}
+                <label
+                  htmlFor="passportPhotoInput"
+                  style={{ cursor: "pointer" }}
                 >
-                  Upload Photo
-                </button>
+                  <div
+                    style={{
+                      padding: "10px 18px",
+                      borderRadius: 30,
+                      backgroundColor: "#007bff",
+                      color: "#fff",
+                    }}
+                  >
+                    Choose Photo
+                  </div>
+                </label>
 
                 <input
-                  type="file"
                   id="passportPhotoInput"
+                  type="file"
                   accept="image/*"
                   style={{ display: "none" }}
-                  onChange={(e) => setProfilePhoto(e.target.files[0])}
+                  onChange={onPhotoChange}
                 />
+
+                <div style={{ marginTop: 8, fontSize: 13 }}>
+                  {profilePhotoName || "No file chosen"}
+                </div>
               </div>
             </div>
           </div>
 
-          {/* ----------- PHYSICAL DETAILS ----------- */}
+          {/* -------------------------------------- */}
+          {/* PHYSICAL */}
+          {/* -------------------------------------- */}
           <div className="edit-pro-parti mb-5">
             <h4>Physical</h4>
 
@@ -373,7 +529,7 @@ const UserProfileEdit = () => {
               </div>
 
               <div className="col-md-4 mb-3">
-                <label>Weight</label>
+                <label>Weight (kg)</label>
                 <input
                   type="number"
                   className="form-control"
@@ -382,6 +538,7 @@ const UserProfileEdit = () => {
                   onChange={handleChange}
                 />
               </div>
+
               <div className="col-md-4 mb-3">
                 <label>Complexion</label>
                 <input
@@ -391,10 +548,25 @@ const UserProfileEdit = () => {
                   onChange={handleChange}
                 />
               </div>
+
+              <div className="col-md-4 mb-3">
+                <label>Blood Group</label>
+                <select
+                  className="form-select"
+                  name="BloodGroupID"
+                  value={profileData.BloodGroupID || ""}
+                  onChange={handleChange}
+                >
+                  <option value="">Select Blood Group</option>
+                  {renderOptions(bloodGroups)}
+                </select>
+              </div>
             </div>
           </div>
 
-          {/* -------------- FAMILY DETAILS -------------- */}
+          {/* -------------------------------------- */}
+          {/* FAMILY */}
+          {/* -------------------------------------- */}
           <div className="edit-pro-parti mb-5">
             <h4>Family Details</h4>
 
@@ -441,55 +613,11 @@ const UserProfileEdit = () => {
                 />
               </div>
             </div>
-
-            <div className="row">
-              <div className="col-md-3 mb-3">
-                <label>No of Brothers</label>
-                <input
-                  type="number"
-                  className="form-control"
-                  name="NoOfBrothers"
-                  value={profileData.NoOfBrothers || ""}
-                  onChange={handleChange}
-                />
-              </div>
-
-              <div className="col-md-3 mb-3">
-                <label>No of Brothers Married</label>
-                <input
-                  type="number"
-                  className="form-control"
-                  name="NoOfBrothersMarried"
-                  value={profileData.NoOfBrothersMarried || ""}
-                  onChange={handleChange}
-                />
-              </div>
-
-              <div className="col-md-3 mb-3">
-                <label>No of Sisters</label>
-                <input
-                  type="number"
-                  className="form-control"
-                  name="NoOfSisters"
-                  value={profileData.NoOfSisters || ""}
-                  onChange={handleChange}
-                />
-              </div>
-
-              <div className="col-md-3 mb-3">
-                <label>No of Sisters Married</label>
-                <input
-                  type="number"
-                  className="form-control"
-                  name="NoOfSistersMarried"
-                  value={profileData.NoOfSistersMarried || ""}
-                  onChange={handleChange}
-                />
-              </div>
-            </div>
           </div>
 
-          {/* ----------- EDUCATION + JOB ------------ */}
+          {/* -------------------------------------- */}
+          {/* EDUCATION & JOB */}
+          {/* -------------------------------------- */}
           <div className="edit-pro-parti mb-5">
             <h4>Education & Job</h4>
 
@@ -497,12 +625,12 @@ const UserProfileEdit = () => {
               <label>Education Degree</label>
               <select
                 className="form-select mb-3"
-                name="EducationDegree"
-                value={profileData.EducationDegree || ""}
+                name="EducationDegreeID"
+                value={profileData.EducationDegreeID || ""}
                 onChange={handleChange}
               >
                 <option value="">Select Degree</option>
-                {renderOptions(dropdowns.educationDegrees)}
+                {renderOptions(educationDegrees)}
               </select>
 
               <label>Education Detail</label>
@@ -513,15 +641,15 @@ const UserProfileEdit = () => {
                 onChange={handleChange}
               />
 
-              <label>Occupation Detail</label>
+              <label>Occupation</label>
               <select
                 className="form-select mb-3"
-                name="OccupationDetail"
-                value={profileData.OccupationDetail || ""}
+                name="OccupationID"
+                value={profileData.OccupationID || ""}
                 onChange={handleChange}
               >
                 <option value="">Select Occupation</option>
-                {renderOptions(dropdowns.occupations)}
+                {renderOptions(occupations)}
               </select>
 
               <div className="row">
@@ -549,17 +677,19 @@ const UserProfileEdit = () => {
               <label>Annual Income</label>
               <select
                 className="form-select mb-3"
-                name="AnnualIncome"
-                value={profileData.AnnualIncome || ""}
+                name="AnnualIncomeID"
+                value={profileData.AnnualIncomeID || ""}
                 onChange={handleChange}
               >
                 <option value="">Select Income</option>
-                {renderOptions(dropdowns.incomeRanges)}
+                {renderOptions(incomeRanges)}
               </select>
             </div>
           </div>
 
-          {/* ------------- Preferences ----------- */}
+          {/* -------------------------------------- */}
+          {/* PREFERENCES */}
+          {/* -------------------------------------- */}
           <div className="edit-pro-parti mb-5">
             <h4>Preferences</h4>
 
@@ -571,8 +701,8 @@ const UserProfileEdit = () => {
                 value={profileData.PreferredAreaOfMarriage || ""}
                 onChange={handleChange}
               >
-                <option value="">Select Preferred Marriage Area</option>
-                {renderOptions(dropdowns.preferenceMarriageAreas)}
+                <option value="">Select Area</option>
+                {renderOptions(preferenceMarriageAreas)}
               </select>
 
               <label>Paitthi/Nivas Khor</label>
@@ -586,12 +716,12 @@ const UserProfileEdit = () => {
               <label>Diet</label>
               <select
                 className="form-select mb-3"
-                name="Diet"
-                value={profileData.Diet || ""}
+                name="DietID"
+                value={profileData.DietID || ""}
                 onChange={handleChange}
               >
                 <option value="">Select Diet</option>
-                {renderOptions(dropdowns.diets)}
+                {renderOptions(diets)}
               </select>
 
               <label>Hobbies</label>
@@ -609,11 +739,13 @@ const UserProfileEdit = () => {
                 name="PartnerExpectations"
                 value={profileData.PartnerExpectations || ""}
                 onChange={handleChange}
-              ></textarea>
+              />
             </div>
           </div>
 
-          {/* -------- Contact Section -------- */}
+          {/* -------------------------------------- */}
+          {/* CONTACT */}
+          {/* -------------------------------------- */}
           <div className="edit-pro-parti mb-5">
             <h4>Contact</h4>
 
@@ -628,13 +760,16 @@ const UserProfileEdit = () => {
 
               <div className="row">
                 <div className="col-md-6 mb-3">
-                  <label>Contact Mobile 2</label>
-                  <input
-                    className="form-control"
-                    name="ContactMobile2"
-                    value={profileData.ContactMobile2 || ""}
+                  <label>Relationship</label>
+                  <select
+                    className="form-select"
+                    name="ContactPersonRelationshipID"
+                    value={profileData.ContactPersonRelationshipID || ""}
                     onChange={handleChange}
-                  />
+                  >
+                    <option value="">Select Relationship</option>
+                    {renderOptions(relationships)}
+                  </select>
                 </div>
 
                 <div className="col-md-6 mb-3">
@@ -643,6 +778,28 @@ const UserProfileEdit = () => {
                     className="form-control"
                     name="ContactPhone"
                     value={profileData.ContactPhone || ""}
+                    onChange={handleChange}
+                  />
+                </div>
+              </div>
+
+              <div className="row">
+                <div className="col-md-6 mb-3">
+                  <label>Contact Mobile</label>
+                  <input
+                    className="form-control"
+                    name="ContactMobile"
+                    value={profileData.ContactMobile || ""}
+                    onChange={handleChange}
+                  />
+                </div>
+
+                <div className="col-md-6 mb-3">
+                  <label>Contact Mobile 2</label>
+                  <input
+                    className="form-control"
+                    name="ContactMobile2"
+                    value={profileData.ContactMobile2 || ""}
                     onChange={handleChange}
                   />
                 </div>
@@ -663,23 +820,24 @@ const UserProfileEdit = () => {
                 name="Address"
                 value={profileData.Address || ""}
                 onChange={handleChange}
-              ></textarea>
+              />
 
               <label>Contact City</label>
               <select
                 className="form-select"
-                name="ContactCity"
-                value={profileData.ContactCity || ""}
+                name="ContactCityID"
+                value={profileData.ContactCityID || ""}
                 onChange={handleChange}
               >
                 <option value="">Select City</option>
-                {renderOptions(dropdowns.cities)}
+                {renderOptions(cities)}
               </select>
             </div>
           </div>
 
-          {/* -------- SUBMIT BUTTON -------- */}
-
+          {/* -------------------------------------- */}
+          {/* SUBMIT */}
+          {/* -------------------------------------- */}
           <div className="text-end mt-4">
             <button
               type="submit"
@@ -694,15 +852,6 @@ const UserProfileEdit = () => {
                 fontWeight: "500",
                 boxShadow: "0 4px 10px rgba(0,0,0,0.2)",
                 cursor: "pointer",
-                transition: "0.2s",
-              }}
-              onMouseOver={(e) => {
-                e.target.style.transform = "translateY(-2px)";
-                e.target.style.boxShadow = "0 6px 14px rgba(0,0,0,0.25)";
-              }}
-              onMouseOut={(e) => {
-                e.target.style.transform = "translateY(0)";
-                e.target.style.boxShadow = "0 4px 10px rgba(0,0,0,0.2)";
               }}
             >
               {submitting ? "Updating..." : "Update Profile"}

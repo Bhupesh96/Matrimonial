@@ -79,14 +79,14 @@ const UserProfile = () => {
   }, []);
 
   const lookup = (type, id) => {
-    if (!id) return "NA";
+    if (!id) return "-";
     const list = masters[type] || [];
     const found = list.find((x) => String(x.id) === String(id));
-    return found ? found.name : "NA";
+    return found ? found.name : "-";
   };
 
   const calcAge = (dob) => {
-    if (!dob) return "NA";
+    if (!dob) return "-";
     const diff = Date.now() - new Date(dob).getTime();
     return `${new Date(diff).getUTCFullYear() - 1970} Years`;
   };
@@ -102,9 +102,7 @@ const UserProfile = () => {
     );
   }
 
-  const imageSrc = profile.ProfilePhoto
-    ? IMG_BASE + profile.ProfilePhoto
-    : DEFAULT_IMG;
+  const imageSrc = profile.ProfilePhoto ? profile.ProfilePhoto : DEFAULT_IMG;
 
   // two-line partner expectation fallback
   const partnerExpectations =
@@ -165,7 +163,7 @@ const UserProfile = () => {
           <div className="col-md-4" key={idx}>
             <div>
               <div style={fieldLabel}>{it.label}</div>
-              <div style={fieldValue}>{it.value ?? "NA"}</div>
+              <div style={fieldValue}>{it.value ?? "-"}</div>
             </div>
           </div>
         ))}
@@ -185,207 +183,211 @@ const UserProfile = () => {
 
       <div
         className="container"
-        style={{ marginTop: "7rem", marginBottom: "4rem" }}
+        style={{ marginTop: "7rem", marginBottom: "5rem" }}
       >
-        {/* -------- PROFILE HEADER -------- */}
-        <div className="row align-items-center mb-5 pb-4 border-bottom">
-          <div className="col-md-3 text-center">
-            <img
-              src={imageSrc}
-              alt="Profile"
-              className="img-fluid rounded shadow-sm"
-              style={{ width: 160, height: 200, objectFit: "cover" }}
-            />
-          </div>
-
-          <div className="col-md-6">
-            <h2 className="fw-bold mb-1" style={{ color: "#222" }}>
-              {profile.Title ? `${profile.Title} ` : ""}
-              {profile.firstname} {profile.MiddleName} {profile.lastname}
-            </h2>
-
-            <div className="text-muted mb-3">
-              <strong>User ID:</strong> {profile.UserID} &nbsp; | &nbsp;
-              <strong>Age:</strong> {calcAge(profile.DateOfBirth)}
-            </div>
-
-            {/* BADGES */}
-            <div className="d-flex flex-wrap gap-2">
-              <span
-                className="badge rounded-pill px-3 py-2"
-                style={{ background: "#f7e7ef", color: "#d32163" }}
+        {/* HEADER CARD */}
+        <div
+          className="p-4 rounded shadow-sm mb-5"
+          style={{
+            background: "white",
+            border: "1px solid #eee",
+            borderRadius: 15,
+          }}
+        >
+          <div className="row align-items-center">
+            {/* IMAGE */}
+            <div className="col-md-3 text-center">
+              <div
+                style={{
+                  width: 160,
+                  height: 200,
+                  borderRadius: 12,
+                  overflow: "hidden",
+                  border: "1px solid #ddd",
+                  boxShadow: "0 4px 14px rgba(0,0,0,0.08)",
+                  margin: "0 auto",
+                }}
               >
-                {lookup("heights", profile.HeightID)}
-              </span>
-              <span
-                className="badge rounded-pill px-3 py-2"
-                style={{ background: "#e8f4ff", color: "#1578d3" }}
+                <img
+                  src={imageSrc}
+                  alt="Profile"
+                  style={{ width: "100%", height: "100%", objectFit: "cover" }}
+                />
+              </div>
+            </div>
+
+            {/* NAME & BASICS */}
+            <div className="col-md-6 mt-4 mt-md-0">
+              <h2 className="fw-bold mb-1" style={{ fontSize: 28 }}>
+                {profile.Title ? `${profile.Title} ` : ""}
+                {profile.firstname} {profile.MiddleName} {profile.lastname}
+              </h2>
+
+              <div className="text-muted mb-3" style={{ fontSize: 15 }}>
+                <strong>UserID:</strong> {profile.UserID} &nbsp; | &nbsp;
+                <strong>Age:</strong> {calcAge(profile.DateOfBirth)}
+              </div>
+
+              {/* BADGES */}
+              <div className="d-flex flex-wrap gap-2 mt-2">
+                <span className="badge bg-light text-dark px-3 py-2">
+                  {lookup("heights", profile.HeightID)}
+                </span>
+                <span className="badge bg-light text-dark px-3 py-2">
+                  {lookup("religions", profile.ReligionID)}
+                </span>
+                <span className="badge bg-light text-dark px-3 py-2">
+                  {lookup("cities", profile.ContactCityID)}
+                </span>
+                <span className="badge bg-light text-dark px-3 py-2">
+                  {profile.Complexion || "Complexion: -"}
+                </span>
+              </div>
+            </div>
+
+            {/* BUTTONS */}
+            <div className="col-md-3 text-md-end text-center mt-4 mt-md-0">
+              <Link
+                to="/user-profile-edit"
+                className="fw-semibold px-4 py-2 d-inline-block"
+                style={{
+                  background: "linear-gradient(90deg,#d32163,#ff5a8f)",
+                  borderRadius: 8,
+                  color: "white",
+                  textDecoration: "none",
+                  boxShadow: "0 4px 12px rgba(211,33,99,0.25)",
+                }}
               >
-                {lookup("religions", profile.ReligionID)}
-              </span>
-              <span
-                className="badge rounded-pill px-3 py-2"
-                style={{ background: "#fff4e5", color: "#d87a00" }}
-              >
-                {lookup("cities", profile.ContactCityID)}
-              </span>
-              <span className="badge rounded-pill px-3 py-2 bg-light text-dark">
-                {profile.Complexion ?? "Complexion: NA"}
-              </span>
-            </div>
-          </div>
+                Edit Profile
+              </Link>
 
-          <div className="col-md-3 text-end mt-4 mt-md-0">
-            <Link
-              to="/user-profile-edit"
-              className="btn text-white fw-semibold px-4 py-2"
-              style={{
-                background: "linear-gradient(90deg,#d32163,#ff5a8f)",
-                borderRadius: "8px",
-              }}
-            >
-              Edit Profile
-            </Link>
-            <br />
-            <a
-              href="/"
-              className="btn btn-outline-secondary fw-semibold mt-3 px-4"
-            >
-              Back to Dashboard
-            </a>
-          </div>
-        </div>
-
-        {/* ----------- SECTIONS ----------- */}
-
-        {/* BASIC DETAILS */}
-        <h4 className="section-title mb-3 mt-4 text-primary">Basic Details</h4>
-        <div className="row mb-4 pb-3 border-bottom">
-          <div className="col-md-4 mb-3">
-            <div className="text-muted small">Title</div>
-            <div className="fw-semibold">{profile.Title || "NA"}</div>
-          </div>
-          <div className="col-md-4 mb-3">
-            <div className="text-muted small">First Name</div>
-            <div className="fw-semibold">{profile.firstname || "NA"}</div>
-          </div>
-          <div className="col-md-4 mb-3">
-            <div className="text-muted small">Middle Name</div>
-            <div className="fw-semibold">{profile.MiddleName || "NA"}</div>
-          </div>
-        </div>
-
-        {/* BIRTH DETAILS */}
-        <h4 className="section-title mb-3 mt-4 text-primary">
-          Birth & Astrological Details
-        </h4>
-        <div className="row mb-4 pb-3 border-bottom">
-          <div className="col-md-4 mb-3">
-            <div className="text-muted small">Date of Birth</div>
-            <div className="fw-semibold">{profile.DateOfBirth || "NA"}</div>
-          </div>
-          <div className="col-md-4 mb-3">
-            <div className="text-muted small">Birth Place</div>
-            <div className="fw-semibold">{profile.BirthPlace || "NA"}</div>
-          </div>
-          <div className="col-md-4 mb-3">
-            <div className="text-muted small">Birth Time</div>
-            <div className="fw-semibold">{profile.BirthTime || "NA"}</div>
-          </div>
-        </div>
-
-        {/* EDUCATION & JOB */}
-        <h4 className="section-title mb-3 mt-4 text-primary">
-          Education & Job
-        </h4>
-        <div className="row mb-4 pb-3 border-bottom">
-          <div className="col-md-4 mb-3">
-            <div className="text-muted small">Education Degree</div>
-            <div className="fw-semibold">
-              {lookup("educationdegrees", profile.EducationDegreeID)}
-            </div>
-          </div>
-          <div className="col-md-4 mb-3">
-            <div className="text-muted small">Occupation</div>
-            <div className="fw-semibold">
-              {lookup("occupations", profile.OccupationID)}
-            </div>
-          </div>
-          <div className="col-md-4 mb-3">
-            <div className="text-muted small">Annual Income</div>
-            <div className="fw-semibold">
-              {lookup("incomeranges", profile.AnnualIncomeID)}
+              <div className="mt-3">
+                <a
+                  href="/"
+                  className="btn btn-outline-secondary px-4 py-2"
+                  style={{ borderRadius: 8 }}
+                >
+                  Dashboard
+                </a>
+              </div>
             </div>
           </div>
         </div>
 
-        {/* FAMILY */}
-        <h4 className="section-title mb-3 mt-4 text-primary">Family Details</h4>
-        <div className="row mb-4 pb-3 border-bottom">
-          <div className="col-md-4 mb-3">
-            <div className="text-muted small">Father Name</div>
-            <div className="fw-semibold">{profile.FatherName || "NA"}</div>
-          </div>
-          <div className="col-md-4 mb-3">
-            <div className="text-muted small">Mother Name</div>
-            <div className="fw-semibold">{profile.MotherName || "NA"}</div>
-          </div>
-          <div className="col-md-4 mb-3">
-            <div className="text-muted small">Siblings</div>
-            <div className="fw-semibold">
-              Brothers: {profile.NoOfBrothers} (Married:{" "}
-              {profile.NoOfBrothersMarried}) | Sisters: {profile.NoOfSisters}{" "}
-              (Married: {profile.NoOfSistersMarried})
+        {/* ============= SECTIONS ============= */}
+
+        {/* REUSABLE SECTION WRAPPER */}
+        {[
+          {
+            title: "Basic Details",
+            rows: [
+              { label: "Title", value: profile.Title },
+              { label: "First Name", value: profile.firstname },
+              { label: "Middle Name", value: profile.MiddleName },
+              { label: "Last Name", value: profile.lastname },
+              { label: "Gender", value: profile.GenderName },
+              { label: "Marital Status", value: profile.MaritalStatus },
+            ],
+          },
+          {
+            title: "Birth & Astrology",
+            rows: [
+              { label: "Date of Birth", value: profile.DateOfBirth },
+              { label: "Birth Time", value: profile.BirthTime },
+              { label: "Birth Place", value: profile.BirthPlace },
+              { label: "Birth Name", value: profile.BirthName },
+              { label: "Rashi", value: profile.Rashi },
+              { label: "Gotra", value: profile.GotraName },
+              { label: "Nana Gotra", value: profile.NanaGotraName },
+              { label: "Manglik", value: profile.Manglik == 1 ? "Yes" : "No" },
+            ],
+          },
+          {
+            title: "Physical Details",
+            rows: [
+              { label: "Height", value: lookup("heights", profile.HeightID) },
+              { label: "Weight", value: profile.Weight },
+              { label: "Complexion", value: profile.Complexion },
+              { label: "Blood Group", value: profile.BloodGroupID },
+            ],
+          },
+          {
+            title: "Education & Job",
+            rows: [
+              { label: "Degree", value: profile.EducationDegreeName },
+              { label: "Education Detail", value: profile.EducationDetail },
+              { label: "Occupation", value: profile.OccupationName },
+              { label: "Organization", value: profile.OrganizationName },
+              { label: "Location", value: profile.OrganizationLocation },
+              {
+                label: "Annual Income",
+                value: lookup("incomeranges", profile.AnnualIncomeID),
+              },
+            ],
+          },
+          {
+            title: "Family Details",
+            rows: [
+              { label: "Father Name", value: profile.FatherName },
+              { label: "Father Status", value: profile.FatherStatus },
+              { label: "Mother Name", value: profile.MotherName },
+              { label: "Mother Occupation", value: profile.MotherOccupation },
+              { label: "Brothers", value: profile.NoOfBrothers },
+              { label: "Sisters", value: profile.NoOfSisters },
+            ],
+          },
+          {
+            title: "Marriage Preferences",
+            rows: [
+              {
+                label: "Preferred Area",
+                value: profile.PreferredAreaOfMarriage,
+              },
+              { label: "Diet", value: profile.Diet },
+              {
+                label: "Partner Expectations",
+                fullWidth: true,
+                value: profile.PartnerExpectations,
+              },
+            ],
+          },
+          {
+            title: "Contact Details",
+            rows: [
+              { label: "Email", value: profile.ContactEmail },
+              { label: "Contact Mobile", value: profile.ContactMobile },
+              { label: "Phone", value: profile.ContactPhone },
+              { label: "Address", value: profile.Address, fullWidth: true },
+            ],
+          },
+        ].map((section, idx) => (
+          <div
+            key={idx}
+            className="p-4 mb-4 rounded shadow-sm"
+            style={{
+              background: "white",
+              border: "1px solid #eee",
+              borderRadius: 15,
+            }}
+          >
+            <h4 className="fw-bold mb-4" style={{ color: "#d32163" }}>
+              {section.title}
+            </h4>
+
+            <div className="row">
+              {section.rows.map((item, i) => (
+                <div
+                  className={item.fullWidth ? "col-md-12" : "col-md-4"}
+                  key={i}
+                  style={{ marginBottom: 20 }}
+                >
+                  <div className="text-muted small">{item.label}</div>
+                  <div className="fw-semibold">{item.value || "-"}</div>
+                </div>
+              ))}
             </div>
           </div>
-        </div>
-
-        {/* MARRIAGE PREFERENCES */}
-        <h4 className="section-title mb-3 mt-4 text-primary">
-          Marriage Preferences
-        </h4>
-        <div className="row mb-4 pb-3 border-bottom">
-          <div className="col-md-4 mb-3">
-            <div className="text-muted small">Preferred Marriage Area</div>
-            <div className="fw-semibold">
-              {lookup(
-                "preference_marriage_area",
-                profile.PreferredAreaOfMarriage
-              )}
-            </div>
-          </div>
-
-          <div className="col-md-4 mb-3">
-            <div className="text-muted small">Diet</div>
-            <div className="fw-semibold">{lookup("diets", profile.DietID)}</div>
-          </div>
-
-          <div className="col-md-12 mt-3">
-            <div className="text-muted small">Partner Expectations</div>
-            <div className="fw-semibold" style={{ whiteSpace: "pre-line" }}>
-              {partnerExpectations}
-            </div>
-          </div>
-        </div>
-
-        {/* CONTACT */}
-        <h4 className="section-title mb-3 mt-4 text-primary">
-          Contact Details
-        </h4>
-        <div className="row mb-4 pb-3 border-bottom">
-          <div className="col-md-4 mb-3">
-            <div className="text-muted small">Primary Mobile</div>
-            <div className="fw-semibold">{profile.ContactMobile || "NA"}</div>
-          </div>
-          <div className="col-md-4 mb-3">
-            <div className="text-muted small">Email</div>
-            <div className="fw-semibold">{profile.ContactEmail || "NA"}</div>
-          </div>
-          <div className="col-md-4 mb-3">
-            <div className="text-muted small">Address</div>
-            <div className="fw-semibold">{profile.Address || "NA"}</div>
-          </div>
-        </div>
+        ))}
       </div>
 
       <Footer />

@@ -86,31 +86,112 @@ export const getProfileDetails = async () => {
 // ---------------------------
 // UPDATE PROFILE (POST → FormData)
 // ---------------------------
-export const updateProfile = async (profileData) => {
+const PROFILE_FIELDS = [
+  "ProfileID",
+  "UserID",
+  "Password",
+  "ProfileImageURL",
+  "Title",
+  "firstname",
+  "lastname",
+  "MiddleName",
+  "GenderID",
+  "MaritalStatusID",
+  "ReligionID",
+  "MotherTongueID",
+  "GotraID",
+  "NanaGotraId",
+  "DateOfBirth",
+  "BirthPlace",
+  "BirthTime",
+  "BirthName",
+  "Manglik",
+  "Rashi",
+  "Complexion",
+  "HeightID",
+  "Weight",
+  "BloodGroupID",
+  "FatherName",
+  "FatherOccupationID",
+  "FatherStatus",
+  "MotherName",
+  "MotherOccupation",
+  "NoOfBrothers",
+  "NoOfBrothersMarried",
+  "NoOfSisters",
+  "NoOfSistersMarried",
+  "EducationDegreeID",
+  "EducationDegree",
+  "EducationDetail",
+  "OccupationID",
+  "OccupationDetail",
+  "OrganizationName",
+  "OrganizationLocation",
+  "WorkingAs",
+  "AnnualIncomeID",
+  "AnnualIncome",
+  "LocationCityID",
+  "PreferredAreaOfMarriage",
+  "PaitthiNivasKhor",
+  "Hobbies",
+  "DietID",
+  "Diet",
+  "PartnerExpectations",
+  "ContactPersonName",
+  "ContactPersonRelationshipID",
+  "ContactPersonRelationship",
+  "ContactMobile",
+  "ContactMobile2",
+  "ContactPhone",
+  "ContactEmail",
+  "Address",
+  "ContactCityID",
+  "ContactCity",
+];
+
+// -------------------------------
+// FINAL WORKING updateProfile()
+// -------------------------------
+export const updateProfile = async (payload, profilePhoto) => {
   const profileID = localStorage.getItem("profileID");
   const userID = localStorage.getItem("userID");
 
+  payload.ProfileID = profileID;
+  payload.UserID = userID;
+
   const formData = new FormData();
 
-  for (let key in profileData) {
-    formData.append(key, profileData[key]);
+  // Append ONLY allowed fields
+  PROFILE_FIELDS.forEach((field) => {
+    if (payload[field] !== undefined && payload[field] !== null) {
+      formData.append(field, payload[field]);
+    }
+  });
+
+  // Append profile photo if selected
+  if (profilePhoto) {
+    formData.append("ProfilePhoto", profilePhoto);
   }
 
-  formData.append("ProfileID", profileID);
-  formData.append("UserID", userID);
+  // Debugging (OPTIONAL)
+  console.log("---- FINAL SENT PAYLOAD ----");
+  for (let pair of formData.entries()) {
+    console.log(pair[0] + ": " + pair[1]);
+  }
 
-  const url = `${API_BASE_URL}?api=update_profile`;
-
-  const res = await fetch(url, {
+  const response = await fetch(`${API_BASE_URL}?api=update_profile`, {
     method: "POST",
     body: formData,
   });
 
-  const data = await res.json();
-  if (!res.ok) throw new Error(data.message);
+  const data = await response.json();
+
+  if (!response.ok) {
+    throw new Error(data.message || "Update failed");
+  }
+
   return data;
 };
-
 // ---------------------------
 // GET ALL PROFILES LIST
 // ---------------------------
@@ -136,6 +217,8 @@ export const updateProfilePicture = async (file) => {
   const formData = new FormData();
   formData.append("ProfileID", profileID);
   formData.append("UserID", userID);
+
+  // The API documentation says "ProfilePhoto" is the key
   formData.append("ProfilePhoto", file);
 
   const res = await fetch(`${API_BASE_URL}?api=update_profile_picture`, {
@@ -144,7 +227,10 @@ export const updateProfilePicture = async (file) => {
   });
 
   const data = await res.json();
-  if (!res.ok || data.status !== 200) throw new Error(data.message);
+  // Adjust error check based on your API's success response (usually 200)
+  if (!res.ok || (data.status !== 200 && data.status !== "success")) {
+    throw new Error(data.message || "Failed to upload photo");
+  }
 
   return data;
 };
