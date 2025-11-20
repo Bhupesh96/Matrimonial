@@ -14,7 +14,7 @@ import MobileMenu from "../components/MobileMenu";
 import DashboardMenu from "../components/DashBoardMenu";
 import Footer from "../components/Footer";
 import CopyRight from "../components/CopyRight";
-
+const API_BASE_URL = process.env.REACT_APP_API_URL;
 const Login = () => {
   // 1. State for form fields, loading
   const [identifier, setIdentifier] = useState("");
@@ -52,6 +52,16 @@ const Login = () => {
         localStorage.setItem("profileID", data.data.ProfileID);
         localStorage.setItem("userID", data.data.UserID);
         localStorage.setItem("profileName", data.data.ProfileName);
+        fetch(
+          `${API_BASE_URL}?api=get_profile&ProfileID=${data.data.ProfileID}`
+        )
+          .then((res) => res.json())
+          .then((profileRes) => {
+            const photo = profileRes?.data?.[0]?.ProfilePhoto;
+            if (photo) {
+              localStorage.setItem("profilePhoto", photo);
+            }
+          });
       } else {
         // This shouldn't happen if the API is correct, but good to check.
         throw new Error("Login response was successful but missing user data.");

@@ -1,11 +1,11 @@
 import React, { useEffect, useState } from "react";
-
+import { fetchApprovedProfiles } from "../api";
+import Preloader from "../components/Preloader";
 const ProfileList = () => {
   const [profiles, setProfiles] = useState([]);
   const [loading, setLoading] = useState(true);
 
-  const API_URL = "/api?api=get_list";
-  const IMG_BASE = "https://techwithus.in/matro/admin/plug/";
+  const API_BASE_URL = process.env.REACT_APP_API_URL;
 
   // --- Helper: Calculate Age ---
   const calculateAge = (dob) => {
@@ -15,16 +15,12 @@ const ProfileList = () => {
     return `${age} Years old`;
   };
 
-  // --- Fetch profiles ---
+  // --- Fetch approved profiles ---
   useEffect(() => {
     const loadProfiles = async () => {
       try {
-        const res = await fetch(API_URL);
-        const json = await res.json();
-
-        if (json.status === 200) {
-          setProfiles(json.data);
-        }
+        const data = await fetchApprovedProfiles();
+        setProfiles(data);
       } catch (err) {
         console.error("Profile load error:", err);
       }
@@ -37,7 +33,7 @@ const ProfileList = () => {
   if (loading) {
     return (
       <div style={{ padding: 50, textAlign: "center", fontSize: 22 }}>
-        Loading profiles...
+        <Preloader />
       </div>
     );
   }
@@ -47,7 +43,7 @@ const ProfileList = () => {
       <div className="all-weddpro all-jobs all-serexp chosenini">
         <div className="container">
           <div className="row">
-            {/* LEFT FILTERS (same UI) */}
+            {/* LEFT FILTERS */}
             <div className="col-md-3 fil-mob-view">
               <span className="filter-clo">+</span>
 
@@ -148,7 +144,7 @@ const ProfileList = () => {
                     }`;
 
                     const imageSrc = p.ProfilePhoto
-                      ? IMG_BASE + p.ProfilePhoto
+                      ? p.ProfilePhoto
                       : "images/default.png";
 
                     const details = [
@@ -161,11 +157,46 @@ const ProfileList = () => {
                     return (
                       <li key={i}>
                         <div className="all-pro-box" data-useravil="avilyes">
-                          <div className="pro-img">
-                            <img src={imageSrc} alt={fullName} />
+                          <div
+                            className="pro-img"
+                            style={{
+                              width: "180px",
+                              height: "240px", // portrait shape
+                              borderRadius: "10px",
+                              overflow: "hidden",
+                              background: "#f3f3f3",
+                              position: "relative",
+                              marginBottom: "10px",
+                            }}
+                          >
+                            <img
+                              src={imageSrc}
+                              alt={fullName}
+                              style={{
+                                width: "100%",
+                                height: "100%",
+                                objectFit: "cover",
+                                objectPosition: "center",
+                                display: "block",
+                              }}
+                            />
 
-                            <div className="pro-avl-status">
-                              <h5>Available Online</h5>
+                            <div
+                              className="pro-avl-status"
+                              style={{
+                                position: "absolute",
+                                bottom: "0",
+                                left: "0",
+                                width: "100%",
+                                padding: "5px 0",
+                                background: "rgba(0,0,0,0.5)",
+                                textAlign: "center",
+                                color: "#fff",
+                              }}
+                            >
+                              <h5 style={{ margin: 0, fontSize: "12px" }}>
+                                Available Online
+                              </h5>
                             </div>
                           </div>
 

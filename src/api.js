@@ -75,7 +75,11 @@ export const getProfileDetails = async () => {
 
   const url = `${API_BASE_URL}?api=get_profile&ProfileID=${profileID}`;
 
-  const res = await fetch(url);
+  const res = await fetch(url, {
+    method: "GET",
+    credentials: "include", // <-- REQUIRED
+  });
+
   const data = await res.json();
 
   if (!res.ok || data.status === 401) throw new Error(data.message);
@@ -207,6 +211,29 @@ export const fetchAllProfiles = async () => {
 
   return data.data || [];
 };
+// ---------------------------
+// GET APPROVED PROFILES LIST
+// ---------------------------
+export const fetchApprovedProfiles = async () => {
+  const viewerID = localStorage.getItem("profileID");
+  if (!viewerID) throw new Error("No profile ID found");
+
+  const url = `${API_BASE_URL}?api=ver_pproved_list&ViewerID=${viewerID}`;
+
+  const res = await fetch(url, {
+    method: "GET",
+    credentials: "include",
+  });
+
+  const data = await res.json();
+
+  if (!res.ok || data.status !== 200) {
+    throw new Error(data.message || "Failed to fetch approved list");
+  }
+
+  return data.data || [];
+};
+
 // ---------------------------
 // UPDATE PROFILE PHOTO (POST → FormData)
 // ---------------------------

@@ -3,11 +3,13 @@ import { Link } from "react-router-dom";
 
 const MainMenu = () => {
   const [profileName, setProfileName] = useState("");
+  const [profilePhoto, setProfilePhoto] = useState("");
   useEffect(() => {
     const name = localStorage.getItem("profileName");
-    if (name) {
-      setProfileName(name);
-    }
+    const photo = localStorage.getItem("profilePhoto");
+
+    if (name) setProfileName(name);
+    if (photo) setProfilePhoto(photo);
   }, []);
 
   return (
@@ -76,7 +78,9 @@ const MainMenu = () => {
                                 Join Now <span>Lorem ipsum dummy</span>
                               </h5>
                               <span className="explor-cta">More details</span>
-                              <Link to="/sign-up">Register</Link>
+                              {!profileName && (
+                                <Link to="/sign-up">Register</Link>
+                              )}
                             </div>
                           </li>
                         </ul>
@@ -119,9 +123,12 @@ const MainMenu = () => {
                       <li>
                         <Link to="/login">Login</Link>
                       </li>
-                      <li>
-                        <Link to="/sign-up">Register</Link>
-                      </li>
+                      {!profileName && (
+                        <li>
+                          <Link to="/sign-up">Register</Link>
+                        </li>
+                      )}
+
                       <li>
                         <a href="plans.html">Pricing plans</a>
                       </li>
@@ -132,9 +139,11 @@ const MainMenu = () => {
                 <li>
                   <a href="plans.html">Plans</a>
                 </li>
-                <li>
-                  <Link to="/sign-up">Register</Link>
-                </li>
+                {!profileName && (
+                  <li>
+                    <Link to="/sign-up">Register</Link>
+                  </li>
+                )}
 
                 <li className="smenu-pare">
                   <span className="smenu">Dashboard</span>
@@ -174,7 +183,12 @@ const MainMenu = () => {
             {profileName && (
               <div className="al">
                 <div className="head-pro">
-                  <img src="images/default.png" alt="" loading="lazy" />
+                  <img
+                    src={profilePhoto ? profilePhoto : "images/default.png"}
+                    alt="Profile"
+                    loading="lazy"
+                  />
+
                   <b>User</b>
                   <br />
                   <h4
