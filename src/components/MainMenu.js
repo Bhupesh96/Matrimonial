@@ -51,7 +51,11 @@ const MainMenu = () => {
                                 <span>1200+ Verified profiles</span>
                               </h5>
                               <span className="explor-cta">More details</span>
-                              <a href="/all-profiles" className="fclick"></a>
+                              <Link
+                                to="/all-profiles"
+                                className="fclick"
+                                aria-label="Open profile list"
+                              ></Link>
                             </div>
                           </li>
                           <li>
