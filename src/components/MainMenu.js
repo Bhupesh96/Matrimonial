@@ -50,9 +50,7 @@ const MainMenu = () => {
                                 Browse profiles{" "}
                                 <span>1200+ Verified profiles</span>
                               </h5>
-                              <span className="explor-cta">
-                                More details Hi
-                              </span>
+                              <span className="explor-cta">More details</span>
                               <Link
                                 to="/all-profiles"
                                 className="fclick"
