@@ -1,3 +1,5 @@
+import { Link } from "react-router-dom";
+
 const TopMenu = () => {
   return (
     <div className="head-top">
@@ -11,13 +13,13 @@ const TopMenu = () => {
                 </a>
               </li>
               <li>
-                <a href="/about">About</a>
+                <Link to="/about">About</Link>
               </li>
               {/* <li>
                 <a href="faq.html">FAQ</a>
               </li> */}
               <li>
-                <a href="/contact">Contact</a>
+                <Link to="/contact">Contact</Link>
               </li>
             </ul>
           </div>
