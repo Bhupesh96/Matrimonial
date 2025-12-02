@@ -1,5 +1,6 @@
 import "./App.css";
-import { BrowserRouter as Router, Route, Routes } from "react-router-dom";
+import { Routes, Route } from "react-router-dom";
+
 import Home from "./pages/Home";
 import InvalidRoute from "./pages/InvalidRoute";
 import AboutUs from "./pages/AboutUs";
@@ -8,29 +9,23 @@ import BolgDetail from "./pages/BolgDetail";
 import SignUp from "./pages/SignUp";
 import Login from "./pages/Login";
 import Contact from "./pages/Contact";
-import { ToastContainer } from "react-toastify";
-import "react-toastify/dist/ReactToastify.css";
 import UserProfileEdit from "./pages/UserProfileEdit";
-import "slick-carousel/slick/slick.css";
-import "slick-carousel/slick/slick-theme.css";
 import UserProfile from "./pages/UserProfile";
 import MyRequests from "./pages/MyRequests";
 
+import { ToastContainer } from "react-toastify";
+import "react-toastify/dist/ReactToastify.css";
+import "slick-carousel/slick/slick.css";
+import "slick-carousel/slick/slick-theme.css";
+
 function App() {
   return (
-    <Router>
+    <>
       <ToastContainer
         position="top-right"
         autoClose={3000}
-        hideProgressBar={false}
-        closeOnClick
-        pauseOnHover
-        draggable
-        newestOnTop
         theme="colored"
-        style={{
-          marginTop: "80px",
-        }}
+        style={{ marginTop: "80px" }}
       />
 
       <Routes>
@@ -44,10 +39,9 @@ function App() {
         <Route path="user-profile/:id" element={<UserProfile />} />
         <Route path="user-profile-edit" element={<UserProfileEdit />} />
         <Route path="my-requests" element={<MyRequests />} />
-
         <Route path="*" element={<InvalidRoute />} />
       </Routes>
-    </Router>
+    </>
   );
 }
 
