@@ -14,6 +14,7 @@ import UserProfileEdit from "./pages/UserProfileEdit";
 import "slick-carousel/slick/slick.css";
 import "slick-carousel/slick/slick-theme.css";
 import UserProfile from "./pages/UserProfile";
+import MyRequests from "./pages/MyRequests";
 
 function App() {
   return (
@@ -40,8 +41,10 @@ function App() {
         <Route path="contact" element={<Contact />} />
         <Route path="all-profiles" element={<AllProfiles />} />
         <Route path="blog-detail" element={<BolgDetail />} />
-        <Route path="user-profile" element={<UserProfile />} />
+        <Route path="user-profile/:id" element={<UserProfile />} />
         <Route path="user-profile-edit" element={<UserProfileEdit />} />
+        <Route path="my-requests" element={<MyRequests />} />
+
         <Route path="*" element={<InvalidRoute />} />
       </Routes>
     </Router>

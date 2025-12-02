@@ -11,7 +11,7 @@ import DashboardMenu from "../components/DashBoardMenu";
 import Footer from "../components/Footer";
 import CopyRight from "../components/CopyRight";
 import { Link } from "react-router-dom";
-
+import { useParams } from "react-router-dom";
 const API = process.env.REACT_APP_API_URL;
 
 // master types (lowercase)
@@ -35,7 +35,7 @@ const UserProfile = () => {
 
   const IMG_BASE = "https://techwithus.in/matro/admin/plug/";
   const DEFAULT_IMG = "images/default.png";
-
+  const { id } = useParams();
   useEffect(() => {
     (async () => {
       try {
@@ -51,7 +51,8 @@ const UserProfile = () => {
         setMasters(masterObj);
 
         // load profile
-        const profileID = localStorage.getItem("profileID");
+
+        const profileID = id || localStorage.getItem("profileID");
         if (!profileID) {
           setProfile(null);
           setLoading(false);
@@ -64,6 +65,7 @@ const UserProfile = () => {
         if (json.status === 200 && Array.isArray(json.data) && json.data[0]) {
           // normalize keys to match edit page if needed
           const p = json.data[0];
+          console.log("User profile: ", JSON.stringify(p, null, 2));
           // keep original keys
           setProfile(p);
         } else {
@@ -246,31 +248,6 @@ const UserProfile = () => {
             </div>
 
             {/* BUTTONS */}
-            <div className="col-md-3 text-md-end text-center mt-4 mt-md-0">
-              <Link
-                to="/user-profile-edit"
-                className="fw-semibold px-4 py-2 d-inline-block"
-                style={{
-                  background: "linear-gradient(90deg,#d32163,#ff5a8f)",
-                  borderRadius: 8,
-                  color: "white",
-                  textDecoration: "none",
-                  boxShadow: "0 4px 12px rgba(211,33,99,0.25)",
-                }}
-              >
-                Edit Profile
-              </Link>
-
-              <div className="mt-3">
-                <a
-                  href="/"
-                  className="btn btn-outline-secondary px-4 py-2"
-                  style={{ borderRadius: 8 }}
-                >
-                  Dashboard
-                </a>
-              </div>
-            </div>
           </div>
         </div>
 

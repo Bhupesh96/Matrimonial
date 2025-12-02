@@ -15,7 +15,7 @@ import { Link } from "react-router-dom";
 const AllProfiles = () => {
   return (
     <div>
-      <Preloader />
+      
       <PoopUpSearch />
       <TopMenu />
       <MenuPopUp />

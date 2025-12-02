@@ -266,15 +266,6 @@ const UserProfileEdit = () => {
         className="container"
         style={{ marginTop: "7rem", marginBottom: "6rem" }}
       >
-        <div
-          className="edit-pro-parti mb-5"
-          style={{ marginTop: "8rem", textAlign: "center" }}
-        >
-          <h3 style={{ fontWeight: 600, fontSize: 28, color: "#333" }}>
-            Edit Profile
-          </h3>
-        </div>
-
         <form onSubmit={handleSubmit}>
           {/* -------------------------------------- */}
           {/* BASIC DETAILS */}

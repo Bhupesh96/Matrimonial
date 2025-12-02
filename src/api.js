@@ -17,17 +17,14 @@ export const fetchMasterData = async (masterType) => {
 // CREATE PROFILE  (POST → FormData)
 // ---------------------------
 export const createProfile = async (profileData) => {
-  const formData = new FormData();
-
-  for (let key in profileData) {
-    formData.append(key, profileData[key]);
-  }
-
   const url = `${API_BASE_URL}?api=create_profile`;
 
   const res = await fetch(url, {
     method: "POST",
-    body: formData,
+    headers: {
+      "Content-Type": "application/json",
+    },
+    body: JSON.stringify(profileData),
   });
 
   const data = await res.json();
@@ -260,4 +257,64 @@ export const updateProfilePicture = async (file) => {
   }
 
   return data;
+};
+export const sendConnectionRequest = async (receiverID) => {
+  const requesterID = localStorage.getItem("profileID"); // Assuming "Me"
+  if (!requesterID) throw new Error("You are not logged in.");
+
+  const url = `${API_BASE_URL}?api=send_request`;
+  const payload = {
+    RequesterID: requesterID,
+    ReceiverID: receiverID,
+  };
+
+  const res = await fetch(url, {
+    method: "POST",
+    headers: { "Content-Type": "application/json" },
+    body: JSON.stringify(payload),
+  });
+
+  const data = await res.json();
+  if (!res.ok) throw new Error(data.message || "Failed to send request");
+  return data;
+};
+
+// 2. Manage Request (Accept/Reject)
+export const manageConnectionRequest = async (requestID, action) => {
+  // Action must be "Accept" or "Reject"
+  const receiverID = localStorage.getItem("profileID"); // Me reacting to incoming
+
+  const url = `${API_BASE_URL}?api=manage_request`;
+  const payload = {
+    RequestID: requestID,
+    ReceiverID: receiverID,
+    Action: action,
+  };
+
+  const res = await fetch(url, {
+    method: "POST",
+    headers: { "Content-Type": "application/json" },
+    body: JSON.stringify(payload),
+  });
+
+  const data = await res.json();
+  if (!res.ok) throw new Error(data.message || "Failed to update request");
+  return data;
+};
+
+// 3. Get My Requests (Incoming & Outgoing)
+
+export const fetchMyRequests = async () => {
+  const viewerID = localStorage.getItem("profileID"); // viewerID = logged-in user
+
+  if (!viewerID) throw new Error("No profile ID found");
+
+  const url = `${API_BASE_URL}?api=my_request&ViewerID=${viewerID}`;
+
+  const res = await fetch(url);
+  const data = await res.json();
+
+  if (!res.ok) throw new Error(data.message || "Failed to fetch requests");
+
+  return data.data; // returns { incoming_requests: [], outgoing_requests: [] }
 };
