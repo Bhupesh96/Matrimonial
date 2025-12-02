@@ -11,13 +11,13 @@ const AboutWelcome = () => {
               <div className="ab-wel-lhs">
                 <span className="ab-wel-3"></span>
                 <img
-                  src="images/about/1.jpg"
+                  src={`${process.env.PUBLIC_URL}/images/about/1.jpg`}
                   alt="Wedding couple"
                   loading="lazy"
                   className="ab-wel-1"
                 />
                 <img
-                  src="images/couples/20.jpg"
+                  src={`${process.env.PUBLIC_URL}/images/couples/20.jpg`}
                   alt="Happy couple"
                   loading="lazy"
                   className="ab-wel-2"

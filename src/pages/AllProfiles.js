@@ -15,7 +15,6 @@ import { Link } from "react-router-dom";
 const AllProfiles = () => {
   return (
     <div>
-      
       <PoopUpSearch />
       <TopMenu />
       <MenuPopUp />
@@ -69,7 +68,7 @@ const AllProfiles = () => {
             <div className="modal-body seninter">
               <div className="lhs">
                 <img
-                  src="images/profiles/1.jpg"
+                  src={`${process.env.PUBLIC_URL}/images/profiles/1.jpg`}
                   alt=""
                   className="intephoto2"
                 />

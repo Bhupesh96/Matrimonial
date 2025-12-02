@@ -13,8 +13,6 @@ import MeetOurTeam from "../components/MeetOurTeam";
 const Contact = () => {
   return (
     <div>
-      {" "}
-      <Preloader />
       <PoopUpSearch />
       <TopMenu />
       <MenuPopUp />
@@ -70,7 +68,10 @@ const Contact = () => {
                 </li>
                 <li>
                   <div className="we-cont">
-                    <img src="images/icon/trust.png" alt="" />
+                    <img
+                      src={`${process.env.PUBLIC_URL}/images/icon/trust.png`}
+                      alt=""
+                    />
                     <h4>Customer Relations</h4>
                     <p>
                       Most Trusted and premium Matrimony Service in the World.
@@ -82,7 +83,10 @@ const Contact = () => {
                 </li>
                 <li>
                   <div className="we-cont">
-                    <img src="images/icon/telephone.png" alt="" />
+                    <img
+                      src={`${process.env.PUBLIC_URL}/images/icon/telephone.png`}
+                      alt=""
+                    />
                     <h4>WhatsApp Support</h4>
                     <p>
                       Most Trusted and premium Matrimony Service in the World.
@@ -111,7 +115,10 @@ const Contact = () => {
                     </h2>
                   </div>
                   <div className="im">
-                    <img src="images/login-couple.png" alt="" />
+                    <img
+                      src={`${process.env.PUBLIC_URL}/images/login-couple.png`}
+                      alt=""
+                    />
                   </div>
                   <div className="log-bg">&nbsp;</div>
                 </div>

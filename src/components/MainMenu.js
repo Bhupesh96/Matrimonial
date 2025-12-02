@@ -26,7 +26,7 @@ const MainMenu = () => {
               </span>
               <Link to="/" className="logo-brand">
                 <img
-                  src="images/logo-b.png"
+                  src={`${process.env.PUBLIC_URL}/images/logo-b.png`}
                   alt=""
                   loading="lazy"
                   className="ic-logo"
@@ -214,13 +214,22 @@ const MainMenu = () => {
             <div className="mob-menu">
               <div className="mob-me-ic">
                 <span className="ser-open mobile-ser">
-                  <img src="images/icon/search.svg" alt="" />
+                  <img
+                    src={`${process.env.PUBLIC_URL}/images/icon/search.svg`}
+                    alt=""
+                  />
                 </span>
                 <span className="mobile-exprt" data-mob="dashbord">
-                  <img src="images/icon/users.svg" alt="" />
+                  <img
+                    src={`${process.env.PUBLIC_URL}/images/icon/users.svg`}
+                    alt=""
+                  />
                 </span>
                 <span className="mobile-menu" data-mob="mobile">
-                  <img src="images/icon/menu.svg" alt="" />
+                  <img
+                    src={`${process.env.PUBLIC_URL}/images/icon/menu.svg`}
+                    alt=""
+                  />
                 </span>
               </div>
             </div>

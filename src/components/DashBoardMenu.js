@@ -5,11 +5,15 @@ const DashboardMenu = () => {
   return (
     <div className="mob-me-all dashbord_menu">
       <div className="mob-me-clo">
-        <img src="images/icon/close.svg" alt="" />
+        <img src={`${process.env.PUBLIC_URL}/images/icon/close.svg`} alt="" />
       </div>
       <div className="mv-bus">
         <div className="head-pro">
-          <img src="images/profiles/1.jpg" alt="" loading="lazy" />
+          <img
+            src={`${process.env.PUBLIC_URL}/images/profiles/1.jpg`}
+            alt=""
+            loading="lazy"
+          />
           <b>user profile</b>
           <br />
           <h4>Ashley emyy</h4>

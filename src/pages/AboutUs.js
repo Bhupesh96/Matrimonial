@@ -16,7 +16,6 @@ import CopyRight from "../components/CopyRight";
 const AboutUs = () => {
   return (
     <div>
-      <Preloader />
       <PoopUpSearch />
       <TopMenu />
       <MenuPopUp />
@@ -54,21 +53,30 @@ const AboutUs = () => {
               <ul>
                 <li>
                   <div>
-                    <img src="images/icon/prize.png" alt="" />
+                    <img
+                      src={`${process.env.PUBLIC_URL}/images/icon/prize.png`}
+                      alt=""
+                    />
                     <h4>Genuine profiles</h4>
                     <p>The most trusted Dewangan Shadi brand</p>
                   </div>
                 </li>
                 <li>
                   <div>
-                    <img src="images/icon/trust.png" alt="" />
+                    <img
+                      src={`${process.env.PUBLIC_URL}/images/icon/trust.png`}
+                      alt=""
+                    />
                     <h4>Most trusted</h4>
                     <p>The most trusted Dewangan Shadi brand</p>
                   </div>
                 </li>
                 <li>
                   <div>
-                    <img src="images/icon/rings.png" alt="" />
+                    <img
+                      src={`${process.env.PUBLIC_URL}/images/icon/rings.png`}
+                      alt=""
+                    />
                     <h4>2000+ weddings</h4>
                     <p>The most trusted Dewangan Shadi brand</p>
                   </div>
@@ -86,8 +94,16 @@ const AboutUs = () => {
               <div className="col-lg-6">
                 <div className="ab-wel-lhs">
                   <span className="ab-wel-3"></span>
-                  <img src="images/about/1.jpg" alt="" className="ab-wel-1" />
-                  <img src="images/about/2.jpg" alt="" className="ab-wel-2" />
+                  <img
+                    src={`${process.env.PUBLIC_URL}/images/about/1.jpg`}
+                    alt=""
+                    className="ab-wel-1"
+                  />
+                  <img
+                    src={`${process.env.PUBLIC_URL}/images/about/2.jpg`}
+                    alt=""
+                    className="ab-wel-2"
+                  />
                   <span className="ab-wel-4"></span>
                 </div>
               </div>
@@ -163,21 +179,30 @@ const AboutUs = () => {
               <ul>
                 <li>
                   <div>
-                    <img src="images/icon/prize.png" alt="Genuine profiles" />
+                    <img
+                      src={`${process.env.PUBLIC_URL}/images/icon/prize.png`}
+                      alt="Genuine profiles"
+                    />
                     <h4>Genuine profiles</h4>
                     <p>The most trusted Dewangan Shadi brand</p>
                   </div>
                 </li>
                 <li>
                   <div>
-                    <img src="images/icon/trust.png" alt="Most trusted" />
+                    <img
+                      src={`${process.env.PUBLIC_URL}/images/icon/trust.png`}
+                      alt="Most trusted"
+                    />
                     <h4>Most trusted</h4>
                     <p>The most trusted Dewangan Shadi brand</p>
                   </div>
                 </li>
                 <li>
                   <div>
-                    <img src="images/icon/rings.png" alt="2000+ weddings" />
+                    <img
+                      src={`${process.env.PUBLIC_URL}/images/icon/rings.png`}
+                      alt="2000+ weddings"
+                    />
                     <h4>2000+ weddings</h4>
                     <p>The most trusted Dewangan Shadi brand</p>
                   </div>
@@ -294,7 +319,10 @@ const AboutUs = () => {
                             </div>
                           </div>
                           <div className="ab-rat-user">
-                            <img src="images/profiles/1.jpg" alt="John Smith" />
+                            <img
+                              src={`${process.env.PUBLIC_URL}/images/profiles/1.jpg`}
+                              alt="John Smith"
+                            />
                             <div>
                               <h4>John Smith</h4>
                               <span>IT Profession</span>
@@ -329,7 +357,10 @@ const AboutUs = () => {
                             </div>
                           </div>
                           <div className="ab-rat-user">
-                            <img src="images/profiles/6.jpg" alt="Julia Ann" />
+                            <img
+                              src={`${process.env.PUBLIC_URL}/images/profiles/6.jpg`}
+                              alt="Julia Ann"
+                            />
                             <div>
                               <h4>Julia Ann</h4>
                               <span>Teacher</span>
@@ -365,7 +396,7 @@ const AboutUs = () => {
                           </div>
                           <div className="ab-rat-user">
                             <img
-                              src="images/profiles/7.jpg"
+                              src={`${process.env.PUBLIC_URL}/images/profiles/7.jpg`}
                               alt="William Son"
                             />
                             <div>
@@ -407,7 +438,10 @@ const AboutUs = () => {
                             </div>
                           </div>
                           <div className="ab-rat-user">
-                            <img src="images/profiles/1.jpg" alt="John Smith" />
+                            <img
+                              src={`${process.env.PUBLIC_URL}/images/profiles/1.jpg`}
+                              alt="John Smith"
+                            />
                             <div>
                               <h4>John Smith</h4>
                               <span>IT Profession</span>
@@ -442,7 +476,10 @@ const AboutUs = () => {
                             </div>
                           </div>
                           <div className="ab-rat-user">
-                            <img src="images/profiles/6.jpg" alt="Julia Ann" />
+                            <img
+                              src={`${process.env.PUBLIC_URL}/images/profiles/6.jpg`}
+                              alt="Julia Ann"
+                            />
                             <div>
                               <h4>Julia Ann</h4>
                               <span>Teacher</span>
@@ -478,7 +515,7 @@ const AboutUs = () => {
                           </div>
                           <div className="ab-rat-user">
                             <img
-                              src="images/profiles/7.jpg"
+                              src={`${process.env.PUBLIC_URL}/images/profiles/7.jpg`}
                               alt="William Son"
                             />
                             <div>

@@ -111,7 +111,10 @@ const Login = () => {
                     </h2>
                   </div>
                   <div className="im">
-                    <img src="images/login-couple.png" alt="" />
+                    <img
+                      src={`${process.env.PUBLIC_URL}/images/login-couple.png`}
+                      alt=""
+                    />
                   </div>
                   <div className="log-bg">&nbsp;</div>
                 </div>

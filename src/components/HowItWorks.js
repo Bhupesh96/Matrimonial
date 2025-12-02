@@ -22,7 +22,11 @@ const HowItWorks = () => {
                       className="tline-im animate animate__animated animate__slower"
                       data-ani="animate__fadeInUp"
                     >
-                      <img src="images/icon/rings.png" alt="" loading="lazy" />
+                      <img
+                        src={`${process.env.PUBLIC_URL}/images/icon/rings.png`}
+                        alt=""
+                        loading="lazy"
+                      />
                     </div>
                     <div
                       className="tline-con animate animate__animated animate__slow"
@@ -67,7 +71,7 @@ const HowItWorks = () => {
                       data-ani="animate__fadeInUp"
                     >
                       <img
-                        src="images/icon/wedding-2.png"
+                        src={`${process.env.PUBLIC_URL}/images/icon/wedding-2.png`}
                         alt=""
                         loading="lazy"
                       />
@@ -82,7 +86,7 @@ const HowItWorks = () => {
                       data-ani="animate__fadeInUp"
                     >
                       <img
-                        src="images/icon/love-birds.png"
+                        src={`${process.env.PUBLIC_URL}/images/icon/love-birds.png`}
                         alt=""
                         loading="lazy"
                       />
@@ -131,7 +135,7 @@ const HowItWorks = () => {
                       data-ani="animate__fadeInUp"
                     >
                       <img
-                        src="images/icon/network.png"
+                        src={`${process.env.PUBLIC_URL}/images/icon/network.png`}
                         alt=""
                         loading="lazy"
                       />
@@ -145,7 +149,11 @@ const HowItWorks = () => {
                       className="tline-im animate animate__animated animate__slower"
                       data-ani="animate__fadeInUp"
                     >
-                      <img src="images/icon/chat.png" alt="" loading="lazy" />
+                      <img
+                        src={`${process.env.PUBLIC_URL}/images/icon/chat.png`}
+                        alt=""
+                        loading="lazy"
+                      />
                     </div>
                     <div
                       className="tline-con animate animate__animated animate__slow"
@@ -192,7 +200,7 @@ const HowItWorks = () => {
                       data-ani="animate__fadeInUp"
                     >
                       <img
-                        src="images/icon/wedding-couple.png"
+                        src={`${process.env.PUBLIC_URL}/images/icon/wedding-couple.png`}
                         alt=""
                         loading="lazy"
                       />

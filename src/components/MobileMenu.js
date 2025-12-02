@@ -5,7 +5,7 @@ const MobileMenu = () => {
   return (
     <div className="mob-me-all mobile_menu">
       <div className="mob-me-clo">
-        <img src="images/icon/close.svg" alt="" />
+        <img src={`${process.env.PUBLIC_URL}/images/icon/close.svg`} alt="" />
       </div>
 
       <div className="mv-bus">
@@ -99,7 +99,11 @@ const MobileMenu = () => {
         <div className="menu-pop-help">
           <h4>Support Team</h4>
           <div className="user-pro">
-            <img src="images/profiles/1.jpg" alt="" loading="lazy" />
+            <img
+              src={`${process.env.PUBLIC_URL}/images/profiles/1.jpg`}
+              alt=""
+              loading="lazy"
+            />
           </div>
           <div className="user-bio">
             <h5>Ashley emyy</h5>
@@ -150,7 +154,11 @@ const MobileMenu = () => {
           <ul>
             <li>
               <div className="rel-pro-img">
-                <img src="images/couples/1.jpg" alt="" loading="lazy" />
+                <img
+                  src={`${process.env.PUBLIC_URL}/images/couples/1.jpg`}
+                  alt=""
+                  loading="lazy"
+                />
               </div>
               <div className="rel-pro-con">
                 <h5>Long established fact that a reader distracted</h5>
@@ -160,7 +168,11 @@ const MobileMenu = () => {
             </li>
             <li>
               <div className="rel-pro-img">
-                <img src="images/couples/3.jpg" alt="" loading="lazy" />
+                <img
+                  src={`${process.env.PUBLIC_URL}/images/couples/3.jpg`}
+                  alt=""
+                  loading="lazy"
+                />
               </div>
               <div className="rel-pro-con">
                 <h5>Long established fact that a reader distracted</h5>
@@ -170,7 +182,11 @@ const MobileMenu = () => {
             </li>
             <li>
               <div className="rel-pro-img">
-                <img src="images/couples/4.jpg" alt="" loading="lazy" />
+                <img
+                  src={`${process.env.PUBLIC_URL}/images/couples/4.jpg`}
+                  alt=""
+                  loading="lazy"
+                />
               </div>
               <div className="rel-pro-con">
                 <h5>Long established fact that a reader distracted</h5>

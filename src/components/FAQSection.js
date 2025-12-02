@@ -104,7 +104,7 @@ const FAQSection = () => {
               <div className="col-lg-6">
                 <div className="ab-faq-rhs">
                   <img
-                    src="images/about/3.jpg"
+                    src={`${process.env.PUBLIC_URL}/images/about/3.jpg`}
                     alt="FAQ"
                     className="img-fluid rounded"
                   />

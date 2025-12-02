@@ -12,7 +12,7 @@ const ContactExpert = () => {
           <h4>Support Team</h4>
           <div className="user-pro">
             <img
-              src="images/profiles/1.jpg"
+              src={`${process.env.PUBLIC_URL}/images/profiles/1.jpg`}
               alt="Support team member"
               loading="lazy"
             />
@@ -66,7 +66,11 @@ const ContactExpert = () => {
           <ul>
             <li>
               <div className="rel-pro-img">
-                <img src="images/couples/1.jpg" alt="News 1" loading="lazy" />
+                <img
+                  src={`${process.env.PUBLIC_URL}/images/couples/1.jpg`}
+                  alt="News 1"
+                  loading="lazy"
+                />
               </div>
               <div className="rel-pro-con">
                 <h5>Long established fact that a reader distracted</h5>
@@ -76,7 +80,11 @@ const ContactExpert = () => {
             </li>
             <li>
               <div className="rel-pro-img">
-                <img src="images/couples/3.jpg" alt="News 2" loading="lazy" />
+                <img
+                  src={`${process.env.PUBLIC_URL}/images/couples/3.jpg`}
+                  alt="News 2"
+                  loading="lazy"
+                />
               </div>
               <div className="rel-pro-con">
                 <h5>Long established fact that a reader distracted</h5>
@@ -86,7 +94,11 @@ const ContactExpert = () => {
             </li>
             <li>
               <div className="rel-pro-img">
-                <img src="images/couples/4.jpg" alt="News 3" loading="lazy" />
+                <img
+                  src={`${process.env.PUBLIC_URL}/images/couples/4.jpg`}
+                  alt="News 3"
+                  loading="lazy"
+                />
               </div>
               <div className="rel-pro-con">
                 <h5>Long established fact that a reader distracted</h5>

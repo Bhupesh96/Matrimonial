@@ -51,22 +51,38 @@ const Footer = () => {
             <ul>
               <li>
                 <a href="#!">
-                  <img src="images/social/1.png" alt="" loading="lazy" />
+                  <img
+                    src={`${process.env.PUBLIC_URL}/images/social/1.png`}
+                    alt=""
+                    loading="lazy"
+                  />
                 </a>
               </li>
               <li>
                 <a href="#!">
-                  <img src="images/social/2.png" alt="" loading="lazy" />
+                  <img
+                    src={`${process.env.PUBLIC_URL}/images/social/2.png`}
+                    alt=""
+                    loading="lazy"
+                  />
                 </a>
               </li>
               <li>
                 <a href="#!">
-                  <img src="images/social/3.png" alt="" loading="lazy" />
+                  <img
+                    src={`${process.env.PUBLIC_URL}/images/social/3.png`}
+                    alt=""
+                    loading="lazy"
+                  />
                 </a>
               </li>
               <li>
                 <a href="#!">
-                  <img src="images/social/5.png" alt="" loading="lazy" />
+                  <img
+                    src={`${process.env.PUBLIC_URL}/images/social/5.png`}
+                    alt=""
+                    loading="lazy"
+                  />
                 </a>
               </li>
             </ul>

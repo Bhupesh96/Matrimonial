@@ -51,7 +51,11 @@ const BolgDetail = () => {
                   {/* BIG POST START */}
                   <div className="blog-home-box">
                     <div className="im">
-                      <img src="images/couples/9.jpg" alt="" loading="lazy" />
+                      <img
+                        src={`${process.env.PUBLIC_URL}/images/couples/9.jpg`}
+                        alt=""
+                        loading="lazy"
+                      />
                       <span className="blog-date">22, Jan 2023</span>
                       <div className="shar-1">
                         <i className="fa fa-share-alt" aria-hidden="true"></i>
@@ -124,7 +128,11 @@ const BolgDetail = () => {
                       </p>
                       <div className="blog-info">
                         <div className="blog-pro-info">
-                          <img src="images/user/3.jpg" alt="" loading="lazy" />
+                          <img
+                            src={`${process.env.PUBLIC_URL}/images/user/3.jpg`}
+                            alt=""
+                            loading="lazy"
+                          />
                           <h5>
                             Steefan Ann <span>Author</span>
                           </h5>

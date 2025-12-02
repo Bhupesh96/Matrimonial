@@ -14,7 +14,7 @@ const AboutSection2 = () => {
                   data-dely="0.1"
                 >
                   <img
-                    src="images/icon/prize.png"
+                    src={`${process.env.PUBLIC_URL}/images/icon/prize.png`}
                     alt="Genuine profiles"
                     loading="lazy"
                   />
@@ -29,7 +29,7 @@ const AboutSection2 = () => {
                   data-dely="0.3"
                 >
                   <img
-                    src="images/icon/trust.png"
+                    src={`${process.env.PUBLIC_URL}/images/icon/trust.png`}
                     alt="Most trusted"
                     loading="lazy"
                   />
@@ -44,7 +44,7 @@ const AboutSection2 = () => {
                   data-dely="0.6"
                 >
                   <img
-                    src="images/icon/rings.png"
+                    src={`${process.env.PUBLIC_URL}/images/icon/rings.png`}
                     alt="2000+ weddings"
                     loading="lazy"
                   />

@@ -58,11 +58,10 @@ const boxStyle = {
 
 const CustomerReviews = () => {
   return (
-    <section >
+    <section>
       <div className="hom-cus-revi">
         <div className="container">
           <div className="row">
-
             {/* TITLE */}
             <div className="home-tit">
               <p>trusted brand</p>
@@ -90,12 +89,21 @@ const CustomerReviews = () => {
               }}
               className="cus-revi"
             >
-
               {/* CARD 1 */}
               <SwiperSlide>
                 <div style={boxStyle}>
-                  <div style={{ position: "relative", width: "80px", margin: "0 auto" }}>
-                    <img src="images/user/1.jpg" alt="" style={imgStyle} />
+                  <div
+                    style={{
+                      position: "relative",
+                      width: "80px",
+                      margin: "0 auto",
+                    }}
+                  >
+                    <img
+                      src={`${process.env.PUBLIC_URL}/images/user/1.jpg`}
+                      alt=""
+                      style={imgStyle}
+                    />
 
                     <i style={circleStyle1}></i>
                     <i style={circleStyle2}></i>
@@ -106,7 +114,9 @@ const CustomerReviews = () => {
                     Lorem Ipsum is simply dummy text of the printing and
                     typesetting industry.
                   </p>
-                  <h5 style={{ margin: "10px 0 0", fontWeight: "600" }}>Jack danial</h5>
+                  <h5 style={{ margin: "10px 0 0", fontWeight: "600" }}>
+                    Jack danial
+                  </h5>
                   <span style={{ color: "#777" }}>New York</span>
                 </div>
               </SwiperSlide>
@@ -114,8 +124,18 @@ const CustomerReviews = () => {
               {/* CARD 2 */}
               <SwiperSlide>
                 <div style={boxStyle}>
-                  <div style={{ position: "relative", width: "80px", margin: "0 auto" }}>
-                    <img src="images/user/2.jpg" alt="" style={imgStyle} />
+                  <div
+                    style={{
+                      position: "relative",
+                      width: "80px",
+                      margin: "0 auto",
+                    }}
+                  >
+                    <img
+                      src={`${process.env.PUBLIC_URL}/images/user/2.jpg`}
+                      alt=""
+                      style={imgStyle}
+                    />
 
                     <i style={circleStyle1}></i>
                     <i style={circleStyle2}></i>
@@ -126,7 +146,9 @@ const CustomerReviews = () => {
                     Lorem Ipsum is simply dummy text of the printing and
                     typesetting industry.
                   </p>
-                  <h5 style={{ margin: "10px 0 0", fontWeight: "600" }}>Jack danial</h5>
+                  <h5 style={{ margin: "10px 0 0", fontWeight: "600" }}>
+                    Jack danial
+                  </h5>
                   <span style={{ color: "#777" }}>New York</span>
                 </div>
               </SwiperSlide>
@@ -134,8 +156,18 @@ const CustomerReviews = () => {
               {/* CARD 3 */}
               <SwiperSlide>
                 <div style={boxStyle}>
-                  <div style={{ position: "relative", width: "80px", margin: "0 auto" }}>
-                    <img src="images/user/3.jpg" alt="" style={imgStyle} />
+                  <div
+                    style={{
+                      position: "relative",
+                      width: "80px",
+                      margin: "0 auto",
+                    }}
+                  >
+                    <img
+                      src={`${process.env.PUBLIC_URL}/images/user/3.jpg`}
+                      alt=""
+                      style={imgStyle}
+                    />
 
                     <i style={circleStyle1}></i>
                     <i style={circleStyle2}></i>
@@ -146,7 +178,9 @@ const CustomerReviews = () => {
                     Lorem Ipsum is simply dummy text of the printing and
                     typesetting industry.
                   </p>
-                  <h5 style={{ margin: "10px 0 0", fontWeight: "600" }}>Jack danial</h5>
+                  <h5 style={{ margin: "10px 0 0", fontWeight: "600" }}>
+                    Jack danial
+                  </h5>
                   <span style={{ color: "#777" }}>New York</span>
                 </div>
               </SwiperSlide>
@@ -154,8 +188,18 @@ const CustomerReviews = () => {
               {/* CARD 4 */}
               <SwiperSlide>
                 <div style={boxStyle}>
-                  <div style={{ position: "relative", width: "80px", margin: "0 auto" }}>
-                    <img src="images/user/5.jpg" alt="" style={imgStyle} />
+                  <div
+                    style={{
+                      position: "relative",
+                      width: "80px",
+                      margin: "0 auto",
+                    }}
+                  >
+                    <img
+                      src={`${process.env.PUBLIC_URL}/images/user/5.jpg`}
+                      alt=""
+                      style={imgStyle}
+                    />
 
                     <i style={circleStyle1}></i>
                     <i style={circleStyle2}></i>
@@ -166,11 +210,12 @@ const CustomerReviews = () => {
                     Lorem Ipsum is simply dummy text of the printing and
                     typesetting industry.
                   </p>
-                  <h5 style={{ margin: "10px 0 0", fontWeight: "600" }}>Jack danial</h5>
+                  <h5 style={{ margin: "10px 0 0", fontWeight: "600" }}>
+                    Jack danial
+                  </h5>
                   <span style={{ color: "#777" }}>New York</span>
                 </div>
               </SwiperSlide>
-
             </Swiper>
             {/* SWIPER END */}
 
@@ -180,7 +225,6 @@ const CustomerReviews = () => {
                 More customer reviews
               </a>
             </div>
-
           </div>
         </div>
       </div>

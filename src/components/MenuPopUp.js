@@ -9,7 +9,7 @@ const MenuPopUp = () => {
 
       <div className="inn">
         <img
-          src="images/logo-b.png"
+          src={`${process.env.PUBLIC_URL}/images/logo-b.png`}
           alt="logo"
           loading="lazy"
           className="logo-brand-only"
@@ -51,7 +51,11 @@ const MenuPopUp = () => {
         <div className="menu-pop-help">
           <h4>Support Team</h4>
           <div className="user-pro">
-            <img src="images/profiles/1.jpg" alt="advisor" loading="lazy" />
+            <img
+              src={`${process.env.PUBLIC_URL}/images/profiles/1.jpg`}
+              alt="advisor"
+              loading="lazy"
+            />
           </div>
           <div className="user-bio">
             <h5>Ashley Emyy</h5>

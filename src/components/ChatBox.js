@@ -3,14 +3,16 @@ import React from "react";
 const ChatBox = () => {
   return (
     <div className="chatbox">
-      <span className="comm-msg-pop-clo">
-      
-      </span>
+      <span className="comm-msg-pop-clo"></span>
 
       <div className="inn">
         <form name="new_chat_form" method="post">
           <div className="s1">
-            <img src="images/user/2.jpg" className="intephoto2" alt="" />
+            <img
+              src={`${process.env.PUBLIC_URL}/images/user/2.jpg`}
+              className="intephoto2"
+              alt=""
+            />
             <h4>
               <b className="intename2">Julia</b>,
             </h4>
