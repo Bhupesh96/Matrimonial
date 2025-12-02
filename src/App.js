@@ -18,7 +18,7 @@ import MyRequests from "./pages/MyRequests";
 
 function App() {
   return (
-    <Router basename={process.env.REACT_APP_BASENAME}>
+    <Router>
       <ToastContainer
         position="top-right"
         autoClose={3000}
