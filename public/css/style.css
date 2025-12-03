@@ -2021,6 +2021,10 @@ table td {
   background: #fff;
   color: #000000;
 }
+.prime-wrapper * {
+  all: unset;
+  all: revert;
+}
 
 .hom-abu-com {
   transition: all 0.4s ease-in-out 0s;
@@ -2150,7 +2154,6 @@ table td {
 }
 
 .home-acces ul li div.hacc {
-  
   background-repeat: no-repeat;
   background-size: 100%;
   float: left;

@@ -52,6 +52,8 @@ const Login = () => {
         localStorage.setItem("profileID", data.data.ProfileID);
         localStorage.setItem("userID", data.data.UserID);
         localStorage.setItem("profileName", data.data.ProfileName);
+        localStorage.setItem("login_token", data.login_token);
+
         fetch(
           `${API_BASE_URL}?api=get_profile&ProfileID=${data.data.ProfileID}`
         )

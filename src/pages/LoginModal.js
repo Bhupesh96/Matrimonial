@@ -1,20 +1,55 @@
 import React, { useState } from "react";
 import { loginUser } from "../api";
 import AlertService from "../services/AlertServices";
+import { useNavigate } from "react-router-dom";
 
 const LoginModal = ({ show, onClose, onSuccess }) => {
   const [identifier, setIdentifier] = useState("");
   const [password, setPassword] = useState("");
   const [loading, setLoading] = useState(false);
+  const [lang, setLang] = useState("en"); // 🌐 NEW LANGUAGE STATE
+  const navigate = useNavigate();
 
-  if (!show) return null; // Do not render modal if hidden
+  if (!show) return null;
+
+  // 🌐 TRANSLATION TEXTS
+  const t = {
+    en: {
+      title: "Sign in to your account",
+      subtitle: "Enter your credentials to continue",
+      userId: "User ID",
+      placeholderUser: "Enter user ID",
+      password: "Password",
+      placeholderPass: "Enter password",
+      remember: "Remember me",
+      signIn: "Sign In",
+      noAccount: "Don't have an account?",
+      createOne: "Create one",
+    },
+    hi: {
+      title: "अपने खाते में लॉगिन करें",
+      subtitle: "जारी रखने के लिए अपनी जानकारी दर्ज करें",
+      userId: "यूज़र आईडी",
+      placeholderUser: "यूज़र आईडी दर्ज करें",
+      password: "पासवर्ड",
+      placeholderPass: "पासवर्ड दर्ज करें",
+      remember: "मुझे याद रखें",
+      signIn: "लॉगिन",
+      noAccount: "खाता नहीं है?",
+      createOne: "नया खाता बनाएं",
+    },
+  };
 
   const handleSubmit = async (e) => {
     e.preventDefault();
     setLoading(true);
 
     if (!identifier || !password) {
-      AlertService.showError("Please enter both User ID and password.");
+      AlertService.showError(
+        lang === "en"
+          ? "Please enter both User ID and password."
+          : "कृपया यूज़र आईडी और पासवर्ड दर्ज करें।"
+      );
       setLoading(false);
       return;
     }
@@ -26,16 +61,17 @@ const LoginModal = ({ show, onClose, onSuccess }) => {
         localStorage.setItem("profileID", data.data.ProfileID);
         localStorage.setItem("userID", data.data.UserID);
         localStorage.setItem("profileName", data.data.ProfileName);
+        localStorage.setItem("login_token", data.login_token);
       }
 
       AlertService.showSuccessAndRedirect(
-        "Login Successful",
+        lang === "en" ? "Login Successful" : "लॉगिन सफल",
         () => {},
-        "" // No redirect needed for modal login
+        ""
       );
 
       onSuccess && onSuccess();
-      onClose(); // Close modal after success
+      onClose();
     } catch (err) {
       AlertService.showError(err.message);
     } finally {
@@ -45,65 +81,199 @@ const LoginModal = ({ show, onClose, onSuccess }) => {
 
   return (
     <div
-      className="modal fade show"
+      onClick={onClose}
       style={{
-        display: "block",
-        background: "rgba(0,0,0,0.4)",
-        paddingTop: "80px",
+        position: "fixed",
+        top: 0,
+        left: 0,
+        width: "100%",
+        height: "100%",
+        background: "rgba(0,0,0,0.65)",
+        backdropFilter: "blur(6px)",
+        display: "flex",
+        justifyContent: "center",
+        alignItems: "center",
+        zIndex: 9999,
+        padding: "20px",
       }}
     >
-      <div className="modal-dialog modal-dialog-centered">
-        <div className="modal-content" style={{ borderRadius: "12px" }}>
-          <div className="modal-header">
-            <h5 className="modal-title">Login</h5>
-            <button className="btn-close" onClick={onClose}></button>
-          </div>
+      <div
+        onClick={(e) => e.stopPropagation()}
+        style={{
+          width: "100%",
+          maxWidth: "420px",
+          background: "#ffffff",
+          borderRadius: "20px",
+          padding: "32px",
+          boxShadow: "0 10px 40px rgba(0,0,0,0.25)",
+          position: "relative",
+        }}
+      >
+        {/* ❌ Close Button */}
+        <button
+          onClick={onClose}
+          style={{
+            position: "absolute",
+            top: "16px",
+            right: "16px",
+            background: "#f3f3f3",
+            border: "none",
+            width: "34px",
+            height: "34px",
+            borderRadius: "50%",
+            fontSize: "20px",
+            cursor: "pointer",
+          }}
+        >
+          ×
+        </button>
 
-          <div className="modal-body">
-            <form onSubmit={handleSubmit}>
-              <div className="form-group mb-3">
-                <label>User ID / Email / Mobile</label>
-                <input
-                  type="text"
-                  className="form-control"
-                  value={identifier}
-                  onChange={(e) => setIdentifier(e.target.value)}
-                  required
-                />
-              </div>
+        {/* Language Switch */}
+        <div
+          style={{
+            display: "flex",
+            justifyContent: "center",
+            gap: "16px",
+            marginBottom: "20px",
+          }}
+        >
+          <button
+            onClick={() => setLang("en")}
+            style={{
+              background: "transparent",
+              border: "none",
+              fontSize: "15px",
+              fontWeight: lang === "en" ? "700" : "500",
+              color: lang === "en" ? "#007bff" : "#666",
+              paddingBottom: "4px",
+              borderBottom:
+                lang === "en" ? "2px solid #007bff" : "2px solid transparent",
+              cursor: "pointer",
+              transition: "0.3s",
+            }}
+          >
+            English
+          </button>
 
-              <div className="form-group mb-3">
-                <label>Password</label>
-                <input
-                  type="password"
-                  className="form-control"
-                  value={password}
-                  onChange={(e) => setPassword(e.target.value)}
-                  required
-                />
-              </div>
-
-              <div className="form-check mb-3">
-                <input type="checkbox" className="form-check-input" />
-                <label className="form-check-label">Remember me</label>
-              </div>
-
-              <button
-                className="btn btn-primary w-100"
-                type="submit"
-                disabled={loading}
-              >
-                {loading ? "Signing in..." : "Sign In"}
-              </button>
-            </form>
-          </div>
-
-          <div className="modal-footer">
-            <button className="btn btn-secondary" onClick={onClose}>
-              Close
-            </button>
-          </div>
+          <button
+            onClick={() => setLang("hi")}
+            style={{
+              background: "transparent",
+              border: "none",
+              fontSize: "15px",
+              fontWeight: lang === "hi" ? "700" : "500",
+              color: lang === "hi" ? "#007bff" : "#666",
+              paddingBottom: "4px",
+              borderBottom:
+                lang === "hi" ? "2px solid #007bff" : "2px solid transparent",
+              cursor: "pointer",
+              transition: "0.3s",
+            }}
+          >
+            हिन्दी
+          </button>
         </div>
+
+        {/* Title */}
+        <h3
+          style={{
+            marginBottom: "8px",
+            fontSize: "24px",
+            fontWeight: "700",
+            textAlign: "center",
+            color: "#222",
+          }}
+        >
+          {t[lang].title}
+        </h3>
+
+        <p
+          style={{
+            marginBottom: "24px",
+            fontSize: "14px",
+            color: "#666",
+            textAlign: "center",
+          }}
+        >
+          {t[lang].subtitle}
+        </p>
+
+        {/* Form */}
+        <form onSubmit={handleSubmit}>
+          <label style={{ fontWeight: "600" }}>{t[lang].userId}</label>
+          <input
+            type="text"
+            value={identifier}
+            placeholder={t[lang].placeholderUser}
+            onChange={(e) => setIdentifier(e.target.value)}
+            required
+            style={{
+              width: "100%",
+              padding: "14px",
+              borderRadius: "10px",
+              border: "1px solid #ddd",
+              marginBottom: "18px",
+            }}
+          />
+
+          <label style={{ fontWeight: "600" }}>{t[lang].password}</label>
+          <input
+            type="password"
+            value={password}
+            placeholder={t[lang].placeholderPass}
+            onChange={(e) => setPassword(e.target.value)}
+            required
+            style={{
+              width: "100%",
+              padding: "14px",
+              borderRadius: "10px",
+              border: "1px solid #ddd",
+              marginBottom: "18px",
+            }}
+          />
+
+          <button
+            type="submit"
+            disabled={loading}
+            style={{
+              width: "100%",
+              background: "#007bff",
+              padding: "14px",
+              color: "#fff",
+              border: "none",
+              borderRadius: "10px",
+              fontSize: "16px",
+              fontWeight: "600",
+            }}
+          >
+            {loading
+              ? lang === "en"
+                ? "Signing in..."
+                : "लॉगिन हो रहा है..."
+              : t[lang].signIn}
+          </button>
+
+          <div style={{ marginTop: "18px", textAlign: "center" }}>
+            <span style={{ fontSize: "14px", color: "#555" }}>
+              {t[lang].noAccount}
+            </span>
+            <span
+              onClick={() => {
+                onClose();
+                navigate("/sign-up");
+              }}
+              style={{
+                fontSize: "14px",
+                color: "#007bff",
+                marginLeft: "6px",
+                cursor: "pointer",
+                fontWeight: "600",
+              }}
+            >
+              {t[lang].createOne}
+            </span>
+          </div>
+        </form>
       </div>
     </div>
   );

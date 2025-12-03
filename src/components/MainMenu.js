@@ -1,15 +1,38 @@
 import React, { useEffect, useState } from "react";
 import { Link } from "react-router-dom";
+import AlertService from "../services/AlertServices";
+import { logoutUser } from "../api";
+import { useNavigate } from "react-router-dom";
 
+import { useRef } from "react";
 const MainMenu = () => {
   const [profileName, setProfileName] = useState("");
   const [profilePhoto, setProfilePhoto] = useState("");
+  const [profileID, setProfileID] = useState("");
+
+  const navigate = useNavigate();
+  const menuRef = useRef(null);
+  const handleLogout = async () => {
+    try {
+      await logoutUser();
+
+      AlertService.showSuccessAndRedirect("Logout successful", navigate, "/");
+
+      // Optional redirect:
+      navigate("/");
+    } catch (err) {
+      AlertService.showError(err.message);
+    }
+  };
+
   useEffect(() => {
     const name = localStorage.getItem("profileName");
     const photo = localStorage.getItem("profilePhoto");
+    const id = localStorage.getItem("profileID");
 
     if (name) setProfileName(name);
     if (photo) setProfilePhoto(photo);
+    if (id) setProfileID(id);
   }, []);
 
   return (
@@ -157,7 +180,9 @@ const MainMenu = () => {
                         <a href="user-dashboard.html">Dashboard</a>
                       </li>
                       <li>
-                        <Link to="/user-profile">My profile</Link>
+                        <Link to={`/user-profile/${profileID}`}>
+                          My profile
+                        </Link>
                       </li>
                       <li>
                         <a href="user-interests.html">Interests</a>
@@ -176,6 +201,17 @@ const MainMenu = () => {
                       </li>
                       <li>
                         <Link to="/login">Login</Link>
+                      </li>
+                      <li>
+                        <Link
+                          to="#"
+                          onClick={(e) => {
+                            e.preventDefault(); // stop navigation
+                            handleLogout(); // run logout
+                          }}
+                        >
+                          Logout
+                        </Link>
                       </li>
                     </ul>
                   </div>

@@ -1,4 +1,5 @@
 import React, { useEffect, useState } from "react";
+import "../assets/css/ProfileList.css";
 // 1. Add manageConnectionRequest to the import
 import {
   fetchApprovedProfiles,
@@ -171,49 +172,36 @@ const ProfileList = () => {
             {/* RIGHT: PROFILE LIST */}
             <div className="col-md-9">
               {/* -------------------- TABS -------------------- */}
-              <div style={{ marginBottom: "25px" }}>
-                <ul className="nav nav-tabs">
-                  <li className="nav-item">
-                    <button
-                      className={`nav-link ${
-                        activeTab === "profiles" ? "active" : ""
-                      }`}
-                      onClick={() => setActiveTab("profiles")}
-                    >
-                      All Profiles
-                    </button>
-                  </li>
-                  <li className="nav-item">
-                    <button
-                      className={`nav-link ${
-                        activeTab === "incoming" ? "active" : ""
-                      }`}
-                      onClick={() => setActiveTab("incoming")}
-                    >
-                      Incoming Requests ({incoming.length})
-                    </button>
-                  </li>
-                  <li className="nav-item">
-                    <button
-                      className={`nav-link ${
-                        activeTab === "outgoing" ? "active" : ""
-                      }`}
-                      onClick={() => setActiveTab("outgoing")}
-                    >
-                      Outgoing Requests ({outgoing.length})
-                    </button>
-                  </li>
-                  <li className="nav-item">
-                    <button
-                      className={`nav-link ${
-                        activeTab === "matches" ? "active" : ""
-                      }`}
-                      onClick={() => setActiveTab("matches")}
-                    >
-                      My Matches ({matches.length})
-                    </button>
-                  </li>
-                </ul>
+              <div className="modern-tabs-wrapper">
+                <div className="modern-tabs">
+                  <button
+                    className={activeTab === "profiles" ? "tab active" : "tab"}
+                    onClick={() => setActiveTab("profiles")}
+                  >
+                    All Profiles
+                  </button>
+
+                  <button
+                    className={activeTab === "incoming" ? "tab active" : "tab"}
+                    onClick={() => setActiveTab("incoming")}
+                  >
+                    Incoming ({incoming.length})
+                  </button>
+
+                  <button
+                    className={activeTab === "outgoing" ? "tab active" : "tab"}
+                    onClick={() => setActiveTab("outgoing")}
+                  >
+                    Outgoing ({outgoing.length})
+                  </button>
+
+                  <button
+                    className={activeTab === "matches" ? "tab active" : "tab"}
+                    onClick={() => setActiveTab("matches")}
+                  >
+                    Matches ({matches.length})
+                  </button>
+                </div>
               </div>
 
               {/* -------------------- TAB CONTENT -------------------- */}
@@ -228,81 +216,45 @@ const ProfileList = () => {
                       }`;
                       const imageSrc = p.ProfilePhoto
                         ? p.ProfilePhoto
-                        : "images/default.png";
+                        : "matro/images/default.png";
                       const details = [
                         p.EducationDegreeName || p.EducationDegree || "NA",
                         p.OccupationName || p.OccupationDetail || "NA",
-                        calculateAge(p.DateOfBirth),
+                        `Age: ${calculateAge(p.DateOfBirth)}`,
                         p.HeightValue
                           ? `Height: ${p.HeightValue}`
                           : "Height: NA",
+                        p.GotraName ? `Gotra: ${p.GotraName}` : "Gotra: NA",
                       ];
 
                       return (
                         <li key={i}>
-                          <div className="all-pro-box">
-                            <div
-                              className="pro-img"
-                              style={{
-                                width: "180px",
-                                height: "240px",
-                                borderRadius: "10px",
-                                overflow: "hidden",
-                                background: "#f3f3f3",
-                                position: "relative",
-                                marginBottom: "10px",
-                              }}
-                            >
-                              <img
-                                src={imageSrc}
-                                alt={fullName}
-                                style={{
-                                  width: "100%",
-                                  height: "100%",
-                                  objectFit: "cover",
-                                  objectPosition: "center",
-                                  display: "block",
-                                }}
-                              />
-                              <div
-                                className="pro-avl-status"
-                                style={{
-                                  position: "absolute",
-                                  bottom: "0",
-                                  left: "0",
-                                  width: "100%",
-                                  padding: "5px 0",
-                                  background: "rgba(0,0,0,0.5)",
-                                  textAlign: "center",
-                                  color: "#fff",
-                                }}
-                              >
-                                <h5 style={{ margin: 0, fontSize: "12px" }}>
-                                  Available Online
-                                </h5>
-                              </div>
+                          <div className="profile-card">
+                            <div className="profile-image-wrapper">
+                              <img src={imageSrc} alt={fullName} />
                             </div>
-                            <div className="pro-detail">
+
+                            <div className="profile-details">
                               <h4>{fullName}</h4>
-                              <div className="pro-bio">
+
+                              <div className="profile-info">
                                 {details.map((d, idx) => (
                                   <span key={idx}>{d}</span>
                                 ))}
                               </div>
-                              <div className="links">
+
+                              <div className="card-actions">
                                 <span
-                                  className="cta cta-sendint"
+                                  className="btn-interest"
                                   data-bs-toggle="modal"
                                   data-bs-target="#sendInter"
-                                  style={{ cursor: "pointer" }}
                                   onClick={() => {
                                     setSelectedProfile(p);
                                     setRequestStatus("");
                                   }}
                                 >
-                                  Send interest
+                                  Send Interest
                                 </span>
-                                <a href="/profile-details">More details</a>
                               </div>
                             </div>
                           </div>
@@ -317,9 +269,18 @@ const ProfileList = () => {
               {activeTab === "incoming" && (
                 <div className="all-list-sh">
                   {incoming.length === 0 && (
-                    <p style={{ padding: "20px", fontSize: "16px" }}>
-                      No incoming requests
-                    </p>
+                    <div className="empty-state">
+                      <i className="fa fa-envelope-open"></i>
+                      <h4>No Incoming Requests</h4>
+                      <p>Profiles who send you interest will appear here.</p>
+
+                      <h4 style={{ marginTop: "12px" }}>
+                        कोई इनकमिंग रिक्वेस्ट नहीं
+                      </h4>
+                      <p>
+                        जो प्रोफ़ाइल आपको इंटरेस्ट भेजेंगे, वे यहाँ दिखाई देंगे।
+                      </p>
+                    </div>
                   )}
                   <ul>
                     {incoming.map((req, i) => (
@@ -333,7 +294,7 @@ const ProfileList = () => {
                           }}
                         >
                           <h4>
-                            {req.firstname} {req.lastname} ({req.UserID})
+                            {req.firstname} {req.lastname}
                           </h4>
                           <div className="pro-bio">
                             <span>Gotra: {req.GotraName}</span>
@@ -372,31 +333,54 @@ const ProfileList = () => {
               {activeTab === "outgoing" && (
                 <div className="all-list-sh">
                   {outgoing.length === 0 && (
-                    <p style={{ padding: "20px", fontSize: "16px" }}>
-                      No outgoing requests found.
-                    </p>
+                    <div className="empty-state">
+                      <i className="fa fa-paper-plane"></i>
+                      <h4>No Outgoing Requests</h4>
+                      <p>Profiles you send interest to will show up here.</p>
+
+                      <h4 style={{ marginTop: "12px" }}>
+                        कोई आउटगोइंग रिक्वेस्ट नहीं
+                      </h4>
+                      <p>
+                        जिन प्रोफ़ाइल को आप इंटरेस्ट भेजेंगे, वे यहाँ दिखाई
+                        देंगे।
+                      </p>
+                    </div>
                   )}
+
                   <ul>
                     {outgoing.map((req, i) => {
                       const fullName = `${req.firstname || ""} ${
                         req.lastname || ""
                       }`;
-                      const imageSrc = req.ProfileImageURL
-                        ? req.ProfileImageURL
-                        : "images/default.png";
+                      const imageSrc =
+                        req.ProfileImageURL || "matro/images/default.png";
+
                       return (
                         <li key={i}>
-                          <div className="all-pro-box">
+                          <div
+                            className="profile-card"
+                            style={{
+                              display: "flex",
+                              gap: "20px",
+                              padding: "18px",
+                              borderRadius: "14px",
+                              background: "#fff",
+                              boxShadow: "0 6px 16px rgba(0,0,0,0.1)",
+                              marginBottom: "20px",
+                              border: "1px solid #eee",
+                            }}
+                          >
+                            {/* IMAGE */}
                             <div
-                              className="pro-img"
                               style={{
-                                width: "180px",
-                                height: "240px",
-                                borderRadius: "10px",
+                                width: "140px",
+                                height: "190px",
+                                borderRadius: "12px",
                                 overflow: "hidden",
-                                background: "#f3f3f3",
+                                background: "#f4f4f4",
+                                flexShrink: 0,
                                 position: "relative",
-                                marginBottom: "10px",
                               }}
                             >
                               <img
@@ -406,60 +390,83 @@ const ProfileList = () => {
                                   width: "100%",
                                   height: "100%",
                                   objectFit: "cover",
-                                  objectPosition: "center",
-                                  display: "block",
                                 }}
                               />
+
+                              {/* PREMIUM STATUS BADGE */}
                               <div
-                                className="pro-avl-status"
                                 style={{
                                   position: "absolute",
-                                  bottom: "0",
-                                  left: "0",
-                                  width: "100%",
-                                  padding: "5px 0",
+                                  bottom: "10px",
+                                  left: "50%",
+                                  transform: "translateX(-50%)",
+                                  padding: "4px 12px",
+                                  borderRadius: "20px",
                                   background:
                                     req.RequestStatus === "Accepted"
-                                      ? "rgba(40, 167, 69, 0.8)"
-                                      : "rgba(0, 0, 0, 0.6)",
-                                  textAlign: "center",
-                                  color: "#fff",
+                                      ? "linear-gradient(135deg, #2ecc71, #27ae60)"
+                                      : "linear-gradient(135deg, #ffc107, #ffb300)",
+                                  color:
+                                    req.RequestStatus === "Accepted"
+                                      ? "#fff"
+                                      : "#000",
+                                  fontSize: "12px",
+                                  fontWeight: "600",
+                                  boxShadow: "0 3px 8px rgba(0,0,0,0.25)",
                                 }}
                               >
-                                <h5 style={{ margin: 0, fontSize: "12px" }}>
-                                  {req.RequestStatus}
-                                </h5>
+                                {req.RequestStatus}
                               </div>
                             </div>
-                            <div className="pro-detail">
-                              <h4>
-                                {fullName} ({req.UserID})
+
+                            {/* DETAILS */}
+                            <div style={{ flexGrow: 1 }}>
+                              <h4
+                                style={{
+                                  marginBottom: "6px",
+                                  fontSize: "18px",
+                                  fontWeight: "700",
+                                  color: "#2d2d2d",
+                                }}
+                              >
+                                {fullName}
                               </h4>
-                              <div className="pro-bio">
-                                <span>{req.GenderName}</span>
-                                <span>{req.MaritalStatus}</span>
-                                <span>{req.HeightValue}</span>
-                                <span>Gotra: {req.GotraName}</span>
-                              </div>
-                              <div className="links">
-                                <span
-                                  className="cta"
-                                  style={{
-                                    cursor: "default",
-                                    background:
-                                      req.RequestStatus === "Pending"
-                                        ? "#ffc107"
-                                        : "#28a745",
-                                    color:
-                                      req.RequestStatus === "Pending"
-                                        ? "#000"
-                                        : "#fff",
-                                    border: "none",
-                                  }}
-                                >
-                                  {req.RequestStatus}
+
+                              <div
+                                style={{
+                                  display: "flex",
+                                  flexWrap: "wrap",
+                                  gap: "10px",
+                                  marginBottom: "12px",
+                                }}
+                              >
+                                <span className="detail-tag">
+                                  {req.GenderName}
+                                </span>
+                                <span className="detail-tag">
+                                  {req.MaritalStatus}
+                                </span>
+                                <span className="detail-tag">
+                                  {req.HeightValue}
+                                </span>
+                                <span className="detail-tag">
+                                  Gotra: {req.GotraName}
                                 </span>
                               </div>
+
+                              {/* INFO TAGS STYLE */}
+                              <style>
+                                {`
+                  .detail-tag {
+                    background: #f4f4f4;
+                    padding: 6px 12px;
+                    border-radius: 8px;
+                    font-size: 13px;
+                    color: #444;
+                    border: 1px solid #e5e5e5;
+                  }
+                `}
+                              </style>
                             </div>
                           </div>
                         </li>
@@ -468,13 +475,25 @@ const ProfileList = () => {
                   </ul>
                 </div>
               )}
+
               {/* -------------------- MATCHES TAB CONTENT -------------------- */}
               {activeTab === "matches" && (
                 <div className="all-list-sh">
                   {matches.length === 0 ? (
-                    <p style={{ padding: "20px", fontSize: "16px" }}>
-                      No connected matches yet.
-                    </p>
+                    <div className="empty-state">
+                      <i className="fa fa-heart"></i>
+                      <h4>No Matches Yet</h4>
+                      <p>
+                        Once profiles accept your interest, they will appear
+                        here.
+                      </p>
+
+                      <h4 style={{ marginTop: "12px" }}>अभी तक कोई मैच नहीं</h4>
+                      <p>
+                        जब कोई प्रोफ़ाइल आपका इंटरेस्ट स्वीकार करेगा, तो वह यहाँ
+                        दिखाई देगा।
+                      </p>
+                    </div>
                   ) : (
                     <ul>
                       {matches.map((match, i) => {
@@ -484,64 +503,32 @@ const ProfileList = () => {
                           match.lastname || ""
                         }`;
                         const imageSrc =
-                          match.ProfileImageURL || "images/default.png";
+                          match.ProfileImageURL || "matro/images/default.png";
 
                         return (
                           <li key={i}>
-                            <div className="all-pro-box">
+                            <div className="profile-card">
                               {/* IMAGE */}
-                              <div
-                                className="pro-img"
-                                style={{
-                                  width: "180px",
-                                  height: "240px",
-                                  borderRadius: "10px",
-                                  overflow: "hidden",
-                                  background: "#f3f3f3",
-                                  position: "relative",
-                                  marginBottom: "10px",
-                                }}
-                              >
-                                <img
-                                  src={imageSrc}
-                                  alt={fullName}
-                                  style={{
-                                    width: "100%",
-                                    height: "100%",
-                                    objectFit: "cover",
-                                    display: "block",
-                                  }}
-                                />
+                              <div className="profile-image-wrapper">
+                                <img src={imageSrc} alt={fullName} />
                               </div>
 
                               {/* DETAILS */}
-                              <div className="pro-detail">
-                                <h4>
-                                  {fullName} ({match.UserID})
-                                  <span
-                                    className="badge bg-success ms-2"
-                                    style={{
-                                      fontSize: "10px",
-                                      verticalAlign: "middle",
-                                    }}
-                                  >
-                                    Connected
-                                  </span>
-                                </h4>
+                              <div className="profile-details">
+                                <h4>{fullName}</h4>
 
-                                <div className="pro-bio">
-                                  {/* Basic Info */}
+                                {/* INFO */}
+                                <div className="profile-info">
                                   <span>
                                     Age: {calculateAge(match.DateOfBirth)}
                                   </span>
                                   <span>Height: {match.HeightValue}</span>
-                                  <span>Gotra: {match.GotraName}</span>
 
-                                  {/* Contact Info (Visible because it's a match) */}
                                   <span
                                     style={{
-                                      color: "#28a745",
-                                      fontWeight: "500",
+                                      background: "#e9f8ef",
+                                      borderColor: "#b7e4c2",
+                                      color: "#2e8b57",
                                     }}
                                   >
                                     <i className="fa fa-phone"></i>{" "}
@@ -549,22 +536,21 @@ const ProfileList = () => {
                                   </span>
                                 </div>
 
-                                <div className="links">
-                                  {/* 1. WHATSAPP BUTTON */}
+                                {/* ACTIONS */}
+                                <div className="card-actions">
                                   {match.ContactMobile && (
                                     <a
                                       href={`https://wa.me/${match.ContactMobile}`}
                                       target="_blank"
                                       rel="noreferrer"
-                                      className="cta"
                                       style={{
                                         background: "#25D366",
-                                        border: "none",
                                         color: "#fff",
-                                        marginRight: "5px",
-                                        textDecoration: "none",
-                                        padding: "6px 12px",
-                                        borderRadius: "4px",
+                                        borderRadius: "8px",
+                                        padding: "8px 14px",
+                                        fontWeight: "600",
+                                        marginRight: "8px",
+                                        display: "inline-block",
                                       }}
                                     >
                                       <i className="fa fa-whatsapp"></i>{" "}
@@ -572,22 +558,15 @@ const ProfileList = () => {
                                     </a>
                                   )}
 
-                                  {/* 2. SHOW DETAILS BUTTON (The new feature) */}
                                   <button
-                                    className="btn btn-primary btn-sm"
+                                    className="btn-interest"
+                                    style={{ padding: "8px 14px" }}
                                     onClick={() =>
                                       handleViewProfile(match.ProfileID)
                                     }
-                                    style={{
-                                      padding: "6px 12px",
-                                      fontSize: "12px",
-                                    }}
                                   >
-                                    <i
-                                      className="fa fa-user-circle-o"
-                                      aria-hidden="true"
-                                    ></i>{" "}
-                                    View Profile
+                                    <i className="fa fa-user-circle-o"></i> View
+                                    Profile
                                   </button>
                                 </div>
                               </div>
@@ -612,62 +591,192 @@ const ProfileList = () => {
         aria-labelledby="sendInterLabel"
         aria-hidden="true"
       >
-        <div className="modal-dialog modal-lg">
-          <div className="modal-content">
-            <div className="modal-header">
-              <h4 className="modal-title seninter-tit" id="sendInterLabel">
-                Send interest to{" "}
-                <span className="intename2">
+        <div className="modal-dialog modal-dialog-centered modal-lg">
+          <div
+            className="modal-content"
+            style={{
+              borderRadius: "18px",
+              overflow: "hidden",
+              boxShadow: "0 8px 30px rgba(0,0,0,0.25)",
+              border: "none",
+            }}
+          >
+            {/* HEADER */}
+            <div
+              style={{
+                background: "linear-gradient(135deg, #6b4a0d, #4a3208)",
+                padding: "20px 28px",
+                color: "#fff",
+                display: "flex",
+                justifyContent: "space-between",
+                alignItems: "center",
+                position: "relative",
+                overflow: "hidden",
+              }}
+            >
+              {/* Soft overlay behind text */}
+              <div
+                style={{
+                  position: "absolute",
+                  top: 0,
+                  left: 0,
+                  width: "70%", // only behind the text
+                  height: "100%",
+                  background: "rgba(0, 0, 0, 0.25)", // subtle blur
+                  backdropFilter: "blur(2px)",
+                  zIndex: 1,
+                }}
+              ></div>
+
+              <h4
+                style={{
+                  margin: 0,
+                  lineHeight: "1.4",
+                  position: "relative",
+                  zIndex: 2,
+                  color: "#fdfdfd",
+                  textShadow: "0 1px 4px rgba(0,0,0,0.45)", // makes text super crisp
+                }}
+              >
+                <span style={{ fontWeight: "600", fontSize: "20px" }}>
+                  Send Interest
+                </span>{" "}
+                <span style={{ fontSize: "15px", opacity: 0.9 }}>
+                  / इंटरेस्ट भेजें
+                </span>
+                <br />
+                <span
+                  style={{
+                    fontWeight: "700",
+                    fontSize: "18px",
+                    color: "#ffffff",
+                    textShadow: "0 1px 6px rgba(0,0,0,0.6)",
+                  }}
+                >
                   {selectedProfile?.firstname || "User"}
                 </span>
               </h4>
+
               <button
                 type="button"
-                className="btn-close"
+                className="btn-close btn-close-white"
                 data-bs-dismiss="modal"
                 aria-label="Close"
+                style={{ zIndex: 2 }}
               ></button>
             </div>
-            <div className="modal-body seninter">
-              <div className="lhs">
+
+            {/* BODY */}
+            <div
+              className="modal-body"
+              style={{ padding: "28px", display: "flex", gap: "22px" }}
+            >
+              {/* LEFT IMAGE */}
+              <div
+                style={{
+                  width: "180px",
+                  height: "220px",
+                  borderRadius: "12px",
+                  overflow: "hidden",
+                  background: "#eee",
+                  flexShrink: 0,
+                }}
+              >
                 <img
-                  src={selectedProfile?.ProfilePhoto || "images/default.png"}
+                  src={
+                    selectedProfile?.ProfilePhoto || "matro/images/default.png"
+                  }
                   alt=""
-                  className="intephoto2"
+                  style={{
+                    width: "100%",
+                    height: "100%",
+                    objectFit: "cover",
+                    objectPosition: "center",
+                  }}
                 />
               </div>
-              <div className="rhs">
-                <h4>
-                  Permissions:{" "}
-                  <span className="intename2">
-                    {selectedProfile?.firstname}
-                  </span>{" "}
-                  can view details
-                </h4>
+
+              {/* RIGHT SIDE */}
+              <div style={{ flex: 1 }}>
+                <h5 style={{ marginBottom: "12px", fontWeight: "600" }}>
+                  Permissions Granted / अनुमति
+                </h5>
+
+                <p style={{ fontSize: "15px", marginBottom: "14px" }}>
+                  By sending interest,{" "}
+                  <strong>{selectedProfile?.firstname}</strong> will be able to
+                  view your profile details.
+                  <br />
+                  इंटरेस्ट भेजने के बाद{" "}
+                  <strong>{selectedProfile?.firstname}</strong> आपकी प्रोफ़ाइल
+                  जानकारी देख पाएंगे।
+                </p>
+
                 {requestStatus && (
-                  <div className="alert alert-info" role="alert">
+                  <div
+                    className="alert alert-info"
+                    style={{
+                      fontSize: "14px",
+                      borderRadius: "8px",
+                    }}
+                  >
                     {requestStatus}
                   </div>
                 )}
-                <div className="form-floating">
-                  <p>Are you sure you want to send a connection request?</p>
+
+                <div
+                  style={{
+                    background: "#f8f8f8",
+                    padding: "14px",
+                    borderRadius: "10px",
+                    fontSize: "15px",
+                  }}
+                >
+                  <p style={{ margin: 0, fontWeight: "500" }}>
+                    Are you sure you want to send a connection request?
+                  </p>
+                  <p style={{ margin: 0, color: "#555" }}>
+                    क्या आप वाकई इंटरेस्ट भेजना चाहते हैं?
+                  </p>
                 </div>
               </div>
             </div>
-            <div className="modal-footer">
+
+            {/* FOOTER */}
+            <div
+              className="modal-footer"
+              style={{
+                borderTop: "1px solid #eee",
+                padding: "16px 22px",
+                display: "flex",
+                justifyContent: "space-between",
+              }}
+            >
               <button
                 type="button"
-                className="btn btn-primary"
+                className="btn"
+                style={{
+                  background: "linear-gradient(135deg, #583c07, #3e2b05)",
+                  color: "#fff",
+                  fontWeight: "600",
+                  borderRadius: "8px",
+                  padding: "10px 20px",
+                }}
                 onClick={handleSendInterest}
               >
-                Send interest
+                Send Interest / इंटरेस्ट भेजें
               </button>
+
               <button
                 type="button"
                 className="btn btn-outline-danger"
                 data-bs-dismiss="modal"
+                style={{
+                  borderRadius: "8px",
+                  padding: "10px 20px",
+                }}
               >
-                Cancel
+                Cancel / रद्द करें
               </button>
             </div>
           </div>

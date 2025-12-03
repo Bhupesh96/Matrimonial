@@ -318,3 +318,36 @@ export const fetchMyRequests = async () => {
 
   return data.data; // returns { incoming_requests: [], outgoing_requests: [] }
 };
+export const logoutUser = async () => {
+  const profileID = localStorage.getItem("profileID");
+  const token = localStorage.getItem("login_token");
+
+  if (!profileID) throw new Error("No profile ID found");
+  if (!token) throw new Error("Login token missing");
+
+  const url = `${API_BASE_URL}?api=user_logout`;
+
+  const res = await fetch(url, {
+    method: "POST",
+    headers: { "Content-Type": "application/json" },
+    body: JSON.stringify({
+      profile_id: profileID,
+      login_token: token,
+    }),
+  });
+
+  const data = await res.json();
+
+  if (!res.ok || data.status !== 200) {
+    throw new Error(data.message || "Logout failed");
+  }
+
+  // Clear all session info
+  localStorage.removeItem("profileID");
+  localStorage.removeItem("userID");
+  localStorage.removeItem("profileName");
+  localStorage.removeItem("login_token");
+
+  return data;
+};
+
