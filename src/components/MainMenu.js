@@ -224,7 +224,9 @@ const MainMenu = () => {
               <div className="al">
                 <div className="head-pro">
                   <img
-                    src={profilePhoto ? profilePhoto : "images/default.png"}
+                    src={
+                      profilePhoto ? profilePhoto : "matro/images/default.png"
+                    }
                     alt="Profile"
                     loading="lazy"
                   />

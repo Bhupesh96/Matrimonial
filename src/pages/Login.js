@@ -1,9 +1,9 @@
 import React, { useState } from "react";
 import { Link, useNavigate } from "react-router-dom";
 import { loginUser } from "../api";
-import AlertService from "../services/AlertServices"; // <-- 1. Import AlertService
+import AlertService from "../services/AlertServices";
 
-// Import layout components
+// Layout Components
 import Preloader from "../components/Preloader";
 import PoopUpSearch from "../components/PoopUpSearch";
 import TopMenu from "../components/TopMenu";
@@ -14,46 +14,76 @@ import MobileMenu from "../components/MobileMenu";
 import DashboardMenu from "../components/DashBoardMenu";
 import Footer from "../components/Footer";
 import CopyRight from "../components/CopyRight";
+
 const API_BASE_URL = process.env.REACT_APP_API_URL;
+
 const Login = () => {
-  // 1. State for form fields, loading
   const [identifier, setIdentifier] = useState("");
   const [password, setPassword] = useState("");
   const [loading, setLoading] = useState(false);
-  // const [message, setMessage] = useState(""); // <-- 2. No longer needed
 
+  const [lang, setLang] = useState("en"); // 🌐 Language State
   const navigate = useNavigate();
 
-  // 3. Handle form submission
+  // 🌐 TRANSLATION TEXTS
+  const t = {
+    en: {
+      headline1: "Now find",
+      headline2: "your life partner",
+      headline3: "Easy and fast.",
+      title: "Sign in to Matrimony",
+      subtitle: "Enter your credentials to continue",
+      userId: "User ID",
+      placeholderUser: "Enter User ID, Email, or Mobile",
+      password: "Password",
+      placeholderPass: "Enter password",
+      remember: "Remember me",
+      signIn: "Sign In",
+      noAccount: "Not a member?",
+      register: "Register",
+      requiredMsg: "Please enter both User ID and password.",
+      signing: "Signing In...",
+    },
+
+    hi: {
+      headline1: "अब पाएँ",
+      headline2: "अपना जीवनसाथी",
+      headline3: "आसानी से और तेज़ी से।",
+      title: "मैट्रिमोनी में लॉगिन करें",
+      subtitle: "जारी रखने के लिए अपनी जानकारी दर्ज करें",
+      userId: "यूज़र आईडी",
+      placeholderUser: "यूज़र आईडी, ईमेल या मोबाइल दर्ज करें",
+      password: "पासवर्ड",
+      placeholderPass: "पासवर्ड दर्ज करें",
+      remember: "मुझे याद रखें",
+      signIn: "लॉगिन",
+      noAccount: "अभी सदस्य नहीं हैं?",
+      register: "रजिस्टर करें",
+      requiredMsg: "कृपया यूज़र आईडी और पासवर्ड दर्ज करें।",
+      signing: "लॉगिन हो रहा है...",
+    },
+  };
+
   const handleSubmit = async (e) => {
     e.preventDefault();
     setLoading(true);
 
-    // Basic validation
     if (!identifier || !password) {
-      AlertService.showError("Please enter both UserID and password."); // <-- 3. Use AlertService
+      AlertService.showError(t[lang].requiredMsg);
       setLoading(false);
       return;
     }
 
     try {
-      // 4. Call the API
       const data = await loginUser({ identifier, password });
-      console.log("LOGIN API RESPONSE:", JSON.stringify(data, null, 2));
-      // 5. On successful login:
 
-      // --- THIS IS THE MOST IMPORTANT PART ---
-      // Your PHP script returns the user in a 'data' object.
       if (data.data && data.data.ProfileID) {
-        console.log(
-          "Saving to LocalStorage:",
-          JSON.stringify(data.data, null, 2)
-        );
         localStorage.setItem("profileID", data.data.ProfileID);
         localStorage.setItem("userID", data.data.UserID);
         localStorage.setItem("profileName", data.data.ProfileName);
         localStorage.setItem("login_token", data.login_token);
 
+        // Fetch profile photo
         fetch(
           `${API_BASE_URL}?api=get_profile&ProfileID=${data.data.ProfileID}`
         )
@@ -64,29 +94,21 @@ const Login = () => {
               localStorage.setItem("profilePhoto", photo);
             }
           });
-      } else {
-        // This shouldn't happen if the API is correct, but good to check.
-        throw new Error("Login response was successful but missing user data.");
       }
-      // ----------------------------------------
 
-      // 6. Show success toast and redirect
       AlertService.showSuccessAndRedirect(
-        data.message || "Login successful!",
+        lang === "en" ? "Login successful!" : "लॉगिन सफल!",
         navigate,
-        "/user-profile-edit" // <-- Redirect to dashboard (or "/")
+        "/user-profile-edit"
       );
     } catch (error) {
-      // 7. On failure, show error toast
       AlertService.showError(error.message);
     } finally {
       setLoading(false);
     }
   };
 
-  if (loading) {
-    return <Preloader />;
-  }
+  if (loading) return <Preloader />;
 
   return (
     <div>
@@ -97,95 +119,144 @@ const Login = () => {
       <MainMenu />
       <MobileMenu />
       <DashboardMenu />
+
       <section>
         <div className="login">
           <div className="container">
             <div className="row">
               <div className="inn">
+                {/* LEFT SIDE */}
                 <div className="lhs">
                   <div className="tit">
                     <h2>
-                      Now{" "}
-                      <b>
-                        Find <br /> your life partner
-                      </b>{" "}
-                      Easy and fast.
+                      {t[lang].headline1} <br />
+                      <b>{t[lang].headline2}</b>
+                      <br />
+                      {t[lang].headline3}
                     </h2>
                   </div>
+
                   <div className="im">
                     <img
                       src={`${process.env.PUBLIC_URL}/images/login-couple.png`}
                       alt=""
                     />
                   </div>
+
                   <div className="log-bg">&nbsp;</div>
                 </div>
+
+                {/* RIGHT SIDE */}
                 <div className="rhs">
                   <div>
+                    {/* 🌐 LANGUAGE SWITCHER */}
+                    <div
+                      style={{
+                        display: "flex",
+                        justifyContent: "center",
+                        gap: "16px",
+                        marginBottom: "25px",
+                      }}
+                    >
+                      <button
+                        onClick={() => setLang("en")}
+                        className={
+                          lang === "en" ? "active-lang-btn" : "lang-btn"
+                        }
+                      >
+                        English
+                      </button>
+
+                      <button
+                        onClick={() => setLang("hi")}
+                        className={
+                          lang === "hi" ? "active-lang-btn" : "lang-btn"
+                        }
+                      >
+                        हिन्दी
+                      </button>
+                    </div>
+
                     <div className="form-tit">
-                      <h4>Start for free</h4>
-                      <h1>Sign in to Matrimony</h1>
+                      <h4>{t[lang].subtitle}</h4>
+                      <h1>{t[lang].title}</h1>
+
                       <p>
-                        Not a member? <Link to="/sign-up">Register</Link>
+                        {t[lang].noAccount}{" "}
+                        <Link to="/sign-up">{t[lang].register}</Link>
                       </p>
                     </div>
+
+                    {/* LOGIN FORM */}
                     <div className="form-login">
                       <form onSubmit={handleSubmit}>
                         <div className="form-group">
-                          <label className="lb">User Id</label>
+                          <label className="lb">{t[lang].userId}</label>
                           <input
                             type="text"
                             className="form-control"
-                            placeholder="Enter User Id, Email, or Mobile"
+                            placeholder={t[lang].placeholderUser}
                             value={identifier}
                             onChange={(e) => setIdentifier(e.target.value)}
                             required
                           />
                         </div>
+
                         <div className="form-group">
-                          <label className="lb">Password:</label>
+                          <label className="lb">{t[lang].password}</label>
                           <input
                             type="password"
                             className="form-control"
-                            placeholder="Enter password"
+                            placeholder={t[lang].placeholderPass}
                             value={password}
                             onChange={(e) => setPassword(e.target.value)}
                             required
                           />
                         </div>
 
-                        {/* 8. Message display is no longer needed, toasts handle it */}
-                        {/* {message && ( ... )} */}
-
                         <div className="form-group form-check">
                           <label className="form-check-label">
                             <input
                               className="form-check-input"
                               type="checkbox"
-                              name="agree"
                             />{" "}
-                            Remember me
+                            {t[lang].remember}
                           </label>
                         </div>
 
-                        <button
-                          type="submit"
-                          className="btn btn-primary"
-                          disabled={loading}
-                        >
-                          {loading ? "Signing In..." : "Sign in"}
+                        <button type="submit" className="btn btn-primary">
+                          {loading ? t[lang].signing : t[lang].signIn}
                         </button>
                       </form>
                     </div>
                   </div>
                 </div>
+                {/* RHS END */}
               </div>
             </div>
           </div>
         </div>
       </section>
+
       <Footer />
       <CopyRight />
+
+      {/* Language Switcher CSS */}
+      <style>{`
+        .lang-btn {
+          background: transparent;
+          border: none;
+          font-size: 15px;
+          color: #777;
+          padding-bottom: 4px;
+          cursor: pointer;
+        }
+        .active-lang-btn {
+          font-weight: 700;
+          color: #007bff;
+          border-bottom: 2px solid #007bff;
+        }
+      `}</style>
     </div>
   );
 };

@@ -1,13 +1,9 @@
 import React, { useState, useEffect } from "react";
 import { Link, useNavigate } from "react-router-dom";
 
-// 1. Import API functions (ADJUST THIS PATH)
-import { createProfile, fetchMasterData, fetchNextUserID } from "../api"; // <-- Verify this path!
-
-// 2. Import Alert Service (ADJUST THIS PATH)
+import { createProfile, fetchMasterData, fetchNextUserID } from "../api";
 import AlertService from "../services/AlertServices";
 
-// 3. Import all your layout components (MOCKED below for a runnable file)
 import Preloader from "../components/Preloader";
 import PoopUpSearch from "../components/PoopUpSearch";
 import TopMenu from "../components/TopMenu";
@@ -19,20 +15,96 @@ import DashboardMenu from "../components/DashBoardMenu";
 import Footer from "../components/Footer";
 import CopyRight from "../components/CopyRight";
 
-// 4. Helper function to render dropdown options
-const renderOptions = (data) => {
-  if (!data || data.length === 0) return null;
-  return data.map((item) => (
+const renderOptions = (data) =>
+  data?.map((item) => (
     <option key={item.id} value={item.id}>
       {item.name}
     </option>
   ));
-};
 
 const SignUp = () => {
   const navigate = useNavigate();
 
-  // 5. State for Dropdown Data
+  /* 🌐 BILINGUAL LANGUAGE STATE */
+  const [lang, setLang] = useState("en");
+
+  const t = {
+    en: {
+      headline1: "Now",
+      headline2: "Find your life partner",
+      headline3: "Easy and fast.",
+      startFree: "Start for free",
+      createTitle: "Create Your Matrimony Profile",
+      alreadyMember: "Already a member?",
+      login: "Login",
+      newUserId: "Your New User ID",
+      phone: "Mobile Contact",
+      phonePlaceholder: "Enter 10-digit mobile number",
+      fname: "First Name",
+      fnamePlaceholder: "Enter your first name",
+      surname: "Surname",
+      surnamePlaceholder: "Enter your surname",
+      gender: "Gender",
+      marital: "Marital Status",
+      gotra: "Gotra (Self)",
+      nanaGotra: "Nana Gotra (Maternal)",
+      height: "Height",
+      weight: "Weight (in kg)",
+      complexion: "Complexion",
+      complexionPlaceholder: "e.g., Fair, Wheatish, Dark",
+      fatherName: "Father's Name",
+      fatherPlaceholder: "Enter father's name",
+      motherName: "Mother's Name",
+      motherPlaceholder: "Enter mother's name",
+      city: "City",
+      terms: "Creating an account means you're okay with our",
+      createBtn: "Create Profile",
+      creating: "Creating...",
+      errorMobile: "Mobile number must be exactly 10 digits.",
+      fillRequired: "Please fill all required fields.",
+      agreeError: "You must agree to the Terms of Service.",
+      invalidMobile: "Please enter a valid 10-digit mobile number.",
+    },
+
+    hi: {
+      headline1: "अब",
+      headline2: "अपना जीवनसाथी खोजें",
+      headline3: "आसान और तेज़ी से।",
+      startFree: "मुफ़्त में शुरू करें",
+      createTitle: "अपनी मैट्रिमोनी प्रोफ़ाइल बनाएँ",
+      alreadyMember: "पहले से सदस्य हैं?",
+      login: "लॉगिन करें",
+      newUserId: "आपकी नई यूज़र आईडी",
+      phone: "मोबाइल नंबर",
+      phonePlaceholder: "10 अंकों का मोबाइल नंबर दर्ज करें",
+      fname: "पहला नाम",
+      fnamePlaceholder: "अपना पहला नाम दर्ज करें",
+      surname: "उपनाम",
+      surnamePlaceholder: "अपना उपनाम दर्ज करें",
+      gender: "लिंग",
+      marital: "वैवाहिक स्थिति",
+      gotra: "गोत्र (स्वयं)",
+      nanaGotra: "नाना गोत्र (मातृ)",
+      height: "लंबाई",
+      weight: "वजन (किलोग्राम में)",
+      complexion: "रंग",
+      complexionPlaceholder: "जैसे: गोरा, गेहुआँ, सांवला",
+      fatherName: "पिता का नाम",
+      fatherPlaceholder: "पिता का नाम दर्ज करें",
+      motherName: "माता का नाम",
+      motherPlaceholder: "माता का नाम दर्ज करें",
+      city: "शहर",
+      terms: "खाता बनाकर आप हमारी शर्तों से सहमत होते हैं",
+      createBtn: "प्रोफ़ाइल बनाएँ",
+      creating: "बनाई जा रही है...",
+      errorMobile: "मोबाइल नंबर बिल्कुल 10 अंकों का होना चाहिए।",
+      fillRequired: "कृपया सभी आवश्यक फ़ील्ड भरें।",
+      agreeError: "कृपया शर्तों से सहमत हों।",
+      invalidMobile: "कृपया सही 10 अंकों का मोबाइल नंबर दर्ज करें।",
+    },
+  };
+
+  /* STATES */
   const [genders, setGenders] = useState([]);
   const [maritalStatuses, setMaritalStatuses] = useState([]);
   const [cities, setCities] = useState([]);
@@ -40,7 +112,6 @@ const SignUp = () => {
   const [heights, setHeights] = useState([]);
   const [nanaGotras, setNanaGotras] = useState([]);
 
-  // 6. State for all Form Fields
   const [userID, setUserID] = useState("");
   const [firstName, setFirstName] = useState("");
   const [surname, setSurname] = useState("");
@@ -57,108 +128,70 @@ const SignUp = () => {
   const [phone, setPhone] = useState("");
   const [agree, setAgree] = useState(false);
 
-  // 7. State for Loading and Inline Validation
   const [loading, setLoading] = useState(true);
-  const [phoneError, setPhoneError] = useState(""); // <-- Kept for inline validation
-
-  // --- START: Input Validation Handlers ---
+  const [phoneError, setPhoneError] = useState("");
 
   const handleMobileChange = (e) => {
-    const value = e.target.value;
-    const numericValue = value.replace(/[^0-9]/g, "");
-    const limitedValue = numericValue.slice(0, 10);
-    setPhone(limitedValue);
-    if (limitedValue.length > 0 && limitedValue.length !== 10) {
-      setPhoneError("Mobile number must be exactly 10 digits.");
-    } else {
-      setPhoneError("");
-    }
+    const numeric = e.target.value.replace(/[^0-9]/g, "").slice(0, 10);
+    setPhone(numeric);
+
+    if (numeric.length > 0 && numeric.length !== 10)
+      setPhoneError(t[lang].errorMobile);
+    else setPhoneError("");
   };
 
-  const handleTextOnlyChange = (setter) => (e) => {
-    const value = e.target.value;
-    // Regex to only allow letters (a-z, A-Z), spaces, and hyphens (for names)
-    const textOnlyValue = value.replace(/[^a-zA-Z\s\-]/g, "");
-    setter(textOnlyValue);
-  };
+  // Text-only handler
+  const handleTextOnly = (setter) => (e) =>
+    setter(e.target.value.replace(/[^a-zA-Z\s]/g, ""));
 
-  // --- END: Input Validation Handlers ---
-
-  // 8. useEffect to fetch ALL data on load
+  /* LOAD MASTER DATA */
   useEffect(() => {
-    const loadInitialData = async () => {
-      setLoading(true);
-
+    const loadData = async () => {
       try {
         const nextID = await fetchNextUserID();
-        if (nextID) {
-          setUserID(nextID);
-        } else {
-          throw new Error("Could not fetch a new UserID.");
-        }
+        setUserID(nextID);
 
-        // Fetch all dropdown data in parallel
         await Promise.all([
           fetchMasterData("genders").then(setGenders),
           fetchMasterData("maritalstatuses").then(setMaritalStatuses),
           fetchMasterData("preference_marriage_area").then(setCities),
-          fetchMasterData("gotras").then((data) => {
-            setGotras(data);
-            setNanaGotras(data);
+          fetchMasterData("gotras").then((g) => {
+            setGotras(g);
+            setNanaGotras(g);
           }),
           fetchMasterData("heights").then(setHeights),
         ]);
-      } catch (error) {
-        AlertService.showError(
-          `Error: ${
-            error.message || "Failed to load initial data."
-          } Please refresh.`
-        );
+      } catch (err) {
+        AlertService.showError("Failed to load data.");
       } finally {
         setLoading(false);
       }
     };
 
-    loadInitialData();
+    loadData();
   }, []);
 
-  // 9. Handle Form Submission
-  const handleSubmit = async (event) => {
-    event.preventDefault();
+  /* SUBMIT FORM */
+  const handleSubmit = async (e) => {
+    e.preventDefault();
 
-    // --- Validation Checks with AlertService ---
-    if (!agree) {
-      AlertService.showError("You must agree to the Terms of Service.");
-      return;
-    }
+    if (!agree) return AlertService.showError(t[lang].agreeError);
 
-    if (phone.length !== 10 || !!phoneError) {
-      AlertService.showError("Please enter a valid 10-digit mobile number.");
-      return;
-    }
+    if (phone.length !== 10)
+      return AlertService.showError(t[lang].invalidMobile);
 
-    if (
-      !genderID ||
-      !maritalStatusID ||
-      !cityID ||
-      !gotraID ||
-      !nanaGotraID ||
-      !heightID
-    ) {
-      AlertService.showError("Please select all required dropdown fields.");
-      return;
-    }
+    if (!genderID || !maritalStatusID || !cityID || !gotraID || !nanaGotraID)
+      return AlertService.showError(t[lang].fillRequired);
 
     setLoading(true);
 
-    // 10. Construct the final payload for the API
-    const profileData = {
+    const payload = {
       UserID: userID,
-      Gender: parseInt(genderID), // <-- Ensure this is parsed
+      GenderID: parseInt(genderID),
       MaritalStatusID: parseInt(maritalStatusID),
       LocationCityID: parseInt(cityID),
-      FirstName: firstName,
-      Surname: surname,
+      firstname: firstName,
+      lastname: surname,
       GotraID: parseInt(gotraID),
       NanaGotraId: parseInt(nanaGotraID),
       FatherName: fatherName,
@@ -166,41 +199,22 @@ const SignUp = () => {
       HeightID: parseInt(heightID),
       Weight: parseInt(weight),
       Complexion: complexion,
-      contact_mobile: phone,
+      ContactMobile: phone,
     };
-    console.log(
-      "Sending payload to createProfile:",
-      JSON.stringify(profileData, null, 2)
-    );
 
     try {
-      const result = await createProfile(profileData);
+      const result = await createProfile(payload);
 
-      if (result.status >= 200 && result.status < 300) {
-        // --- SUCCESS ---
-        const alertMessage = `${result.message}\n\nUse your phone number as the password for your first login. You can change it later from your profile settings.`;
-
-        // Show alert and redirect to /login
-        AlertService.showSuccessAndRedirect(alertMessage, navigate, "/login");
-      } else {
-        // --- API FAILURE (e.g., 400, 409) ---
-        AlertService.showError(
-          result.message ||
-            "Failed to create account. Please check your details."
-        );
-      }
-    } catch (error) {
-      // --- CATCH BLOCK (e.g., network error) ---
-      AlertService.showError(
-        error.message || "An error occurred: Please try again."
-      );
+      AlertService.showSuccessAndRedirect(result.message, navigate, "/login");
+    } catch (err) {
+      AlertService.showError(err.message);
     } finally {
       setLoading(false);
     }
   };
-  if (loading) {
-    return <Preloader />;
-  }
+
+  if (loading) return <Preloader />;
+
   return (
     <div>
       <PoopUpSearch />
@@ -210,15 +224,18 @@ const SignUp = () => {
       <MainMenu />
       <MobileMenu />
       <DashboardMenu />
+
       <section>
         <div className="login">
           <div className="container">
             <div className="row">
               <div className="inn">
+                {/* LEFT */}
                 <div className="lhs">
                   <div className="tit">
                     <h2>
-                      Now <b>Find your life partner</b> Easy and fast.
+                      {t[lang].headline1} <b>{t[lang].headline2}</b>{" "}
+                      {t[lang].headline3}
                     </h2>
                   </div>
                   <div className="im">
@@ -227,280 +244,229 @@ const SignUp = () => {
                       alt=""
                     />
                   </div>
-                  <div className="log-bg">&nbsp;</div>
+                  <div className="log-bg"></div>
                 </div>
+
+                {/* RIGHT */}
                 <div className="rhs">
-                  <div>
-                    <div className="form-tit">
-                      <h4>Start for free</h4>
-                      <h1>Create Your Matrimony Profile</h1>
-                      <p>
-                        Already a member? <Link to="/login">Login</Link>
-                      </p>
-                    </div>
+                  {/* 🌐 LANGUAGE SWITCH */}
+                  <div
+                    style={{
+                      display: "flex",
+                      gap: "15px",
+                      justifyContent: "center",
+                    }}
+                  >
+                    <button
+                      onClick={() => setLang("en")}
+                      className={lang === "en" ? "active-lang-btn" : "lang-btn"}
+                    >
+                      English
+                    </button>
+                    <button
+                      onClick={() => setLang("hi")}
+                      className={lang === "hi" ? "active-lang-btn" : "lang-btn"}
+                    >
+                      हिन्दी
+                    </button>
+                  </div>
 
-                    <div className="form-login">
-                      <form onSubmit={handleSubmit}>
-                        <div className="row">
-                          {/* -------------------- Column 1 (Left) -------------------- */}
-                          <div className="col-md-6">
-                            {/* --- UserID Display --- */}
-                            <div className="form-group">
-                              <label className="lb">Your New User ID:</label>
-                              <input
-                                type="text"
-                                className="form-control"
-                                value={userID || "Fetching ID..."}
-                                readOnly
-                                style={{
-                                  backgroundColor: "#e9ecef",
-                                  fontWeight: "bold",
-                                  color: "#007bff",
-                                }}
-                              />
-                            </div>
+                  <div className="form-tit">
+                    <h4>{t[lang].startFree}</h4>
+                    <h1>{t[lang].createTitle}</h1>
+                    <p>
+                      {t[lang].alreadyMember}{" "}
+                      <Link to="/login">{t[lang].login}</Link>
+                    </p>
+                  </div>
 
-                            {/* --- Mobile Number Input --- */}
-                            <div className="form-group">
-                              <label className="lb">Mobile Contact:</label>
-                              <input
-                                type="tel"
-                                className="form-control"
-                                placeholder="Enter 10-digit mobile number"
-                                value={phone}
-                                onChange={handleMobileChange}
-                                maxLength="10"
-                                inputMode="numeric"
-                                required
-                              />
-                              {phoneError && (
-                                <small style={{ color: "red" }}>
-                                  {phoneError}
-                                </small>
-                              )}
-                            </div>
-
-                            {/* --- First Name --- */}
-                            <div className="form-group">
-                              <label className="lb">First Name:</label>
-                              <input
-                                type="text"
-                                className="form-control"
-                                placeholder="Enter your first name"
-                                value={firstName}
-                                onChange={handleTextOnlyChange(setFirstName)}
-                                required
-                              />
-                            </div>
-
-                            {/* --- Surname --- */}
-                            <div className="form-group">
-                              <label className="lb">Surname:</label>
-                              <input
-                                type="text"
-                                className="form-control"
-                                placeholder="Enter your surname"
-                                value={surname}
-                                onChange={handleTextOnlyChange(setSurname)}
-                                required
-                              />
-                            </div>
-
-                            {/* --- Gender Dropdown --- */}
-                            <div className="form-group">
-                              <label className="lb">Gender:</label>
-                              <select
-                                className="form-control"
-                                value={genderID}
-                                onChange={(e) => setGenderID(e.target.value)}
-                                required
-                                disabled={loading && genders.length === 0}
-                              >
-                                <option value="">Select Gender</option>
-                                {renderOptions(genders)}
-                              </select>
-                            </div>
-
-                            {/* --- Marital Status Dropdown --- */}
-                            <div className="form-group">
-                              <label className="lb">Marital Status:</label>
-                              <select
-                                className="form-control"
-                                value={maritalStatusID}
-                                onChange={(e) =>
-                                  setMaritalStatusID(e.target.value)
-                                }
-                                required
-                                disabled={
-                                  loading && maritalStatuses.length === 0
-                                }
-                              >
-                                <option value="">Select Marital Status</option>
-                                {renderOptions(maritalStatuses)}
-                              </select>
-                            </div>
-
-                            {/* --- Gotra Dropdown (Self) --- */}
-                            <div className="form-group">
-                              <label className="lb">Gotra (Self):</label>
-                              <select
-                                className="form-control"
-                                value={gotraID}
-                                onChange={(e) => setGotraID(e.target.value)}
-                                required
-                                disabled={loading && gotras.length === 0}
-                              >
-                                <option value="">Select Gotra</option>
-                                {renderOptions(gotras)}
-                              </select>
-                            </div>
-
-                            {/* Nana Gotra is NOW IN COLUMN 2 */}
-                          </div>
-                          {/* -------------------- End Column 1 -------------------- */}
-
-                          {/* -------------------- Column 2 (Right) -------------------- */}
-                          <div className="col-md-6">
-                            {/* --- Nana Gotra Dropdown (Maternal) (MOVED HERE) --- */}
-                            <div className="form-group">
-                              <label className="lb">
-                                Nana Gotra (Maternal):
-                              </label>
-                              <select
-                                className="form-control"
-                                value={nanaGotraID}
-                                onChange={(e) => setNanaGotraID(e.target.value)}
-                                required
-                                disabled={loading && nanaGotras.length === 0}
-                              >
-                                <option value="">Select Nana Gotra</option>
-                                {renderOptions(nanaGotras)}
-                              </select>
-                            </div>
-
-                            {/* --- Height Dropdown --- */}
-                            <div className="form-group">
-                              <label className="lb">Height:</label>
-                              <select
-                                className="form-control"
-                                value={heightID}
-                                onChange={(e) => setHeightID(e.target.value)}
-                                required
-                                disabled={loading && heights.length === 0}
-                              >
-                                <option value="">Select Height</option>
-                                {renderOptions(heights)}
-                              </select>
-                            </div>
-
-                            {/* --- Weight Input --- */}
-                            <div className="form-group">
-                              <label className="lb">Weight (in kg):</label>
-                              <input
-                                type="number"
-                                className="form-control"
-                                placeholder="Enter weight (30-200 kg)"
-                                value={weight}
-                                onChange={(e) =>
-                                  setWeight(e.target.value.slice(0, 3))
-                                }
-                                min="30"
-                                max="200"
-                                required
-                              />
-                            </div>
-
-                            {/* --- Complexion --- */}
-                            <div className="form-group">
-                              <label className="lb">Complexion:</label>
-                              <input
-                                type="text"
-                                className="form-control"
-                                placeholder="e.g., Fair, Wheatish, Dark"
-                                value={complexion}
-                                onChange={handleTextOnlyChange(setComplexion)}
-                                required
-                              />
-                            </div>
-
-                            {/* --- Father's Name --- */}
-                            <div className="form-group">
-                              <label className="lb">Father's Name:</label>
-                              <input
-                                type="text"
-                                className="form-control"
-                                placeholder="Enter father's name"
-                                value={fatherName}
-                                onChange={handleTextOnlyChange(setFatherName)}
-                                required
-                              />
-                            </div>
-
-                            {/* --- Mother's Name --- */}
-                            <div className="form-group">
-                              <label className="lb">Mother's Name:</label>
-                              <input
-                                type="text"
-                                className="form-control"
-                                placeholder="Enter mother's name"
-                                value={motherName}
-                                onChange={handleTextOnlyChange(setMotherName)}
-                                required
-                              />
-                            </div>
-
-                            {/* --- City Dropdown --- */}
-                            <div className="form-group">
-                              <label className="lb">City:</label>
-                              <select
-                                className="form-control"
-                                value={cityID}
-                                onChange={(e) => setCityID(e.target.value)}
-                                required
-                                disabled={loading && cities.length === 0}
-                              >
-                                <option value="">Select City</option>
-                                {renderOptions(cities)}
-                              </select>
-                            </div>
-                          </div>
-                          {/* -------------------- End Column 2 -------------------- */}
-                        </div>
-                        {/* --- End Bootstrap Row --- */}
-
-                        {/* --- Full-width items --- */}
-                        <div className="form-group form-check">
-                          <label className="form-check-label">
+                  <div className="form-login">
+                    <form onSubmit={handleSubmit}>
+                      <div className="row">
+                        {/* LEFT COLUMN */}
+                        <div className="col-md-6">
+                          <div className="form-group">
+                            <label>{t[lang].newUserId}</label>
                             <input
-                              className="form-check-input"
-                              type="checkbox"
-                              checked={agree}
-                              onChange={(e) => setAgree(e.target.checked)}
-                              required
-                            />{" "}
-                            Creating an account means you’re okay with our{" "}
-                            <a href="#">Terms of Service</a>...
-                          </label>
+                              className="form-control"
+                              readOnly
+                              value={userID}
+                              style={{ background: "#eee", fontWeight: "bold" }}
+                            />
+                          </div>
+
+                          <div className="form-group">
+                            <label>{t[lang].phone}</label>
+                            <input
+                              type="text"
+                              className="form-control"
+                              placeholder={t[lang].phonePlaceholder}
+                              value={phone}
+                              onChange={handleMobileChange}
+                            />
+                            {phoneError && (
+                              <small style={{ color: "red" }}>
+                                {phoneError}
+                              </small>
+                            )}
+                          </div>
+
+                          <div className="form-group">
+                            <label>{t[lang].fname}</label>
+                            <input
+                              className="form-control"
+                              placeholder={t[lang].fnamePlaceholder}
+                              value={firstName}
+                              onChange={handleTextOnly(setFirstName)}
+                            />
+                          </div>
+
+                          <div className="form-group">
+                            <label>{t[lang].surname}</label>
+                            <input
+                              className="form-control"
+                              placeholder={t[lang].surnamePlaceholder}
+                              value={surname}
+                              onChange={handleTextOnly(setSurname)}
+                            />
+                          </div>
+
+                          <div className="form-group">
+                            <label>{t[lang].gender}</label>
+                            <select
+                              className="form-control"
+                              value={genderID}
+                              onChange={(e) => setGenderID(e.target.value)}
+                            >
+                              <option value="">--</option>
+                              {renderOptions(genders)}
+                            </select>
+                          </div>
+
+                          <div className="form-group">
+                            <label>{t[lang].marital}</label>
+                            <select
+                              className="form-control"
+                              value={maritalStatusID}
+                              onChange={(e) =>
+                                setMaritalStatusID(e.target.value)
+                              }
+                            >
+                              <option value="">--</option>
+                              {renderOptions(maritalStatuses)}
+                            </select>
+                          </div>
+
+                          <div className="form-group">
+                            <label>{t[lang].gotra}</label>
+                            <select
+                              className="form-control"
+                              value={gotraID}
+                              onChange={(e) => setGotraID(e.target.value)}
+                            >
+                              <option value="">--</option>
+                              {renderOptions(gotras)}
+                            </select>
+                          </div>
                         </div>
 
-                        {/* --- THIS IS NO LONGER NEEDED --- */}
-                        {/* {message && ( ... )} */}
+                        {/* RIGHT COLUMN */}
+                        <div className="col-md-6">
+                          <div className="form-group">
+                            <label>{t[lang].nanaGotra}</label>
+                            <select
+                              className="form-control"
+                              value={nanaGotraID}
+                              onChange={(e) => setNanaGotraID(e.target.value)}
+                            >
+                              <option value="">--</option>
+                              {renderOptions(nanaGotras)}
+                            </select>
+                          </div>
 
-                        <button
-                          type="submit"
-                          className="btn btn-primary"
-                          disabled={
-                            loading ||
-                            !!phoneError ||
-                            !userID ||
-                            !agree ||
-                            phone.length !== 10
-                          }
-                        >
-                          {loading ? "Creating..." : "Create Profile"}
-                        </button>
-                      </form>
-                    </div>
+                          <div className="form-group">
+                            <label>{t[lang].height}</label>
+                            <select
+                              className="form-control"
+                              value={heightID}
+                              onChange={(e) => setHeightID(e.target.value)}
+                            >
+                              <option value="">--</option>
+                              {renderOptions(heights)}
+                            </select>
+                          </div>
+
+                          <div className="form-group">
+                            <label>{t[lang].weight}</label>
+                            <input
+                              type="number"
+                              className="form-control"
+                              value={weight}
+                              onChange={(e) => setWeight(e.target.value)}
+                            />
+                          </div>
+
+                          <div className="form-group">
+                            <label>{t[lang].complexion}</label>
+                            <input
+                              className="form-control"
+                              placeholder={t[lang].complexionPlaceholder}
+                              value={complexion}
+                              onChange={handleTextOnly(setComplexion)}
+                            />
+                          </div>
+
+                          <div className="form-group">
+                            <label>{t[lang].fatherName}</label>
+                            <input
+                              className="form-control"
+                              placeholder={t[lang].fatherPlaceholder}
+                              value={fatherName}
+                              onChange={handleTextOnly(setFatherName)}
+                            />
+                          </div>
+
+                          <div className="form-group">
+                            <label>{t[lang].motherName}</label>
+                            <input
+                              className="form-control"
+                              placeholder={t[lang].motherPlaceholder}
+                              value={motherName}
+                              onChange={handleTextOnly(setMotherName)}
+                            />
+                          </div>
+
+                          <div className="form-group">
+                            <label>{t[lang].city}</label>
+                            <select
+                              className="form-control"
+                              value={cityID}
+                              onChange={(e) => setCityID(e.target.value)}
+                            >
+                              <option value="">--</option>
+                              {renderOptions(cities)}
+                            </select>
+                          </div>
+                        </div>
+                      </div>
+
+                      {/* Terms */}
+                      <div className="form-group form-check">
+                        <label className="form-check-label">
+                          <input
+                            type="checkbox"
+                            className="form-check-input"
+                            checked={agree}
+                            onChange={(e) => setAgree(e.target.checked)}
+                          />{" "}
+                          {t[lang].terms}
+                        </label>
+                      </div>
+
+                      <button type="submit" className="btn btn-primary">
+                        {loading ? t[lang].creating : t[lang].createBtn}
+                      </button>
+                    </form>
                   </div>
                 </div>
               </div>
@@ -508,8 +474,25 @@ const SignUp = () => {
           </div>
         </div>
       </section>
+
       <Footer />
       <CopyRight />
+
+      {/* LANGUAGE SWITCH CSS */}
+      <style>{`
+        .lang-btn {
+          background: transparent;
+          border: none;
+          color: #777;
+          font-size: 15px;
+          cursor: pointer;
+        }
+        .active-lang-btn {
+          font-weight: bold;
+          color: #007bff;
+          border-bottom: 2px solid #007bff;
+        }
+      `}</style>
     </div>
   );
 };

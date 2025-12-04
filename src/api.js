@@ -1,92 +1,101 @@
 const API_BASE_URL = process.env.REACT_APP_API_URL;
 
-// ---------------------------
-// FETCH MASTER DATA
-// ---------------------------
+/* ----------------------------------------------------
+   GLOBAL FETCH WRAPPER – handles 401 & auto-logout
+---------------------------------------------------- */
+const apiFetch = async (url, options = {}) => {
+  try {
+    const res = await fetch(url, options);
+    const data = await res.json();
+
+    // 🔥 Auto logout when backend returns 401
+    if (data.status === 401) {
+      localStorage.clear();
+      window.location.href = "/login";
+      return;
+    }
+
+    return data;
+  } catch (err) {
+    throw new Error("Network error: " + err.message);
+  }
+};
+
+/* ----------------------------------------------------
+   MASTER DATA
+---------------------------------------------------- */
 export const fetchMasterData = async (masterType) => {
   const url = `${API_BASE_URL}?api=get_master&master_type=${masterType}`;
+  const data = await apiFetch(url);
 
-  const res = await fetch(url);
-  const data = await res.json();
-
-  if (!res.ok) throw new Error(data.message);
+  if (!data || data.status !== 200) throw new Error(data.message);
   return data.data || [];
 };
 
-// ---------------------------
-// CREATE PROFILE  (POST → FormData)
-// ---------------------------
+/* ----------------------------------------------------
+   CREATE PROFILE
+---------------------------------------------------- */
 export const createProfile = async (profileData) => {
   const url = `${API_BASE_URL}?api=create_profile`;
 
-  const res = await fetch(url, {
+  const data = await apiFetch(url, {
     method: "POST",
-    headers: {
-      "Content-Type": "application/json",
-    },
+    headers: { "Content-Type": "application/json" },
     body: JSON.stringify(profileData),
   });
 
-  const data = await res.json();
-  if (!res.ok) throw new Error(data.message);
+  if (!data || data.status !== 200) throw new Error(data.message);
   return data;
 };
 
-// ---------------------------
-// LOGIN USER (POST → FormData)
-// ---------------------------
+/* ----------------------------------------------------
+   LOGIN USER
+---------------------------------------------------- */
 export const loginUser = async (credentials) => {
   const url = `${API_BASE_URL}?api=user_login`;
 
-  const res = await fetch(url, {
+  const data = await apiFetch(url, {
     method: "POST",
     headers: { "Content-Type": "application/json" },
     body: JSON.stringify(credentials),
   });
 
-  const data = await res.json();
-  if (!res.ok) throw new Error(data.message);
-
+  if (!data || data.status !== 200) throw new Error(data.message);
   return data;
 };
 
-// ---------------------------
-// NEXT USER ID
-// ---------------------------
+/* ----------------------------------------------------
+   NEXT USER ID
+---------------------------------------------------- */
 export const fetchNextUserID = async () => {
   const url = `${API_BASE_URL}?api=get_next_user`;
+  const data = await apiFetch(url);
 
-  const res = await fetch(url);
-  const data = await res.json();
-
-  if (data.status === 200 && data.next_user_id) return data.next_user_id;
-  throw new Error(data.message || "Unable to fetch next user ID");
+  if (!data || data.status !== 200) throw new Error(data.message);
+  return data.next_user_id;
 };
 
-// ---------------------------
-// GET PROFILE
-// ---------------------------
+/* ----------------------------------------------------
+   GET PROFILE
+---------------------------------------------------- */
 export const getProfileDetails = async () => {
   const profileID = localStorage.getItem("profileID");
   if (!profileID) throw new Error("No ProfileID saved");
 
   const url = `${API_BASE_URL}?api=get_profile&ProfileID=${profileID}`;
 
-  const res = await fetch(url, {
+  const data = await apiFetch(url, {
     method: "GET",
-    credentials: "include", // <-- REQUIRED
+    credentials: "include",
   });
 
-  const data = await res.json();
-
-  if (!res.ok || data.status === 401) throw new Error(data.message);
-
+  if (!data || data.status !== 200) throw new Error(data.message);
   return data.data?.[0];
 };
 
-// ---------------------------
-// UPDATE PROFILE (POST → FormData)
-// ---------------------------
+/* ----------------------------------------------------
+   UPDATE PROFILE (FORMDATA)
+---------------------------------------------------- */
 const PROFILE_FIELDS = [
   "ProfileID",
   "UserID",
@@ -150,9 +159,6 @@ const PROFILE_FIELDS = [
   "ContactCity",
 ];
 
-// -------------------------------
-// FINAL WORKING updateProfile()
-// -------------------------------
 export const updateProfile = async (payload, profilePhoto) => {
   const profileID = localStorage.getItem("profileID");
   const userID = localStorage.getItem("userID");
@@ -162,78 +168,57 @@ export const updateProfile = async (payload, profilePhoto) => {
 
   const formData = new FormData();
 
-  // Append ONLY allowed fields
   PROFILE_FIELDS.forEach((field) => {
     if (payload[field] !== undefined && payload[field] !== null) {
       formData.append(field, payload[field]);
     }
   });
 
-  // Append profile photo if selected
   if (profilePhoto) {
     formData.append("ProfilePhoto", profilePhoto);
   }
 
-  // Debugging (OPTIONAL)
-  console.log("---- FINAL SENT PAYLOAD ----");
-  for (let pair of formData.entries()) {
-    console.log(pair[0] + ": " + pair[1]);
-  }
-
-  const response = await fetch(`${API_BASE_URL}?api=update_profile`, {
+  const data = await apiFetch(`${API_BASE_URL}?api=update_profile`, {
     method: "POST",
     body: formData,
   });
 
-  const data = await response.json();
-
-  if (!response.ok) {
-    throw new Error(data.message || "Update failed");
-  }
-
+  if (!data || data.status !== 200) throw new Error(data.message);
   return data;
 };
-// ---------------------------
-// GET ALL PROFILES LIST
-// ---------------------------
+
+/* ----------------------------------------------------
+   LIST ALL PROFILES
+---------------------------------------------------- */
 export const fetchAllProfiles = async () => {
   const url = `${API_BASE_URL}?api=get_list`;
+  const data = await apiFetch(url);
 
-  const res = await fetch(url);
-  const data = await res.json();
-
-  if (!res.ok || data.status !== 200) {
-    throw new Error(data.message || "Failed to fetch profiles");
-  }
-
+  if (!data || data.status !== 200) throw new Error(data.message);
   return data.data || [];
 };
-// ---------------------------
-// GET APPROVED PROFILES LIST
-// ---------------------------
+
+/* ----------------------------------------------------
+   LIST APPROVED PROFILES
+---------------------------------------------------- */
 export const fetchApprovedProfiles = async () => {
   const viewerID = localStorage.getItem("profileID");
   if (!viewerID) throw new Error("No profile ID found");
 
   const url = `${API_BASE_URL}?api=ver_pproved_list&ViewerID=${viewerID}`;
 
-  const res = await fetch(url, {
+  const data = await apiFetch(url, {
     method: "GET",
     credentials: "include",
   });
 
-  const data = await res.json();
-
-  if (!res.ok || data.status !== 200) {
-    throw new Error(data.message || "Failed to fetch approved list");
-  }
-
+  if (!data || data.status !== 200) throw new Error(data.message);
   return data.data || [];
 };
 
-// ---------------------------
-// UPDATE PROFILE PHOTO (POST → FormData)
-// ---------------------------
+/* ----------------------------------------------------
+   UPDATE PROFILE PICTURE
+---------------------------------------------------- */
 export const updateProfilePicture = async (file) => {
   const profileID = localStorage.getItem("profileID");
   const userID = localStorage.getItem("userID");
@@ -241,113 +226,109 @@ export const updateProfilePicture = async (file) => {
   const formData = new FormData();
   formData.append("ProfileID", profileID);
   formData.append("UserID", userID);
-
-  // The API documentation says "ProfilePhoto" is the key
   formData.append("ProfilePhoto", file);
 
-  const res = await fetch(`${API_BASE_URL}?api=update_profile_picture`, {
+  const data = await apiFetch(`${API_BASE_URL}?api=update_profile_picture`, {
     method: "POST",
     body: formData,
   });
 
-  const data = await res.json();
-  // Adjust error check based on your API's success response (usually 200)
-  if (!res.ok || (data.status !== 200 && data.status !== "success")) {
-    throw new Error(data.message || "Failed to upload photo");
-  }
-
+  if (!data || data.status !== 200) throw new Error(data.message);
   return data;
 };
+
+/* ----------------------------------------------------
+   SEND CONNECTION REQUEST
+---------------------------------------------------- */
 export const sendConnectionRequest = async (receiverID) => {
-  const requesterID = localStorage.getItem("profileID"); // Assuming "Me"
+  const requesterID = localStorage.getItem("profileID");
   if (!requesterID) throw new Error("You are not logged in.");
 
   const url = `${API_BASE_URL}?api=send_request`;
-  const payload = {
-    RequesterID: requesterID,
-    ReceiverID: receiverID,
-  };
 
-  const res = await fetch(url, {
+  const data = await apiFetch(url, {
     method: "POST",
     headers: { "Content-Type": "application/json" },
-    body: JSON.stringify(payload),
+    body: JSON.stringify({
+      RequesterID: requesterID,
+      ReceiverID: receiverID,
+    }),
   });
 
-  const data = await res.json();
-  if (!res.ok) throw new Error(data.message || "Failed to send request");
+  if (!data || data.status !== 200) throw new Error(data.message);
   return data;
 };
 
-// 2. Manage Request (Accept/Reject)
+/* ----------------------------------------------------
+   ACCEPT / REJECT REQUEST
+---------------------------------------------------- */
 export const manageConnectionRequest = async (requestID, action) => {
-  // Action must be "Accept" or "Reject"
-  const receiverID = localStorage.getItem("profileID"); // Me reacting to incoming
+  const receiverID = localStorage.getItem("profileID");
 
   const url = `${API_BASE_URL}?api=manage_request`;
-  const payload = {
-    RequestID: requestID,
-    ReceiverID: receiverID,
-    Action: action,
-  };
 
-  const res = await fetch(url, {
+  const data = await apiFetch(url, {
     method: "POST",
     headers: { "Content-Type": "application/json" },
-    body: JSON.stringify(payload),
+    body: JSON.stringify({
+      RequestID: requestID,
+      ReceiverID: receiverID,
+      Action: action,
+    }),
   });
 
-  const data = await res.json();
-  if (!res.ok) throw new Error(data.message || "Failed to update request");
+  if (!data || data.status !== 200) throw new Error(data.message);
   return data;
 };
 
-// 3. Get My Requests (Incoming & Outgoing)
-
+/* ----------------------------------------------------
+   FETCH MY REQUESTS
+---------------------------------------------------- */
 export const fetchMyRequests = async () => {
-  const viewerID = localStorage.getItem("profileID"); // viewerID = logged-in user
-
+  const viewerID = localStorage.getItem("profileID");
   if (!viewerID) throw new Error("No profile ID found");
 
   const url = `${API_BASE_URL}?api=my_request&ViewerID=${viewerID}`;
 
-  const res = await fetch(url);
-  const data = await res.json();
+  const data = await apiFetch(url);
 
-  if (!res.ok) throw new Error(data.message || "Failed to fetch requests");
-
-  return data.data; // returns { incoming_requests: [], outgoing_requests: [] }
+  if (!data || data.status !== 200) throw new Error(data.message);
+  return data.data;
 };
+
+/* ----------------------------------------------------
+   LOGOUT USER
+---------------------------------------------------- */
 export const logoutUser = async () => {
-  const profileID = localStorage.getItem("profileID");
-  const token = localStorage.getItem("login_token");
-
-  if (!profileID) throw new Error("No profile ID found");
-  if (!token) throw new Error("Login token missing");
-
   const url = `${API_BASE_URL}?api=user_logout`;
 
-  const res = await fetch(url, {
+  const data = await apiFetch(url, {
     method: "POST",
-    headers: { "Content-Type": "application/json" },
-    body: JSON.stringify({
-      profile_id: profileID,
-      login_token: token,
-    }),
+    credentials: "include",
   });
 
-  const data = await res.json();
+  // Always clear localStorage
+  localStorage.clear();
 
-  if (!res.ok || data.status !== 200) {
-    throw new Error(data.message || "Logout failed");
-  }
-
-  // Clear all session info
-  localStorage.removeItem("profileID");
-  localStorage.removeItem("userID");
-  localStorage.removeItem("profileName");
-  localStorage.removeItem("login_token");
-
+  if (!data || data.status !== 200) throw new Error(data.message);
   return data;
 };
 
+/* ----------------------------------------------------
+   CONTACT US
+---------------------------------------------------- */
+export const submitContactForm = async (formData) => {
+  const url = `${API_BASE_URL}?api=contact_us`;
+
+  const data = await apiFetch(url, {
+    method: "POST",
+    headers: { "Content-Type": "application/json" },
+    body: JSON.stringify(formData),
+  });
+
+  if (!data || (data.status !== 200 && data.status !== 201)) {
+    throw new Error(data.message);
+  }
+
+  return data;
+};

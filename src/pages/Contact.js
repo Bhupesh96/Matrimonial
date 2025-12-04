@@ -9,10 +9,14 @@ import DashboardMenu from "../components/DashBoardMenu";
 import Footer from "../components/Footer";
 import CopyRight from "../components/CopyRight";
 import MeetOurTeam from "../components/MeetOurTeam";
-
+import { Toast } from "primereact/toast";
+import { useRef } from "react";
+import { submitContactForm } from "../api";
 const Contact = () => {
+  const toast = useRef(null);
   return (
     <div>
+      <Toast ref={toast} />
       <PoopUpSearch />
       <TopMenu />
       <MenuPopUp />
@@ -131,16 +135,40 @@ const Contact = () => {
                     <div className="form-login">
                       <form
                         className="cform fvali"
-                        method="post"
-                        action="https://rn53themes.net/themes/matrimo/mail/mail-contact.php"
+                        onSubmit={async (e) => {
+                          e.preventDefault();
+
+                          const name = e.target.name.value.trim();
+                          const email = e.target.email.value.trim();
+                          const mobile = e.target.phone.value.trim();
+                          const message = e.target.message.value.trim();
+
+                          try {
+                            await submitContactForm({
+                              name,
+                              email,
+                              mobile,
+                              message,
+                            });
+
+                            toast.current.show({
+                              severity: "success",
+                              summary: "Success",
+                              detail: "Your message was sent successfully!",
+                              life: 3000,
+                            });
+
+                            e.target.reset(); // Reset form
+                          } catch (error) {
+                            toast.current.show({
+                              severity: "error",
+                              summary: "Failed",
+                              detail: error.message || "Unable to send message",
+                              life: 3000,
+                            });
+                          }
+                        }}
                       >
-                        <div
-                          className="alert alert-success cmessage"
-                          style={{ display: "none" }}
-                          role="alert"
-                        >
-                          Your message was sent successfully.
-                        </div>
                         <div className="form-group">
                           <label className="lb">Name:</label>
                           <input
@@ -152,6 +180,7 @@ const Contact = () => {
                             required
                           />
                         </div>
+
                         <div className="form-group">
                           <label className="lb">Email:</label>
                           <input
@@ -163,6 +192,7 @@ const Contact = () => {
                             required
                           />
                         </div>
+
                         <div className="form-group">
                           <label className="lb">Phone:</label>
                           <input
@@ -174,6 +204,7 @@ const Contact = () => {
                             required
                           />
                         </div>
+
                         <div className="form-group">
                           <label className="lb">Message:</label>
                           <textarea
@@ -184,6 +215,7 @@ const Contact = () => {
                             required
                           ></textarea>
                         </div>
+
                         <button type="submit" className="btn btn-primary">
                           Send Enquiry
                         </button>

@@ -35,13 +35,13 @@ const QuickAccess = () => {
       <div className="str home-acces-main">
         <div className="container">
           <div className="row">
-            <div class="home-tit">
+            <div className="home-tit">
               <p>Quick Access</p>
               <h2>
                 <span>Our Services</span>
               </h2>
-              <span class="leaf1"></span>
-              <span class="tit-ani-"></span>
+              <span className="leaf1"></span>
+              <span className="tit-ani-"></span>
             </div>
 
             <div className="home-acces">
