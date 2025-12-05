@@ -1,0 +1,123 @@
+/* =============================
+   SECTION BACKGROUND
+============================= */
+.why-section {
+  padding: 80px 0;
+  background: #faf7f2;
+  position: relative;
+}
+
+/* Subtle background patterns */
+.why-section::before {
+  content: "";
+  position: absolute;
+  width: 180px;
+  height: 180px;
+  background: radial-gradient(rgba(255, 215, 130, 0.45), transparent);
+  top: -40px;
+  left: -40px;
+  z-index: 1;
+}
+
+.why-section::after {
+  content: "";
+  position: absolute;
+  width: 150px;
+  height: 150px;
+  background: radial-gradient(rgba(255, 230, 160, 0.35), transparent);
+  bottom: -30px;
+  right: -30px;
+  z-index: 1;
+}
+
+/* =============================
+   HEADER
+============================= */
+.why-header {
+  text-align: center;
+  margin-bottom: 50px;
+  position: relative;
+  z-index: 5;
+}
+
+.why-badge {
+  display: inline-block;
+  padding: 8px 18px;
+  font-size: 15px;
+  background: linear-gradient(90deg, #ffe7a0, #f3c84b);
+  color: #333;
+  border-radius: 25px;
+  margin-bottom: 10px;
+  font-weight: 600;
+}
+
+.why-badge i {
+  font-style: normal;
+  color: #d35400;
+  font-weight: 700;
+}
+
+.why-title {
+  font-size: 36px;
+  font-weight: 800;
+  color: #2e2e2e;
+}
+
+.gold {
+  background: linear-gradient(90deg, #ffdf8b, #e7b748);
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+}
+
+.why-subtext {
+  color: #666;
+  font-size: 16px;
+  max-width: 520px;
+  margin: 12px auto 0;
+}
+
+/* =============================
+   GRID
+============================= */
+.why-grid {
+  display: grid;
+  grid-template-columns: repeat(4, 1fr);
+  gap: 25px;
+  margin-top: 40px;
+}
+
+@media (max-width: 992px) {
+  .why-grid {
+    grid-template-columns: repeat(2, 1fr);
+  }
+}
+
+@media (max-width: 576px) {
+  .why-grid {
+    grid-template-columns: 1fr;
+  }
+}
+
+/* =============================
+   PREMIUM CARDS
+============================= */
+.why-card {
+  background: #ffffff;
+  padding: 30px 20px;
+  border-radius: 18px;
+  text-align: center;
+  position: relative;
+
+  border: 1px solid rgba(240, 200, 120, 0.35);
+  box-shadow: 0 10px 22px rgba(0, 0, 0, 0.07);
+  transition: 0.3s ease-in-out;
+}
+
+.why-card:hover {
+  transform: translateY(-8px);
+  box-shadow: 0 15px 30px rgba(240, 200, 120, 0.35);
+}
+
+/* =============================
+   ICON CIRCLE
+============================= */

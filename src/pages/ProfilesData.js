@@ -305,7 +305,8 @@ const ProfileList = () => {
                         p.lastname || ""
                       }`;
                       const imageSrc =
-                        p.ProfilePhoto || "matro/images/default.png";
+                        p.ProfilePhoto ||
+                        `${process.env.PUBLIC_URL}/images/default.png`;
 
                       return (
                         <li key={i}>
@@ -413,8 +414,8 @@ const ProfileList = () => {
                     {outgoing.map((req, i) => {
                       const fullName = `${req.firstname} ${req.lastname}`;
                       const imageSrc =
-                        req.ProfilePhoto || "matro/images/default.png";
-
+                        req.ProfilePhoto ||
+                        `${process.env.PUBLIC_URL}/images/default.png`;
                       return (
                         <li key={i}>
                           <div className="profile-card">
@@ -477,8 +478,8 @@ const ProfileList = () => {
                       {matches.map((match, i) => {
                         const fullName = `${match.firstname} ${match.lastname}`;
                         const imageSrc =
-                          match.ProfilePhoto || "matro/images/default.png";
-
+                          match.ProfilePhoto ||
+                          `${process.env.PUBLIC_URL}/images/default.png`;
                         return (
                           <li key={i}>
                             <div className="profile-card">
