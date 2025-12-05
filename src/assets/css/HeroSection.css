@@ -78,7 +78,6 @@
   position: absolute;
   inset: 0;
   background: rgba(0, 0, 0, 0.55);
-  z-index: 3;
 }
 
 /* ======================================================
@@ -87,7 +86,7 @@
 
 .hero-content {
   position: absolute !important;
-  z-index: 9999 !important;
+
   max-width: 900px;
   text-align: center;
   color: #ffffff;
@@ -97,7 +96,6 @@
 .hero-content h1,
 .hero-content .subtext {
   position: relative;
-  z-index: 10000 !important;
 }
 .hero-content h1 {
   color: #ffffff;

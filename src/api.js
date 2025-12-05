@@ -10,9 +10,11 @@ const apiFetch = async (url, options = {}) => {
 
     // 🔥 Auto logout when backend returns 401
     if (data.status === 401) {
-      localStorage.clear();
-      window.location.href = "/login";
-      return;
+      if (localStorage.getItem("profileID")) {
+        localStorage.clear();
+        window.location.href = "/login";
+      }
+      return data; // allow homepage to work
     }
 
     return data;
