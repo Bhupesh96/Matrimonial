@@ -1,0 +1,94 @@
+/* MAIN WRAPPER */
+.qa-wrapper {
+  padding: 70px 0;
+  background: #f7f8fc;
+  position: relative;
+  z-index: 10;
+}
+
+/* HEADER */
+.qa-header {
+  text-align: center;
+  margin-bottom: 40px;
+}
+
+.qa-header p {
+  font-size: 15px;
+  font-weight: 600;
+  color: #777;
+  text-transform: uppercase;
+  letter-spacing: 1px;
+  margin-bottom: 6px;
+}
+
+.qa-header h2 {
+  font-size: 32px;
+  font-weight: 700;
+  color: #222;
+}
+
+/* CARD STYLE */
+.qa-card {
+  background: #ffffff;
+  padding: 28px;
+  border-radius: 16px;
+  text-align: center;
+  box-shadow: 0 8px 30px rgba(0, 0, 0, 0.06);
+  transition: all 0.3s ease;
+  border: 1px solid #f0f0f0;
+}
+
+.qa-card:hover {
+  transform: translateY(-10px);
+  box-shadow: 0 12px 40px rgba(0, 0, 0, 0.12);
+}
+
+/* ICON */
+.qa-icon img {
+  width: 65px;
+  height: 65px;
+  padding: 10px;
+  background: #f3f4f7;
+  border-radius: 14px;
+  margin-bottom: 18px;
+}
+
+/* TITLE */
+.qa-card h4 {
+  font-size: 18px;
+  font-weight: 700;
+  margin-bottom: 6px;
+  color: #222;
+}
+
+/* SUBTEXT */
+.qa-card p {
+  font-size: 14px;
+  color: #666;
+  margin-bottom: 14px;
+}
+
+/* BUTTON */
+.qa-btn {
+  display: inline-block;
+  padding: 10px 18px;
+  font-size: 14px;
+  font-weight: 600;
+  background: #ffcc00;
+  color: #222;
+  border-radius: 8px;
+  text-decoration: none;
+  transition: 0.3s ease;
+}
+
+.qa-btn:hover {
+  background: #ffdb4d;
+  color: #111;
+}
+
+/* RESPONSIVE */
+@media (max-width: 768px) {
+  .qa-header h2 {
+    font-size: 26px;
+  }
+}

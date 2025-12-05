@@ -1,5 +1,7 @@
 import React, { useEffect, useState } from "react";
 import "../assets/css/ProfileList.css";
+import { useLocation } from "react-router-dom";
+
 import {
   fetchApprovedProfiles,
   sendConnectionRequest,
@@ -11,6 +13,14 @@ import Preloader from "../components/Preloader";
 import { useNavigate } from "react-router-dom";
 
 const ProfileList = () => {
+  const location = useLocation();
+  const query = new URLSearchParams(location.search);
+
+  const defaultAge = query.get("age") || "";
+
+  const defaultCity = query.get("city") || "";
+  const defaultGotra = query.get("gotra") || "";
+
   const [profiles, setProfiles] = useState([]);
   const [loading, setLoading] = useState(true);
 
@@ -23,9 +33,10 @@ const ProfileList = () => {
   const [incoming, setIncoming] = useState([]);
   const [outgoing, setOutgoing] = useState([]);
   const [matches, setMatches] = useState([]);
-  const [filterAge, setFilterAge] = useState("");
-  const [filterCity, setFilterCity] = useState("");
-  const [filterGotra, setFilterGotra] = useState("");
+  const [filterAge, setFilterAge] = useState(defaultAge);
+  const [filterCity, setFilterCity] = useState(defaultCity);
+  const [filterGotra, setFilterGotra] = useState(defaultGotra);
+
   const navigate = useNavigate();
 
   const calculateAge = (dob) => {

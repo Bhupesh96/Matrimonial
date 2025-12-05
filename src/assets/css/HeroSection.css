@@ -1,0 +1,288 @@
+/* ======================================================
+   PREMIUM HERO SECTION (FINAL VERSION WITH ALL FIXES)
+====================================================== */
+
+/* MAIN HERO CONTAINER */
+.hero-container {
+  position: relative;
+  width: 100%;
+  height: 65vh; /* Reduced banner height */
+  overflow: hidden;
+
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: 0 20px;
+
+  /* FIX: Prevent banner from going behind navbar */
+  margin-top: 80px; /* adjust based on your navbar height */
+}
+
+/* FALLBACK BACKGROUND */
+.hero-container {
+  background: linear-gradient(rgba(20, 20, 20, 0.55), rgba(0, 0, 0, 0.65)),
+    url("https://images.unsplash.com/photo-1573133545054-830d1c4f43d6?auto=format&fit=crop&w=1600&q=80")
+      center/cover no-repeat;
+}
+
+/* TOP + BOTTOM GRADIENT GLOW */
+.hero-container::before,
+.hero-container::after {
+  content: "";
+  position: absolute;
+  width: 100%;
+  height: 120px;
+  left: 0;
+  z-index: 1;
+  pointer-events: none;
+}
+
+.hero-container::before {
+  top: 0;
+  background: linear-gradient(to bottom, rgba(0, 0, 0, 0.75), transparent);
+}
+.hero-container::after {
+  bottom: 0;
+  background: linear-gradient(to top, rgba(0, 0, 0, 0.75), transparent);
+}
+
+/* CAROUSEL WRAPPER */
+.hero-carousel {
+  position: absolute;
+  width: 100%;
+  height: 65vh;
+  top: 0;
+  left: 0;
+}
+
+.hero-carousel img {
+  width: 100%;
+  height: 65vh;
+  object-fit: cover;
+}
+
+/* EXTRA GRADIENT MASK OVER IMAGES */
+.hero-carousel::after {
+  content: "";
+  position: absolute;
+  bottom: 0;
+  left: 0;
+  width: 100%;
+  height: 120px;
+  background: linear-gradient(to top, rgba(0, 0, 0, 0.6), transparent);
+  z-index: 2;
+}
+
+/* DARK OVERLAY ABOVE IMAGES */
+.hero-overlay {
+  position: absolute;
+  inset: 0;
+  background: rgba(0, 0, 0, 0.55);
+  z-index: 3;
+}
+
+/* ======================================================
+   HERO CONTENT TEXT (FIXED VISIBILITY)
+====================================================== */
+
+.hero-content {
+  position: absolute !important;
+  z-index: 9999 !important;
+  max-width: 900px;
+  text-align: center;
+  color: #ffffff;
+  animation: fadeIn 1.2s ease-out;
+}
+
+.hero-content h1,
+.hero-content .subtext {
+  position: relative;
+  z-index: 10000 !important;
+}
+.hero-content h1 {
+  color: #ffffff;
+  font-weight: 900;
+  text-shadow: 0 2px 10px rgba(0, 0, 0, 0.7), 0 0 8px rgba(0, 0, 0, 0.6);
+}
+.hero-content h1 span {
+  background: linear-gradient(90deg, #ffec78, #ffcc33, #ffbb00);
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+
+  /* Soft golden glow */
+  filter: drop-shadow(0 0 6px rgba(255, 200, 0, 0.9));
+}
+
+.hero-highlight {
+  background: linear-gradient(90deg, #ffe9a3, #ffd25a);
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+
+  /* subtle premium glow (VERY soft) */
+  filter: drop-shadow(0 0 3px rgba(255, 200, 0, 0.4));
+}
+.hero-highlight.hindi {
+  font-weight: 700;
+  letter-spacing: 0.5px;
+}
+
+.hero-content .subtext {
+  color: #ffffff;
+  text-shadow: 0 2px 10px rgba(0, 0, 0, 0.9), 0 0 4px rgba(255, 255, 255, 0.4);
+}
+/* ======================================================
+   GLASS SEARCH BAR
+====================================================== */
+
+.hero-search {
+  margin-top: 35px;
+  padding: 16px;
+
+  display: flex;
+  gap: 12px;
+  justify-content: center;
+  flex-wrap: wrap;
+
+  background: rgba(255, 255, 255, 0.12);
+  backdrop-filter: blur(14px);
+
+  border-radius: 18px;
+  box-shadow: 0 10px 35px rgba(0, 0, 0, 0.35);
+  border: 1px solid rgba(255, 255, 255, 0.2);
+}
+
+.hero-search select,
+.hero-search button {
+  padding: 14px 20px;
+  font-size: 15px;
+  border-radius: 12px;
+  border: none;
+  outline: none;
+  min-width: 170px;
+  font-weight: 600;
+  letter-spacing: 0.3px;
+}
+
+.hero-search select {
+  background: rgba(255, 255, 255, 0.85);
+  color: #333;
+}
+
+.hero-search button {
+  background: linear-gradient(90deg, #ffdd55, #ffbb00);
+  color: #222;
+  font-weight: 700;
+  cursor: pointer;
+  padding: 14px 35px;
+  transition: 0.25s ease-in-out;
+  box-shadow: 0 5px 18px rgba(255, 204, 0, 0.35);
+}
+
+.hero-search button:hover {
+  background: linear-gradient(90deg, #ffe680, #ffcc33);
+  transform: translateY(-3px);
+  box-shadow: 0 8px 25px rgba(255, 204, 0, 0.5);
+}
+
+/* ======================================================
+   PREMIUM CAROUSEL ARROWS – CENTER FIX
+====================================================== */
+
+.carousel .control-arrow {
+  opacity: 0.95;
+  background: rgba(0, 0, 0, 0.25) !important;
+  backdrop-filter: blur(6px);
+
+  width: 55px;
+  height: 55px;
+  border-radius: 50%;
+
+  /* FIX: Arrows centered perfectly */
+  top: 50% !important;
+  transform: translateY(-50%) !important;
+
+  transition: 0.3s ease-in-out;
+  z-index: 15 !important;
+}
+
+.carousel .control-arrow:hover {
+  background: rgba(255, 255, 255, 0.35) !important;
+  backdrop-filter: blur(10px);
+  opacity: 1;
+  transform: translateY(-50%) scale(1.07) !important;
+}
+
+.carousel .control-prev::before {
+  border-right: 5px solid white !important;
+}
+.carousel .control-next::before {
+  border-left: 5px solid white !important;
+}
+
+.carousel .control-prev::before,
+.carousel .control-next::before {
+  margin-top: -3px !important;
+}
+
+/* ======================================================
+   PREMIUM DOTS
+====================================================== */
+
+.carousel .control-dots {
+  bottom: 20px !important;
+  z-index: 20;
+}
+
+.carousel .control-dots .dot {
+  background: rgba(255, 255, 255, 0.6);
+  width: 14px;
+  height: 14px;
+  margin: 0 6px;
+  border-radius: 50%;
+  transition: 0.3s;
+  border: 2px solid rgba(255, 255, 255, 0.7);
+}
+
+.carousel .control-dots .dot.selected {
+  background: #ffbb00;
+  border-color: #ffdd55;
+  transform: scale(1.25);
+  box-shadow: 0 0 10px rgba(255, 200, 0, 0.9);
+}
+
+/* ======================================================
+   ANIMATIONS
+====================================================== */
+
+@keyframes fadeIn {
+  from {
+    opacity: 0;
+    transform: translateY(25px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+/* ======================================================
+   RESPONSIVE
+====================================================== */
+
+@media (max-width: 768px) {
+  .hero-content h1 {
+    font-size: 34px;
+  }
+
+  .hero-container {
+    height: 55vh;
+  }
+
+  .hero-carousel img {
+    height: 55vh;
+  }
+
+  .hero-search {
+    padding: 12px;
+  }
+}

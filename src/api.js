@@ -332,3 +332,14 @@ export const submitContactForm = async (formData) => {
 
   return data;
 };
+/* ----------------------------------------------------
+   FETCH BANNERS BY POSITION
+---------------------------------------------------- */
+export const fetchBanners = async (position = "top") => {
+  const url = `${API_BASE_URL}?api=banner_list&position=${position}`;
+
+  const data = await apiFetch(url);
+
+  if (!data || data.status !== 200) throw new Error(data.message);
+  return data.data || [];
+};
