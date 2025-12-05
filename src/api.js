@@ -345,3 +345,10 @@ export const fetchBanners = async (position = "top") => {
   if (!data || data.status !== 200) throw new Error(data.message);
   return data.data || [];
 };
+export const checkProfileCompleteness = async (userID) => {
+  const url = `${API_BASE_URL}?api=profile_checker&UserID=${userID}`;
+  const data = await apiFetch(url);
+
+  if (!data || data.status !== 200) throw new Error(data.message);
+  return data;
+};

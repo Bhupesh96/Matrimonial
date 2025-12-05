@@ -8,10 +8,11 @@ import {
   fetchMyRequests,
   manageConnectionRequest,
   fetchMasterData,
+  checkProfileCompleteness,
 } from "../api";
 import Preloader from "../components/Preloader";
 import { useNavigate } from "react-router-dom";
-
+import "../assets/css/ProfileData.css";
 const ProfileList = () => {
   const location = useLocation();
   const query = new URLSearchParams(location.search);
@@ -28,6 +29,8 @@ const ProfileList = () => {
   const [requestStatus, setRequestStatus] = useState("");
   const [cities, setCities] = useState([]);
   const [gotras, setGotras] = useState([]);
+  const [profileCheck, setProfileCheck] = useState(null);
+  const [showIncompleteModal, setShowIncompleteModal] = useState(false);
 
   const [activeTab, setActiveTab] = useState("profiles");
   const [incoming, setIncoming] = useState([]);
@@ -108,6 +111,27 @@ const ProfileList = () => {
 
     loadRequests();
   }, []);
+  const handleCheckBeforeSend = async (p) => {
+    const userID = localStorage.getItem("userID");
+
+    try {
+      const check = await checkProfileCompleteness(userID);
+
+      if (!check.is_complete) {
+        setProfileCheck(check); // store response
+        setShowIncompleteModal(true); // open custom modal
+        return;
+      }
+
+      // ✔ Profile complete → open Send Interest modal
+      setSelectedProfile(p);
+      setRequestStatus("");
+      // Trigger existing modal
+      document.getElementById("openSendInterestBtn").click();
+    } catch (error) {
+      alert("Error checking profile: " + error.message);
+    }
+  };
 
   /* ---------------- SEND REQUEST ---------------- */
   const handleSendInterest = async () => {
@@ -206,16 +230,17 @@ const ProfileList = () => {
             {/* LEFT FILTERS */}
             <div className="col-md-3 fil-mob-view">
               <span className="filter-clo">+</span>
-              <div className="filt-com lhs-cate">
-                <h4>
+
+              <div className="filter-box-premium">
+                <h4 className="filter-title">
                   <i className="fa fa-search"></i> Filters
                 </h4>
 
                 {/* Age Filter */}
                 <div className="form-group">
-                  <label>Age</label>
+                  <label className="filter-label">Age</label>
                   <select
-                    className="chosen-select form-control"
+                    className="filter-select"
                     value={filterAge}
                     onChange={(e) => setFilterAge(e.target.value)}
                   >
@@ -230,9 +255,9 @@ const ProfileList = () => {
 
                 {/* City Filter */}
                 <div className="form-group">
-                  <label>City</label>
+                  <label className="filter-label">City</label>
                   <select
-                    className="chosen-select form-control"
+                    className="filter-select"
                     value={filterCity}
                     onChange={(e) => setFilterCity(e.target.value)}
                   >
@@ -247,9 +272,9 @@ const ProfileList = () => {
 
                 {/* Gotra Filter */}
                 <div className="form-group">
-                  <label>Gotra</label>
+                  <label className="filter-label">Gotra</label>
                   <select
-                    className="chosen-select form-control"
+                    className="filter-select"
                     value={filterGotra}
                     onChange={(e) => setFilterGotra(e.target.value)}
                   >
@@ -327,12 +352,7 @@ const ProfileList = () => {
                               <div className="card-actions">
                                 <span
                                   className="btn-interest"
-                                  data-bs-toggle="modal"
-                                  data-bs-target="#sendInter"
-                                  onClick={() => {
-                                    setSelectedProfile(p);
-                                    setRequestStatus("");
-                                  }}
+                                  onClick={() => handleCheckBeforeSend(p)}
                                 >
                                   Send Interest
                                 </span>
@@ -573,6 +593,71 @@ const ProfileList = () => {
           </div>
         </div>
       </div>
+      <button
+        id="openSendInterestBtn"
+        style={{ display: "none" }}
+        data-bs-toggle="modal"
+        data-bs-target="#sendInter"
+      ></button>
+
+      {showIncompleteModal && (
+        <div
+          className="modal fade show custom-modal-backdrop"
+          style={{ display: "block" }}
+        >
+          <div className="modal-dialog modal-dialog-centered modal-md">
+            <div className="modal-content complete-profile-modal">
+              {/* HEADER */}
+              <div className="modal-header border-0 pb-0">
+                <h4 className="modal-title modal-title-premium">
+                  Complete Your Profile
+                </h4>
+                <button
+                  className="btn-close"
+                  onClick={() => setShowIncompleteModal(false)}
+                ></button>
+              </div>
+
+              {/* BODY */}
+              <div className="modal-body text-center">
+                {/* Matrimony Icon Circle */}
+                <div className="premium-icon-wrapper">
+                  <i className="fa fa-heart premium-heart-icon"></i>
+                </div>
+
+                {/* Headline */}
+                <h5 className="premium-heading">Your Profile is Incomplete</h5>
+
+                {/* Subtext */}
+                <p className="premium-subtext">
+                  To send interest and connect with matches, please update your
+                  profile details.
+                </p>
+              </div>
+
+              {/* FOOTER */}
+              <div className="modal-footer premium-footer">
+                <button
+                  className="btn btn-primary px-4 premium-btn"
+                  onClick={() => {
+                    setShowIncompleteModal(false);
+                    navigate("/user-profile-edit");
+                  }}
+                >
+                  Complete Profile
+                </button>
+
+                <button
+                  className="btn btn-outline-secondary px-4 premium-btn-outline"
+                  onClick={() => setShowIncompleteModal(false)}
+                >
+                  Close
+                </button>
+              </div>
+            </div>
+          </div>
+        </div>
+      )}
     </section>
   );
 };

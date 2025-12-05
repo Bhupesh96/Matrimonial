@@ -1,0 +1,142 @@
+/* BACKDROP */
+.custom-modal-backdrop {
+  background: rgba(0, 0, 0, 0.55) !important;
+}
+
+/* PREMIUM MATRIMONIAL CARD */
+.complete-profile-modal {
+  border-radius: 14px !important;
+  background: #ffffff;
+  box-shadow: 0 6px 18px rgba(0, 0, 0, 0.15);
+  padding-bottom: 10px;
+}
+
+/* PREMIUM TITLE */
+.modal-title-premium {
+  font-weight: 700;
+  color: #583c07; /* your wedding theme */
+}
+
+/* HEART ICON CIRCLE */
+.premium-icon-wrapper {
+  width: 80px;
+  height: 80px;
+  margin: 0 auto 18px;
+  background: #f9f5ef;
+  border: 2px solid #e7d7b8;
+  border-radius: 50%;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  box-shadow: 0 4px 12px rgba(88, 60, 7, 0.15);
+}
+
+.premium-heart-icon {
+  font-size: 34px;
+  color: #b28a45; /* gold shade */
+}
+
+/* PREMIUM TEXT */
+.premium-heading {
+  font-weight: 600;
+  font-size: 18px;
+  color: #3a2d14;
+  margin-bottom: 6px;
+}
+
+.premium-subtext {
+  font-size: 15px;
+  color: #6c5c3c;
+  line-height: 22px;
+}
+
+/* FOOTER */
+.premium-footer {
+  border-top: none !important;
+  justify-content: center !important;
+  padding-bottom: 20px;
+}
+
+/* BUTTONS */
+.premium-btn {
+  background: linear-gradient(135deg, #583c07, #735311);
+  border-radius: 30px;
+  border: none;
+}
+
+.premium-btn-outline {
+  border-radius: 30px;
+  color: #583c07;
+  border: 1px solid #c8b48a;
+}
+
+.premium-btn:hover {
+  opacity: 0.9;
+}
+
+.premium-btn-outline:hover {
+  background: #f8f2e6;
+}
+/* Premium Filter Box Matching Profile Cards */
+.filter-box-premium {
+  background: #fff;
+  padding: 22px 18px;
+  border-radius: 14px;
+  box-shadow: 0 6px 18px rgba(0, 0, 0, 0.08);
+  border: 1px solid #e7d7b8; /* gold border */
+}
+
+/* Filter Title */
+.filter-title {
+  font-size: 18px;
+  font-weight: 700;
+  color: #583c07;
+  margin-bottom: 20px;
+  display: flex;
+  align-items: center;
+  gap: 8px;
+}
+
+.filter-title i {
+  color: #b28a45;
+}
+
+/* Labels */
+.filter-label {
+  font-size: 14px;
+  color: #583c07;
+  font-weight: 600;
+  margin-bottom: 6px;
+  display: block;
+}
+
+/* Select Boxes */
+.filter-select {
+  width: 100%;
+  padding: 10px 12px;
+  border-radius: 10px;
+  border: 1px solid #d8c7a0;
+  background: #f9f5ef;
+  color: #4e3a16;
+  font-size: 14px;
+  transition: 0.2s;
+}
+
+.filter-select:focus {
+  border-color: #583c07;
+  box-shadow: 0 0 0 2px rgba(88, 60, 7, 0.2);
+  outline: none;
+}
+
+/* Hover State */
+.filter-select:hover {
+  background: #f3ecdd;
+}
+
+/* Mobile Collapse Icon */
+.filter-clo {
+  font-size: 26px;
+  cursor: pointer;
+  font-weight: bold;
+  color: #583c07;
+}

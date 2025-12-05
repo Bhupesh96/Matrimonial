@@ -225,7 +225,9 @@ const MainMenu = () => {
                 <div className="head-pro">
                   <img
                     src={
-                      profilePhoto ? profilePhoto : "matro/images/default.png"
+                      profilePhoto
+                        ? profilePhoto
+                        : `${process.env.PUBLIC_URL}/images/default.png`
                     }
                     alt="Profile"
                     loading="lazy"
