@@ -7,23 +7,40 @@ import "../assets/css/CustomerReviews.css";
 
 const CustomerReviews = () => {
   const reviews = [
-    { img: "/images/user/1.jpg", name: "Aarav & Meera", city: "Mumbai" },
-    { img: "/images/user/2.jpg", name: "Rohan & Kriti", city: "Delhi" },
-    { img: "/images/user/3.jpg", name: "Vikram & Anjali", city: "Pune" },
-    { img: "/images/user/5.jpg", name: "Samar & Priya", city: "Bangalore" },
+    {
+      img: `${process.env.PUBLIC_URL}/images/user/1.jpg`,
+      name: "Aarav & Meera",
+      city: "Mumbai",
+    },
+    {
+      img: `${process.env.PUBLIC_URL}/images/user/2.jpg`,
+      name: "Rohan & Kriti",
+      city: "Delhi",
+    },
+    {
+      img: `${process.env.PUBLIC_URL}/images/user/3.jpg`,
+      name: "Vikram & Anjali",
+      city: "Pune",
+    },
+    {
+      img: `${process.env.PUBLIC_URL}/images/user/5.jpg`,
+      name: "Samar & Priya",
+      city: "Bangalore",
+    },
   ];
 
   return (
     <section className="premium-review-section">
       <div className="container">
-        <div className="review-title">
+        <div className="home-tit">
           <p>Trusted by Families</p>
           <h2>
-            <span className="gold-text">
-              1500+ Successful <b>Matches</b>
+            <span>
+              Trust by <b class="num">1500</b>+ Couples
             </span>
           </h2>
-          <div className="title-underline"></div>
+          <span class="leaf1"></span>
+          <span class="tit-ani-"></span>
         </div>
 
         <Swiper

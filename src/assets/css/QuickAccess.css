@@ -1,94 +1,103 @@
-/* MAIN WRAPPER */
+/* SHAADI THEME BACKGROUND */
 .qa-wrapper {
   padding: 70px 0;
-  background: #f7f8fc;
+  background: linear-gradient(180deg, #fff7e6, #f3e2c1, #e8d2a8);
   position: relative;
-  z-index: 10;
+ 
 }
 
 /* HEADER */
 .qa-header {
   text-align: center;
-  margin-bottom: 40px;
+  margin-bottom: 45px;
 }
 
 .qa-header p {
-  font-size: 15px;
+  font-size: 16px;
   font-weight: 600;
-  color: #777;
-  text-transform: uppercase;
+  color: #b28a45; /* wedding gold */
   letter-spacing: 1px;
-  margin-bottom: 6px;
+  text-transform: uppercase;
 }
 
 .qa-header h2 {
   font-size: 32px;
-  font-weight: 700;
-  color: #222;
+  font-weight: 800;
+  color: #583c07; /* wedding brown */
+  font-family: "Poppins", sans-serif;
 }
 
-/* CARD STYLE */
+/* SHAADI CARD */
 .qa-card {
   background: #ffffff;
-  padding: 28px;
-  border-radius: 16px;
+  padding: 32px 24px;
+  border-radius: 18px;
   text-align: center;
-  box-shadow: 0 8px 30px rgba(0, 0, 0, 0.06);
-  transition: all 0.3s ease;
-  border: 1px solid #f0f0f0;
+  border: 1px solid #e7d7b8; /* soft gold border */
+  box-shadow: 0 8px 24px rgba(88, 60, 7, 0.12);
+  transition: all 0.35s ease;
 }
 
 .qa-card:hover {
   transform: translateY(-10px);
-  box-shadow: 0 12px 40px rgba(0, 0, 0, 0.12);
+  box-shadow: 0 14px 34px rgba(88, 60, 7, 0.18);
+  border-color: #b28a45;
 }
 
-/* ICON */
+/* ICON WRAPPER */
 .qa-icon img {
-  width: 65px;
-  height: 65px;
-  padding: 10px;
-  background: #f3f4f7;
-  border-radius: 14px;
+  width: 70px;
+  height: 70px;
+  padding: 12px;
+  border-radius: 16px;
+  background: #fff8e7; /* haldi shade */
+  border: 1px solid #e7d7b8;
+  box-shadow: 0 4px 10px rgba(88, 60, 7, 0.12);
   margin-bottom: 18px;
 }
 
 /* TITLE */
 .qa-card h4 {
-  font-size: 18px;
+  font-size: 20px;
   font-weight: 700;
-  margin-bottom: 6px;
-  color: #222;
+  color: #583c07;
+  margin-bottom: 4px;
 }
 
 /* SUBTEXT */
 .qa-card p {
   font-size: 14px;
-  color: #666;
-  margin-bottom: 14px;
+  color: #7a6a4b;
+  margin-bottom: 16px;
 }
 
-/* BUTTON */
+/* PREMIUM BUTTON */
 .qa-btn {
   display: inline-block;
   padding: 10px 18px;
   font-size: 14px;
   font-weight: 600;
-  background: #ffcc00;
-  color: #222;
-  border-radius: 8px;
+  border-radius: 25px;
   text-decoration: none;
+  background: linear-gradient(135deg, #b28a45, #d6c08a);
+  color: #fff;
   transition: 0.3s ease;
+  box-shadow: 0 4px 10px rgba(178, 138, 69, 0.3);
 }
 
 .qa-btn:hover {
-  background: #ffdb4d;
-  color: #111;
+  background: linear-gradient(135deg, #583c07, #7a520c);
+  color: #fff;
+  box-shadow: 0 6px 14px rgba(88, 60, 7, 0.35);
 }
 
 /* RESPONSIVE */
 @media (max-width: 768px) {
   .qa-header h2 {
     font-size: 26px;
+  }
+
+  .qa-card {
+    padding: 26px 18px;
   }
 }
