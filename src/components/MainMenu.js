@@ -84,7 +84,7 @@ const MainMenu = () => {
                           <li>
                             <div className="menu-box menu-box-1">
                               <h5>
-                                Wedding page <span>Make reservation</span>
+                                Community Page <span>See What's Going On</span>
                               </h5>
                               <span className="explor-cta">More details</span>
                               <a href="wedding.html" className="fclick"></a>
@@ -123,15 +123,15 @@ const MainMenu = () => {
                       <li>
                         <Link to="/all-profiles">All profiles</Link>
                       </li>
-                      <li>
+                      {/* <li>
                         <a href="profile-details.html">Profile details</a>
-                      </li>
-                      <li>
+                      </li> */}
+                      {/* <li>
                         <a href="wedding.html">Wedding</a>
-                      </li>
-                      <li>
+                      </li> */}
+                      {/* <li>
                         <a href="blog.html">Blog</a>
-                      </li>
+                      </li> */}
                       <li>
                         <Link to="/blog-detail">Blog detail</Link>
                       </li>
@@ -141,12 +141,12 @@ const MainMenu = () => {
                       <li>
                         <Link to="/contact">Contact</Link>
                       </li>
-                      <li>
+                      {/* <li>
                         <a href="photo-gallery.html">Photo gallery</a>
-                      </li>
-                      <li>
+                      </li> */}
+                      {/* <li>
                         <a href="photo-gallery-1.html">Photo gallery 1</a>
-                      </li>
+                      </li> */}
                       <li>
                         <Link to="/login">Login</Link>
                       </li>
@@ -156,15 +156,15 @@ const MainMenu = () => {
                         </li>
                       )}
 
-                      <li>
+                      {/* <li>
                         <a href="plans.html">Pricing plans</a>
-                      </li>
+                      </li> */}
                     </ul>
                   </div>
                 </li>
 
                 <li>
-                  <a href="plans.html">Plans</a>
+                  <a href="plans.html">Community</a>
                 </li>
                 {!profileName && (
                   <li>
@@ -176,26 +176,24 @@ const MainMenu = () => {
                   <span className="smenu">Dashboard</span>
                   <div className="smenu-open smenu-single">
                     <ul>
-                      <li>
-                        <a href="user-dashboard.html">Dashboard</a>
-                      </li>
+                    
                       <li>
                         <Link to={`/user-profile/${profileID}`}>
                           My profile
                         </Link>
                       </li>
-                      <li>
+                      {/* <li>
                         <a href="user-interests.html">Interests</a>
-                      </li>
-                      <li>
+                      </li> */}
+                      {/* <li>
                         <a href="user-chat.html">Chat lists</a>
-                      </li>
-                      <li>
+                      </li> */}
+                      {/* <li>
                         <a href="user-plan.html">My plan details</a>
-                      </li>
-                      <li>
-                        <a href="user-setting.html">Profile settings</a>
-                      </li>
+                      </li> */}
+                      {/* <li>
+                        <Link to="user-profile-edit">Profile settings</Link>
+                      </li> */}
                       <li>
                         <Link to="/user-profile-edit">Edit full profile</Link>
                       </li>

@@ -23,7 +23,7 @@ const MobileMenu = () => {
             <a href="services.html">All Services</a>
           </li>
           <li>
-            <a href="plans.html">Join Now</a>
+            <Link to={"sign-up"}>Join Now</Link>
           </li>
         </ul>
 
