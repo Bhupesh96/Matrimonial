@@ -7,26 +7,10 @@ import "../assets/css/CustomerReviews.css";
 
 const CustomerReviews = () => {
   const reviews = [
-    {
-      img: `${process.env.PUBLIC_URL}/images/user/1.jpg`,
-      name: "Aarav & Meera",
-      city: "Mumbai",
-    },
-    {
-      img: `${process.env.PUBLIC_URL}/images/user/2.jpg`,
-      name: "Rohan & Kriti",
-      city: "Delhi",
-    },
-    {
-      img: `${process.env.PUBLIC_URL}/images/user/3.jpg`,
-      name: "Vikram & Anjali",
-      city: "Pune",
-    },
-    {
-      img: `${process.env.PUBLIC_URL}/images/user/5.jpg`,
-      name: "Samar & Priya",
-      city: "Bangalore",
-    },
+    { img: "/images/user/1.jpg", name: "Aarav & Meera", city: "Mumbai" },
+    { img: "/images/user/2.jpg", name: "Rohan & Kriti", city: "Delhi" },
+    { img: "/images/user/3.jpg", name: "Vikram & Anjali", city: "Pune" },
+    { img: "/images/user/5.jpg", name: "Samar & Priya", city: "Bangalore" },
   ];
 
   return (

@@ -284,3 +284,112 @@
     padding: 12px;
   }
 }
+/* ======================================================
+   MOBILE VIEW FIXES (Perfect Shaadi Style)
+====================================================== */
+
+@media (max-width: 768px) {
+  /* Increase hero height for better layout */
+  .hero-container {
+    height: 78vh;
+    padding: 0;
+    margin-top: 70px;
+  }
+
+  .hero-carousel,
+  .hero-carousel img {
+    height: 78vh !important;
+    object-fit: cover;
+  }
+
+  /* TEXT ADJUSTMENTS */
+  .hero-content {
+    width: 100%;
+    padding: 0 18px;
+  }
+
+  .hero-content h1 {
+    font-size: 26px !important;
+    font-weight: 800;
+    line-height: 1.3;
+  }
+
+  .hero-content h1 .hero-highlight.hindi {
+    font-size: 20px !important;
+  }
+
+  .hero-content .subtext {
+    font-size: 14px;
+    margin-top: 10px;
+    line-height: 1.5;
+  }
+
+  /* SEARCH BOX IMPROVED */
+  .hero-search {
+    flex-direction: column;
+    width: 100%;
+    padding: 16px;
+    gap: 10px;
+    margin-top: 20px;
+    border-radius: 14px;
+  }
+
+  .hero-search select,
+  .hero-search button {
+    width: 100%;
+    font-size: 14px;
+    padding: 12px 14px;
+    min-width: auto;
+  }
+
+  .hero-search button {
+    padding: 12px 14px;
+    font-size: 15px;
+  }
+
+  /* CAROUSEL ARROWS FIX */
+  .carousel .control-arrow {
+    display: none !important; /* hides arrows for cleaner mobile look */
+  }
+
+  /* DOTS FIX */
+  .carousel .control-dots {
+    bottom: 12px !important;
+  }
+
+  .carousel .control-dots .dot {
+    width: 10px;
+    height: 10px;
+    margin: 0 4px;
+  }
+}
+
+/* EXTRA SMALL DEVICES (max-width: 480px) */
+@media (max-width: 480px) {
+  .hero-container {
+    height: 85vh;
+  }
+
+  .hero-carousel img {
+    height: 85vh !important;
+  }
+
+  .hero-content h1 {
+    font-size: 22px !important;
+  }
+
+  .hero-highlight.hindi {
+    font-size: 18px !important;
+  }
+
+  .hero-search {
+    padding: 12px;
+    gap: 8px;
+  }
+
+  .hero-search select,
+  .hero-search button {
+    padding: 10px 12px;
+    font-size: 13px;
+  }
+}
