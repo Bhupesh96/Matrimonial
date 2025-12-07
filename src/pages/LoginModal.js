@@ -66,8 +66,8 @@ const LoginModal = ({ show, onClose, onSuccess }) => {
 
       AlertService.showSuccessAndRedirect(
         lang === "en" ? "Login Successful" : "लॉगिन सफल",
-        () => {},
-        ""
+        navigate,
+        "/"
       );
 
       onSuccess && onSuccess();
