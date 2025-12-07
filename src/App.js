@@ -30,8 +30,7 @@ function App() {
   }, []);
 
   return (
-    // <Router basename={process.env.REACT_APP_BASENAME}>
-    <Router basename="/matro">
+    <Router basename={process.env.REACT_APP_BASENAME}>
       <ToastContainer position="top-right" autoClose={3000} theme="colored" />
       {/* GLOBAL LOGIN MODAL */}
 
