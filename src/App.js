@@ -15,6 +15,8 @@ import { ToastContainer } from "react-toastify";
 
 import ProtectedRoute from "./components/ProtectedRoute";
 import LoginModal from "./pages/LoginModal";
+import Community from "./pages/Community";
+import CoupleStories from "./pages/CoupleStories";
 
 function App() {
   const [showLogin, setShowLogin] = React.useState(false);
@@ -46,7 +48,7 @@ function App() {
         <Route path="about" element={<AboutUs />} />
         <Route path="contact" element={<Contact />} />
         <Route path="blog-detail" element={<BolgDetail />} />
-
+        <Route path="community" element={<Community />} />
         {/* 🔐 PROTECTED ROUTES */}
         <Route
           path="all-profiles"
@@ -74,7 +76,14 @@ function App() {
             </ProtectedRoute>
           }
         />
-
+        <Route
+          path="couple-stories"
+          element={
+            <ProtectedRoute openLogin={openLogin}>
+              <CoupleStories />
+            </ProtectedRoute>
+          }
+        />
         <Route path="*" element={<InvalidRoute />} />
       </Routes>
     </Router>

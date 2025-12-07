@@ -1,0 +1,239 @@
+.community-page {
+  padding: 100px 0;
+  background: #fff7ec;
+}
+
+.com-header {
+  text-align: center;
+  margin-bottom: 50px;
+}
+
+.com-header h1 {
+  font-size: 42px;
+  color: #66451c;
+  font-family: var(--tit-font);
+}
+
+.com-header p {
+  font-size: 16px;
+  color: #8b6a3f;
+  margin-top: 10px;
+}
+
+/* GRID */
+.com-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(330px, 1fr));
+  gap: 25px;
+}
+
+/* CARD */
+.com-card {
+  background: #ffffff;
+  border-radius: 8px;
+  box-shadow: rgba(150, 150, 150, 0.2) 0px 4px 12px;
+  overflow: hidden;
+  transition: 0.3s;
+  border: 1px solid #f3e8d7;
+}
+
+.com-card:hover {
+  transform: translateY(-4px);
+  box-shadow: rgba(0, 0, 0, 0.25) 0px 7px 20px -5px;
+}
+
+/* IMAGE */
+.com-img img {
+  width: 100%;
+  height: 220px;
+  object-fit: cover;
+}
+
+/* CONTENT */
+.com-content {
+  padding: 20px;
+}
+
+.com-content h3 {
+  font-size: 20px;
+  color: #66451c;
+  margin-bottom: 10px;
+  font-weight: 600;
+}
+
+.com-content p {
+  font-size: 15px;
+  color: #7a5a2e;
+  line-height: 22px;
+}
+
+/* META */
+.com-meta {
+  display: flex;
+  justify-content: space-between;
+  margin: 15px 0;
+  font-size: 14px;
+  color: #9a7c53;
+}
+
+/* BUTTON (theme matched) */
+.com-content .cta-5 {
+  cursor: pointer;
+}
+/* COMMUNITY — LETTER STYLE VIEW */
+.community-mail-wrapper {
+  padding: 70px 0;
+}
+
+.mail-item {
+  background: transparent; /* No card background */
+  padding: 25px 0;
+  border-bottom: 1px solid #e5d6c3;
+  margin-bottom: 40px;
+}
+
+.mail-header {
+  margin-bottom: 12px;
+}
+
+.mail-subject {
+  font-size: 28px;
+  font-weight: 800;
+  color: #4c341a;
+  font-family: var(--tit-font);
+  margin-bottom: 10px;
+  border-left: 4px solid #c9a57a;
+  padding-left: 12px;
+  letter-spacing: 0.5px;
+}
+
+.mail-salutation {
+  font-size: 16px;
+  font-weight: 500;
+  color: #7b5a36;
+  margin: 15px 0;
+}
+
+.mail-body {
+  font-size: 16px;
+  line-height: 28px;
+  color: #5c4631;
+  white-space: pre-line;
+  margin-bottom: 20px;
+}
+
+.mail-meta {
+  font-size: 14px;
+  color: #8f7756;
+  margin-top: 20px;
+  display: flex;
+  gap: 25px;
+}
+
+.mail-image {
+  width: auto;
+  max-width: 100%;
+  height: auto;
+  border-radius: 6px;
+  margin: 20px 0;
+  display: block;
+}
+
+/* Read More button (matching theme) */
+.mail-read-btn {
+  background: linear-gradient(135deg, #a67c52, #d6b68a);
+  color: #fff;
+  padding: 10px 26px;
+  border-radius: 30px;
+  border: none;
+  font-weight: 600;
+  font-size: 15px;
+  cursor: pointer;
+  letter-spacing: 0.5px;
+  box-shadow: 0 4px 12px rgba(166, 124, 82, 0.4);
+  transition: 0.3s ease;
+}
+
+.mail-read-btn:hover {
+  transform: translateY(-2px);
+  box-shadow: 0 6px 16px rgba(166, 124, 82, 0.55);
+  background: linear-gradient(135deg, #8f6a45, #c8a578);
+}
+.mail-meta {
+  display: flex;
+  align-items: center;
+  flex-wrap: wrap;
+  gap: 35px;
+  margin-top: 20px;
+  padding: 12px 0;
+  border-top: 1px dashed #d6c7b8;
+  border-bottom: 1px dashed #d6c7b8;
+}
+
+.meta-item {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  font-size: 15px;
+  color: #6b5437;
+  font-weight: 500;
+}
+
+.meta-icon {
+  width: 18px;
+  height: 18px;
+  fill: #a67c52; /* Gold-brown theme color */
+  opacity: 0.85;
+}
+
+.status-active {
+  color: #1e9e4c;
+  font-weight: 600;
+}
+
+.status-expired {
+  color: #d82d2d;
+  font-weight: 600;
+}
+
+/* Improve responsiveness */
+@media (max-width: 600px) {
+  .mail-meta {
+    gap: 15px;
+  }
+}
+/* VENUE */
+.mail-venue {
+  display: flex;
+  align-items: flex-start;
+  gap: 10px;
+  background: #fff6e8;
+  padding: 12px 15px;
+  border-left: 4px solid #d8b68a;
+  border-radius: 6px;
+  margin: 18px 0 22px;
+  color: #5a4633;
+}
+
+.venue-icon {
+  width: 20px;
+  height: 20px;
+  fill: #a67c52;
+  flex-shrink: 0;
+}
+
+/* Created on footer */
+.mail-created {
+  margin-top: 18px;
+  font-size: 13px;
+  color: #907d65;
+  text-align: right;
+  font-style: italic;
+}
+
+/* Improve overall block spacing */
+.mail-item {
+  padding-bottom: 40px;
+  margin-bottom: 50px;
+  border-bottom: 1px solid #d9c8b3;
+}

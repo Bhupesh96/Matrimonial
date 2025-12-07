@@ -87,16 +87,19 @@ const MainMenu = () => {
                                 Community Page <span>See What's Going On</span>
                               </h5>
                               <span className="explor-cta">More details</span>
-                              <a href="wedding.html" className="fclick"></a>
+                              <Link to="/community" className="fclick"></Link>
                             </div>
                           </li>
                           <li>
                             <div className="menu-box menu-box-3">
                               <h5>
-                                All Services<span>Lorem ipsum dummy</span>
+                                Couple Stories<span>Beautiful Moment</span>
                               </h5>
                               <span className="explor-cta">More details</span>
-                              <a href="services.html" className="fclick"></a>
+                              <Link
+                                to="/couple-stories"
+                                className="fclick"
+                              ></Link>
                             </div>
                           </li>
                           <li>
@@ -132,9 +135,9 @@ const MainMenu = () => {
                       {/* <li>
                         <a href="blog.html">Blog</a>
                       </li> */}
-                      <li>
+                      {/* <li>
                         <Link to="/blog-detail">Blog detail</Link>
-                      </li>
+                      </li> */}
                       <li>
                         <Link to="/about">About</Link>
                       </li>
@@ -164,7 +167,7 @@ const MainMenu = () => {
                 </li>
 
                 <li>
-                  <a href="plans.html">Community</a>
+                  <Link to="/community">Community</Link>
                 </li>
                 {!profileName && (
                   <li>
@@ -176,7 +179,6 @@ const MainMenu = () => {
                   <span className="smenu">Dashboard</span>
                   <div className="smenu-open smenu-single">
                     <ul>
-                    
                       <li>
                         <Link to={`/user-profile/${profileID}`}>
                           My profile

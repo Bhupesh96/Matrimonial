@@ -9,14 +9,12 @@ import DashboardMenu from "../components/DashBoardMenu";
 import Footer from "../components/Footer";
 import CopyRight from "../components/CopyRight";
 import MeetOurTeam from "../components/MeetOurTeam";
-import { Toast } from "primereact/toast";
+import AlertService from "../services/AlertServices";
 import { useRef } from "react";
 import { submitContactForm } from "../api";
 const Contact = () => {
-  const toast = useRef(null);
   return (
     <div>
-      <Toast ref={toast} />
       <PoopUpSearch />
       <TopMenu />
       <MenuPopUp />
@@ -151,21 +149,17 @@ const Contact = () => {
                               message,
                             });
 
-                            toast.current.show({
-                              severity: "success",
-                              summary: "Success",
-                              detail: "Your message was sent successfully!",
-                              life: 3000,
-                            });
+                            AlertService.showSuccessAndRedirect(
+                              "Your message was sent successfully!",
+                              () => {}, // navigate not needed here
+                              "" // no redirect
+                            );
 
                             e.target.reset(); // Reset form
                           } catch (error) {
-                            toast.current.show({
-                              severity: "error",
-                              summary: "Failed",
-                              detail: error.message || "Unable to send message",
-                              life: 3000,
-                            });
+                            AlertService.showError(
+                              error.message || "Unable to send message"
+                            );
                           }
                         }}
                       >

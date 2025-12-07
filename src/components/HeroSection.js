@@ -38,17 +38,18 @@ const HeroSection = () => {
     const loadBanner = async () => {
       try {
         let banners = await fetchBanners("top");
+        console.log("BANNERS RECEIVED:", JSON.stringify(banners, null, 2)); // 👈 ADD THIS
 
-        // Sort by DisplayOrder ASC
         banners = banners.sort((a, b) => a.DisplayOrder - b.DisplayOrder);
 
-        // Fix image path (full URL)
         banners = banners.map((b) => ({
           ...b,
           fullImage: b.BannerImage.startsWith("http")
             ? b.BannerImage
             : `https://techwithus.in${b.BannerImage}`,
         }));
+
+        console.log("FINAL BANNERS:", JSON.stringify(banners, null, 2)); // 👈 ADD THIS
 
         setBanners(banners);
       } catch (error) {
@@ -76,26 +77,29 @@ const HeroSection = () => {
   return (
     <section className="hero-container">
       {/* BACKGROUND CAROUSEL */}
-      <Carousel
-        autoPlay
-        infiniteLoop
-        showThumbs={false}
-        showStatus={false}
-        interval={4000}
-        swipeable
-        emulateTouch
-        className="hero-carousel"
-      >
-        {banners.map((b) => (
-          <div key={b.BannerID}>
-            <img
-              src={b.fullImage}
-              alt={b.BannerTitle}
-              className="hero-banner-img"
-            />
-          </div>
-        ))}
-      </Carousel>
+      {banners.length > 0 && (
+        <Carousel
+          autoPlay={true}
+          infiniteLoop={true}
+          showThumbs={false}
+          showStatus={false}
+          interval={4000}
+          stopOnHover={false}
+          swipeable={true}
+          emulateTouch={true}
+          className="hero-carousel"
+        >
+          {banners.map((b) => (
+            <div key={b.BannerID}>
+              <img
+                src={b.fullImage}
+                alt={b.BannerTitle}
+                className="hero-banner-img"
+              />
+            </div>
+          ))}
+        </Carousel>
+      )}
 
       {/* DARK OVERLAY */}
       <div className="hero-overlay"></div>

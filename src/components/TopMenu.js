@@ -7,11 +7,11 @@ const TopMenu = () => {
         <div className="row">
           <div className="lhs">
             <ul>
-              <li>
+              {/* <li>
                 <a href="#!" className="ser-open">
                   <i className="fa fa-search" aria-hidden="true"></i>
                 </a>
-              </li>
+              </li> */}
               <li>
                 <Link to="/about">About</Link>
               </li>

@@ -223,32 +223,6 @@
 }
 
 /* ======================================================
-   PREMIUM DOTS
-====================================================== */
-
-.carousel .control-dots {
-  bottom: 20px !important;
-  z-index: 20;
-}
-
-.carousel .control-dots .dot {
-  background: rgba(255, 255, 255, 0.6);
-  width: 14px;
-  height: 14px;
-  margin: 0 6px;
-  border-radius: 50%;
-  transition: 0.3s;
-  border: 2px solid rgba(255, 255, 255, 0.7);
-}
-
-.carousel .control-dots .dot.selected {
-  background: #ffbb00;
-  border-color: #ffdd55;
-  transform: scale(1.25);
-  box-shadow: 0 0 10px rgba(255, 200, 0, 0.9);
-}
-
-/* ======================================================
    ANIMATIONS
 ====================================================== */
 

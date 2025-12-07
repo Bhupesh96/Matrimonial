@@ -185,19 +185,19 @@ const QuickAccess = () => {
       icon: <ShehnaiIcon />,
       title: "Join Now",
       sub: "Create Free Account",
-      link: "plans.html",
+      link: "/sign-up",
     },
     {
       icon: <GalleryIcon />,
-      title: "Photo Gallery",
+      title: "Couple Stories",
       sub: "Beautiful Moments",
-      link: "photo-gallery.html",
+      link: "/couple-stories",
     },
     {
       icon: <BlogIcon />,
       title: "Community",
       sub: "Get Latest Updates",
-      link: "blog.html",
+      link: "/community",
     },
   ];
 

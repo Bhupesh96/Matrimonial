@@ -352,3 +352,28 @@ export const checkProfileCompleteness = async (userID) => {
   if (!data || data.status !== 200) throw new Error(data.message);
   return data;
 };
+/* ----------------------------------------------------
+   FETCH COMMUNITY EVENTS (Active + Expired)
+---------------------------------------------------- */
+export const fetchCommunityEvents = async () => {
+  const url = `${API_BASE_URL}?api=list_community`;
+
+  const data = await apiFetch(url);
+
+  if (!data || data.status !== true) throw new Error(data.message);
+  return data.data || [];
+};
+export const fetchCoupleStories = async () => {
+  const url = `${API_BASE_URL}?api=list_couple_stories`;
+  const data = await apiFetch(url);
+
+  if (!data || data.status !== true) throw new Error(data.message);
+  return data.data || [];
+};
+export const fetchTestimonials = async () => {
+  const url = `${API_BASE_URL}?api=testimonial_list`;
+  const data = await apiFetch(url);
+
+  if (!data || data.status !== true) throw new Error(data.message);
+  return data.data || [];
+};

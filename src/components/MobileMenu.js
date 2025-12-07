@@ -70,9 +70,9 @@ const MobileMenu = () => {
           <li>
             <a href="blog.html">Blog</a>
           </li>
-          <li>
+          {/* <li>
             <Link to="/blog-detail">Blog detail</Link>
-          </li>
+          </li> */}
           <li>
             <a href="enquiry.html">Ask your doubts</a>
           </li>

@@ -67,7 +67,7 @@ const Home = () => {
       <RecentCouples />
       <MeetOurTeam />
       <PhotoGallery />
-      <BlogSection />
+      {/* <BlogSection /> */}
       <FindMatchSection />
       <Footer />
       <CopyRight />

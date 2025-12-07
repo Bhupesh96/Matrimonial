@@ -18,7 +18,7 @@ const AboutSection2 = () => {
                     alt="Genuine profiles"
                     loading="lazy"
                   />
-                  <h4>Genuine profiles Hi</h4>
+                  <h4>Genuine profiles</h4>
                   <p>Contact genuine profiles with 100% verified mobile</p>
                 </div>
               </li>
