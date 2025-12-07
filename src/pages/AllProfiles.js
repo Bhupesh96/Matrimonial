@@ -11,6 +11,7 @@ import Footer from "../components/Footer";
 import CopyRight from "../components/CopyRight";
 import ChatBox from "../components/ChatBox";
 import { Link } from "react-router-dom";
+import DashboardMenu from "../components/DashBoardMenu";
 
 const AllProfiles = () => {
   return (
@@ -21,6 +22,7 @@ const AllProfiles = () => {
       <ContactExpert />
       <MainMenu />
       <MobileMenu />
+      <DashboardMenu />
       <section>
         <div className="all-pro-head">
           <div className="container">
