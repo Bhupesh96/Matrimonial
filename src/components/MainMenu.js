@@ -102,17 +102,18 @@ const MainMenu = () => {
                               ></Link>
                             </div>
                           </li>
-                          <li>
-                            <div className="menu-box menu-box-4">
-                              <h5>
-                                Join Now <span>Lorem ipsum dummy</span>
-                              </h5>
-                              <span className="explor-cta">More details</span>
-                              {!profileName && (
+                          {!profileName && (
+                            <li>
+                              <div className="menu-box menu-box-4">
+                                <h5>
+                                  Join Now <span>Register</span>
+                                </h5>
+                                <span className="explor-cta">More details</span>
+
                                 <Link to="/sign-up">Register</Link>
-                              )}
-                            </div>
-                          </li>
+                              </div>
+                            </li>
+                          )}
                         </ul>
                       </div>
                     </div>
