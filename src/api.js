@@ -1,8 +1,8 @@
 const API_BASE_URL = process.env.REACT_APP_API_URL;
 
 /* ----------------------------------------------------
-   GLOBAL FETCH WRAPPER – handles 401 & auto-logout
----------------------------------------------------- */
+    GLOBAL FETCH WRAPPER – handles 401 & auto-logout
+  ---------------------------------------------------- */
 const apiFetch = async (url, options = {}) => {
   try {
     const res = await fetch(url, options);
@@ -12,7 +12,7 @@ const apiFetch = async (url, options = {}) => {
     if (data.status === 401) {
       if (localStorage.getItem("profileID")) {
         localStorage.clear();
-        window.location.href = "/login";
+        window.location.href = `${process.env.REACT_APP_BASENAME || ""}/login`;
       }
       return data; // allow homepage to work
     }
@@ -24,8 +24,8 @@ const apiFetch = async (url, options = {}) => {
 };
 
 /* ----------------------------------------------------
-   MASTER DATA
----------------------------------------------------- */
+    MASTER DATA
+  ---------------------------------------------------- */
 export const fetchMasterData = async (masterType) => {
   const url = `${API_BASE_URL}?api=get_master&master_type=${masterType}`;
   const data = await apiFetch(url);
@@ -35,8 +35,8 @@ export const fetchMasterData = async (masterType) => {
 };
 
 /* ----------------------------------------------------
-   CREATE PROFILE
----------------------------------------------------- */
+    CREATE PROFILE
+  ---------------------------------------------------- */
 export const createProfile = async (profileData) => {
   const url = `${API_BASE_URL}?api=create_profile`;
 
@@ -51,8 +51,8 @@ export const createProfile = async (profileData) => {
 };
 
 /* ----------------------------------------------------
-   LOGIN USER
----------------------------------------------------- */
+    LOGIN USER
+  ---------------------------------------------------- */
 export const loginUser = async (credentials) => {
   const url = `${API_BASE_URL}?api=user_login`;
 
@@ -67,8 +67,8 @@ export const loginUser = async (credentials) => {
 };
 
 /* ----------------------------------------------------
-   NEXT USER ID
----------------------------------------------------- */
+    NEXT USER ID
+  ---------------------------------------------------- */
 export const fetchNextUserID = async () => {
   const url = `${API_BASE_URL}?api=get_next_user`;
   const data = await apiFetch(url);
@@ -78,8 +78,8 @@ export const fetchNextUserID = async () => {
 };
 
 /* ----------------------------------------------------
-   GET PROFILE
----------------------------------------------------- */
+    GET PROFILE
+  ---------------------------------------------------- */
 export const getProfileDetails = async () => {
   const profileID = localStorage.getItem("profileID");
   if (!profileID) throw new Error("No ProfileID saved");
@@ -96,8 +96,8 @@ export const getProfileDetails = async () => {
 };
 
 /* ----------------------------------------------------
-   UPDATE PROFILE (FORMDATA)
----------------------------------------------------- */
+    UPDATE PROFILE (FORMDATA)
+  ---------------------------------------------------- */
 const PROFILE_FIELDS = [
   "ProfileID",
   "UserID",
@@ -190,8 +190,8 @@ export const updateProfile = async (payload, profilePhoto) => {
 };
 
 /* ----------------------------------------------------
-   LIST ALL PROFILES
----------------------------------------------------- */
+    LIST ALL PROFILES
+  ---------------------------------------------------- */
 export const fetchAllProfiles = async () => {
   const url = `${API_BASE_URL}?api=get_list`;
   const data = await apiFetch(url);
@@ -201,8 +201,8 @@ export const fetchAllProfiles = async () => {
 };
 
 /* ----------------------------------------------------
-   LIST APPROVED PROFILES
----------------------------------------------------- */
+    LIST APPROVED PROFILES
+  ---------------------------------------------------- */
 export const fetchApprovedProfiles = async () => {
   const viewerID = localStorage.getItem("profileID");
   if (!viewerID) throw new Error("No profile ID found");
@@ -219,8 +219,8 @@ export const fetchApprovedProfiles = async () => {
 };
 
 /* ----------------------------------------------------
-   UPDATE PROFILE PICTURE
----------------------------------------------------- */
+    UPDATE PROFILE PICTURE
+  ---------------------------------------------------- */
 export const updateProfilePicture = async (file) => {
   const profileID = localStorage.getItem("profileID");
   const userID = localStorage.getItem("userID");
@@ -240,8 +240,8 @@ export const updateProfilePicture = async (file) => {
 };
 
 /* ----------------------------------------------------
-   SEND CONNECTION REQUEST
----------------------------------------------------- */
+    SEND CONNECTION REQUEST
+  ---------------------------------------------------- */
 export const sendConnectionRequest = async (receiverID) => {
   const requesterID = localStorage.getItem("profileID");
   if (!requesterID) throw new Error("You are not logged in.");
@@ -262,8 +262,8 @@ export const sendConnectionRequest = async (receiverID) => {
 };
 
 /* ----------------------------------------------------
-   ACCEPT / REJECT REQUEST
----------------------------------------------------- */
+    ACCEPT / REJECT REQUEST
+  ---------------------------------------------------- */
 export const manageConnectionRequest = async (requestID, action) => {
   const receiverID = localStorage.getItem("profileID");
 
@@ -284,8 +284,8 @@ export const manageConnectionRequest = async (requestID, action) => {
 };
 
 /* ----------------------------------------------------
-   FETCH MY REQUESTS
----------------------------------------------------- */
+    FETCH MY REQUESTS
+  ---------------------------------------------------- */
 export const fetchMyRequests = async () => {
   const viewerID = localStorage.getItem("profileID");
   if (!viewerID) throw new Error("No profile ID found");
@@ -299,8 +299,8 @@ export const fetchMyRequests = async () => {
 };
 
 /* ----------------------------------------------------
-   LOGOUT USER
----------------------------------------------------- */
+    LOGOUT USER
+  ---------------------------------------------------- */
 export const logoutUser = async () => {
   const url = `${API_BASE_URL}?api=user_logout`;
 
@@ -317,8 +317,8 @@ export const logoutUser = async () => {
 };
 
 /* ----------------------------------------------------
-   CONTACT US
----------------------------------------------------- */
+    CONTACT US
+  ---------------------------------------------------- */
 export const submitContactForm = async (formData) => {
   const url = `${API_BASE_URL}?api=contact_us`;
 
@@ -335,8 +335,8 @@ export const submitContactForm = async (formData) => {
   return data;
 };
 /* ----------------------------------------------------
-   FETCH BANNERS BY POSITION
----------------------------------------------------- */
+    FETCH BANNERS BY POSITION
+  ---------------------------------------------------- */
 export const fetchBanners = async (position = "top") => {
   const url = `${API_BASE_URL}?api=banner_list&position=${position}`;
 
@@ -353,8 +353,8 @@ export const checkProfileCompleteness = async (userID) => {
   return data;
 };
 /* ----------------------------------------------------
-   FETCH COMMUNITY EVENTS (Active + Expired)
----------------------------------------------------- */
+    FETCH COMMUNITY EVENTS (Active + Expired)
+  ---------------------------------------------------- */
 export const fetchCommunityEvents = async () => {
   const url = `${API_BASE_URL}?api=list_community`;
 

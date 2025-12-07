@@ -99,7 +99,7 @@ const Login = () => {
       AlertService.showSuccessAndRedirect(
         lang === "en" ? "Login successful!" : "लॉगिन सफल!",
         navigate,
-        "/user-profile-edit"
+        "/"
       );
     } catch (error) {
       AlertService.showError(error.message);
