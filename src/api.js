@@ -5,16 +5,19 @@ const API_BASE_URL = process.env.REACT_APP_API_URL;
   ---------------------------------------------------- */
 const apiFetch = async (url, options = {}) => {
   try {
-    const res = await fetch(url, options);
+    const res = await fetch(url, {
+      credentials: "include", // <-- FIX FOR LIVE SERVER
+      ...options,
+    });
+
     const data = await res.json();
 
-    // 🔥 Auto logout when backend returns 401
     if (data.status === 401) {
       if (localStorage.getItem("profileID")) {
         localStorage.clear();
         window.location.href = `${process.env.REACT_APP_BASENAME || ""}/login`;
       }
-      return data; // allow homepage to work
+      return data;
     }
 
     return data;
