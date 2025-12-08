@@ -46,7 +46,7 @@ const Home = () => {
 
   // 5. When loading is false, show the full page
   return (
-    <div>
+    <div className="str">
       {/* <Preloader /> <-- Removed from here */}
       <PoopUpSearch />
       <TopMenu />
@@ -67,7 +67,7 @@ const Home = () => {
       <RecentCouples />
       <MeetOurTeam />
       <PhotoGallery />
-      {/* <BlogSection /> */}
+      <BlogSection />
       <FindMatchSection />
       <Footer />
       <CopyRight />

@@ -405,13 +405,9 @@ img {
 /* HOME BANNER
 /*-------------------------------------------------------*/
 .hom-head {
-  padding: 8% 0 50px 0;
-  position: relative;
-  width: 100%;
-  float: left;
-  height: calc(100vh - 100px);
-  margin-top: var(--mtop);
-  z-index: 2;
+  position: relative !important;
+  z-index: 0 !important;
+  pointer-events: auto !important;
 }
 
 @keyframes bannscrl {

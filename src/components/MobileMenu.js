@@ -1,211 +1,175 @@
-import React from "react";
-import { Link } from "react-router-dom";
+import React, { useState, useEffect } from "react";
+import { Link, useNavigate } from "react-router-dom";
+import AlertService from "../services/AlertServices";
+import { logoutUser } from "../api";
+import "../assets/css/MobileMenu.css";
 
 const MobileMenu = () => {
+  const [open, setOpen] = useState(false);
+
+  // User info
+  const [profileName, setProfileName] = useState("");
+  const [profilePhoto, setProfilePhoto] = useState("");
+  const [profileID, setProfileID] = useState("");
+
+  const navigate = useNavigate();
+
+  useEffect(() => {
+    setProfileName(localStorage.getItem("profileName") || "");
+    setProfilePhoto(localStorage.getItem("profilePhoto") || "");
+    setProfileID(localStorage.getItem("profileID") || "");
+  }, []);
+
+  const handleLogout = async () => {
+    try {
+      await logoutUser();
+      localStorage.clear();
+
+      setOpen(false);
+
+      AlertService.showSuccessAndRedirect("Logout successful", navigate, "/");
+
+      navigate("/");
+    } catch (err) {
+      AlertService.showError(err.message);
+    }
+  };
+
   return (
-    <div className="mob-me-all mobile_menu">
-      <div className="mob-me-clo">
-        <img src={`${process.env.PUBLIC_URL}/images/icon/close.svg`} alt="" />
+    <>
+      {/* Mobile menu icon */}
+      <div className="mob-menu-btn" onClick={() => setOpen(true)}>
+        <img src={`${process.env.PUBLIC_URL}/images/icon/menu.svg`} alt="" />
       </div>
 
-      <div className="mv-bus">
-        <h4>
-          <i className="fa fa-globe" aria-hidden="true"></i> EXPLORE CATEGORY
-        </h4>
-        <ul>
-          <li>
-            <Link to="/all-profiles">All profiles</Link>
-          </li>
-          <li>
-            <a href="wedding.html">Wedding page</a>
-          </li>
-          <li>
-            <a href="services.html">All Services</a>
-          </li>
-          <li>
-            <Link to={"sign-up"}>Join Now</Link>
-          </li>
-        </ul>
+      {/* Backdrop */}
+      {open && <div className="mm-overlay" onClick={() => setOpen(false)} />}
 
-        <h4>
-          <i className="fa fa-align-center" aria-hidden="true"></i> All Pages
-        </h4>
-        <ul>
-          <li>
-            <Link to="/all-profiles">All profiles</Link>
-          </li>
-          <li>
-            <a href="profile-details.html">Profile details</a>
-          </li>
-          <li>
-            <a href="wedding.html">Wedding</a>
-          </li>
-          <li>
-            <a href="wedding-video.html">Wedding video</a>
-          </li>
-          <li>
-            <a href="services.html">Our Services</a>
-          </li>
-          <li>
-            <a href="plans.html">Pricing plans</a>
-          </li>
-          <li>
-            <Link to="/login">Login</Link>
-          </li>
-          <li>
-            <Link to="/sign-up">Sign-up</Link>
-          </li>
-          <li>
-            <a href="photo-gallery.html">Photo gallery</a>
-          </li>
-          <li>
-            <a href="photo-gallery-1.html">Photo gallery 1</a>
-          </li>
-          <li>
-            <Link to="/contact">Contact</Link>
-          </li>
-          <li>
-            <Link to="/about">About</Link>
-          </li>
-          <li>
-            <a href="blog.html">Blog</a>
-          </li>
-          {/* <li>
-            <Link to="/blog-detail">Blog detail</Link>
-          </li> */}
-          <li>
-            <a href="enquiry.html">Ask your doubts</a>
-          </li>
-          <li>
-            <a href="make-reservation.html">Make Reservation</a>
-          </li>
-          <li>
-            <a href="faq.html">FAQ</a>
-          </li>
-          <li>
-            <a
-              href="coming-soon.html"
-              target="_blank"
-              rel="noopener noreferrer"
-            >
-              Coming soon
-            </a>
-          </li>
-          <li>
-            <a href="404.html">404</a>
-          </li>
-        </ul>
-
-        <div className="menu-pop-help">
-          <h4>Support Team</h4>
-          <div className="user-pro">
-            <img
-              src={`${process.env.PUBLIC_URL}/images/profiles/1.jpg`}
-              alt=""
-              loading="lazy"
-            />
-          </div>
-          <div className="user-bio">
-            <h5>Ashley emyy</h5>
-            <span>Senior personal advisor</span>
-            <a href="enquiry.html" className="btn btn-primary btn-sm">
-              Ask your doubts
-            </a>
-          </div>
+      {/* Slide menu panel */}
+      <div className={`mm-panel ${open ? "mm-open" : ""}`}>
+        <div className="mm-close" onClick={() => setOpen(false)}>
+          <img
+            src={`${process.env.PUBLIC_URL}/images/icon/close.svg`}
+            alt="close"
+          />
         </div>
 
-        <div className="menu-pop-soci">
-          <ul>
+        <div className="mm-content">
+          {/* If user logged in → show user profile */}
+          {profileName && (
+            <div className="mm-user-box">
+              <img
+                src={
+                  profilePhoto
+                    ? profilePhoto
+                    : `${process.env.PUBLIC_URL}/images/default.png`
+                }
+                alt="User"
+              />
+              <div>
+                <h4>{profileName}</h4>
+              </div>
+            </div>
+          )}
+
+          {/* EXPLORE */}
+          <h4 className="mm-title">
+            <i className="fa fa-globe"></i> EXPLORE CATEGORY
+          </h4>
+
+          <ul className="mm-list">
             <li>
-              <a href="#!">
-                <i className="fa fa-facebook" aria-hidden="true"></i>
-              </a>
+              <Link to="/all-profiles" onClick={() => setOpen(false)}>
+                All Profiles
+              </Link>
             </li>
             <li>
-              <a href="#!">
-                <i className="fa fa-twitter" aria-hidden="true"></i>
-              </a>
+              <Link to="/couple-stories" onClick={() => setOpen(false)}>
+                Couple Stories
+              </Link>
             </li>
             <li>
-              <a href="#!">
-                <i className="fa fa-whatsapp" aria-hidden="true"></i>
-              </a>
+              <Link to="/services" onClick={() => setOpen(false)}>
+                All Services
+              </Link>
             </li>
-            <li>
-              <a href="#!">
-                <i className="fa fa-linkedin" aria-hidden="true"></i>
-              </a>
-            </li>
-            <li>
-              <a href="#!">
-                <i className="fa fa-youtube-play" aria-hidden="true"></i>
-              </a>
-            </li>
-            <li>
-              <a href="#!">
-                <i className="fa fa-instagram" aria-hidden="true"></i>
-              </a>
-            </li>
+
+            {!profileName && (
+              <li>
+                <Link to="/sign-up" onClick={() => setOpen(false)}>
+                  Join Now
+                </Link>
+              </li>
+            )}
           </ul>
-        </div>
 
-        <div className="late-news">
-          <h4>Latest news</h4>
-          <ul>
+          {/* All Pages */}
+          <h4 className="mm-title">
+            <i className="fa fa-align-center"></i> All Pages
+          </h4>
+
+          <ul className="mm-list">
             <li>
-              <div className="rel-pro-img">
-                <img
-                  src={`${process.env.PUBLIC_URL}/images/couples/1.jpg`}
-                  alt=""
-                  loading="lazy"
-                />
-              </div>
-              <div className="rel-pro-con">
-                <h5>Long established fact that a reader distracted</h5>
-                <span className="ic-date">12 Dec 2023</span>
-              </div>
-              <Link to="/blog-detail" className="fclick"></Link>
+              <Link to="/about" onClick={() => setOpen(false)}>
+                About
+              </Link>
             </li>
             <li>
-              <div className="rel-pro-img">
-                <img
-                  src={`${process.env.PUBLIC_URL}/images/couples/3.jpg`}
-                  alt=""
-                  loading="lazy"
-                />
-              </div>
-              <div className="rel-pro-con">
-                <h5>Long established fact that a reader distracted</h5>
-                <span className="ic-date">12 Dec 2023</span>
-              </div>
-              <Link to="/blog-detail" className="fclick"></Link>
+              <Link to="/contact" onClick={() => setOpen(false)}>
+                Contact
+              </Link>
             </li>
-            <li>
-              <div className="rel-pro-img">
-                <img
-                  src={`${process.env.PUBLIC_URL}/images/couples/4.jpg`}
-                  alt=""
-                  loading="lazy"
-                />
-              </div>
-              <div className="rel-pro-con">
-                <h5>Long established fact that a reader distracted</h5>
-                <span className="ic-date">12 Dec 2023</span>
-              </div>
-              <Link to="/blog-detail" className="fclick"></Link>
-            </li>
+
+            {!profileName && (
+              <>
+                <li>
+                  <Link to="/login" onClick={() => setOpen(false)}>
+                    Login
+                  </Link>
+                </li>
+                <li>
+                  <Link to="/sign-up" onClick={() => setOpen(false)}>
+                    Register
+                  </Link>
+                </li>
+              </>
+            )}
           </ul>
-        </div>
 
-        <div className="prof-rhs-help">
-          <div className="inn">
-            <h3>Tell us your Needs</h3>
-            <p>Tell us what kind of service you are looking for.</p>
-            <a href="enquiry.html">Register for free</a>
-          </div>
+          {/* Dashboard when logged in */}
+          {profileName && (
+            <>
+              <h4 className="mm-title">
+                <i className="fa fa-user"></i> Dashboard
+              </h4>
+
+              <ul className="mm-list">
+                <li>
+                  <Link
+                    to={`/user-profile/${profileID}`}
+                    onClick={() => setOpen(false)}
+                  >
+                    My Profile
+                  </Link>
+                </li>
+
+                <li>
+                  <Link to="/user-profile-edit" onClick={() => setOpen(false)}>
+                    Edit Profile
+                  </Link>
+                </li>
+
+                <li>
+                  <span className="mm-logout" onClick={handleLogout}>
+                    Logout
+                  </span>
+                </li>
+              </ul>
+            </>
+          )}
         </div>
       </div>
-    </div>
+    </>
   );
 };
 

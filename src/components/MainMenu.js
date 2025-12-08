@@ -5,6 +5,7 @@ import { logoutUser } from "../api";
 import { useNavigate } from "react-router-dom";
 
 import { useRef } from "react";
+import MobileMenu from "./MobileMenu";
 const MainMenu = () => {
   const [profileName, setProfileName] = useState("");
   const [profilePhoto, setProfilePhoto] = useState("");
@@ -250,31 +251,6 @@ const MainMenu = () => {
                 </div>
               </div>
             )}
-
-            {/* MOBILE MENU */}
-            <div className="mob-menu">
-              <div className="mob-me-ic">
-                <span className="ser-open mobile-ser">
-                  <img
-                    src={`${process.env.PUBLIC_URL}/images/icon/search.svg`}
-                    alt=""
-                  />
-                </span>
-                <span className="mobile-exprt" data-mob="dashbord">
-                  <img
-                    src={`${process.env.PUBLIC_URL}/images/icon/users.svg`}
-                    alt=""
-                  />
-                </span>
-                <span className="mobile-menu" data-mob="mobile">
-                  <img
-                    src={`${process.env.PUBLIC_URL}/images/icon/menu.svg`}
-                    alt=""
-                  />
-                </span>
-              </div>
-            </div>
-            {/* END MOBILE MENU */}
           </div>
         </div>
       </div>

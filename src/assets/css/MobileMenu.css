@@ -1,0 +1,143 @@
+/* MOBILE MENU BUTTON */
+.mob-menu-btn {
+  position: fixed;
+  top: 18px;
+  right: 20px;
+  z-index: 1090;
+  cursor: pointer;
+}
+.mob-menu-btn img {
+  width: 32px;
+}
+
+/* OVERLAY */
+.mm-overlay {
+  position: fixed;
+  inset: 0;
+  background: rgba(0, 0, 0, 0.55);
+  backdrop-filter: blur(3px);
+  z-index: 1080;
+}
+
+/* MAIN MENU PANEL */
+.mm-panel {
+  position: fixed;
+  top: 0;
+  right: -350px;
+  width: 300px;
+  height: 100vh;
+  background: #ffffff;
+  z-index: 1100;
+  padding: 20px;
+  overflow-y: auto;
+  transition: all 0.35s ease;
+  box-shadow: -5px 0px 25px rgba(0, 0, 0, 0.2);
+  border-left: 3px solid #f6af04;
+}
+
+.mm-open {
+  right: 0;
+}
+
+/* CLOSE BUTTON */
+.mm-close {
+  text-align: right;
+  margin-bottom: 15px;
+  cursor: pointer;
+}
+.mm-close img {
+  width: 26px;
+}
+
+/* TITLES */
+.mm-title {
+  font-size: 17px;
+  color: #333;
+  font-weight: 600;
+  margin: 20px 0 10px;
+}
+.mm-title i {
+  margin-right: 6px;
+  color: #f6af04;
+}
+
+/* MENU LIST */
+.mm-list {
+  list-style: none;
+  padding: 0;
+  margin: 0 0 15px;
+}
+.mm-list li {
+  margin: 8px 0;
+}
+.mm-list li a {
+  font-size: 15px;
+  color: #555;
+  text-decoration: none;
+  font-weight: 500;
+  display: block;
+  padding: 8px 0;
+  transition: 0.25s ease;
+}
+.mm-list li a:hover {
+  color: #f6af04;
+  margin-left: 4px;
+}
+
+/* SUPPORT SECTION */
+.mm-support {
+  margin-top: 25px;
+}
+.mm-support h4 {
+  font-weight: 600;
+  margin-bottom: 8px;
+}
+.mm-support-box {
+  background: #f7f7f7;
+  padding: 12px;
+  border-radius: 8px;
+  display: flex;
+  gap: 10px;
+}
+.mm-support-box img {
+  width: ;
+} /* User profile box */
+.mm-user-box {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  padding: 12px 0 20px;
+  border-bottom: 1px solid #eee;
+  margin-bottom: 15px;
+}
+
+.mm-user-box img {
+  width: 55px;
+  height: 55px;
+  border-radius: 8px;
+  object-fit: cover;
+}
+
+.mm-user-box h4 {
+  margin: 0;
+  font-size: 16px;
+  font-weight: 700;
+}
+
+.mm-user-box p {
+  margin: 0;
+  color: #777;
+  font-size: 13px;
+}
+
+/* Logout button */
+.mm-logout {
+  color: #d00000;
+  font-weight: 600;
+  cursor: pointer;
+  padding: 8px 0;
+  display: block;
+}
+.mm-logout:hover {
+  color: #ff0000;
+}
