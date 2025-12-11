@@ -199,9 +199,9 @@ const SignUp = () => {
       HeightID: parseInt(heightID),
       Weight: parseInt(weight),
       Complexion: complexion,
-      ContactMobile: phone,
+      contact_mobile: phone,
     };
-
+    console.log("Sending details: ", JSON.stringify(payload, null, 2));
     try {
       const result = await createProfile(payload);
 

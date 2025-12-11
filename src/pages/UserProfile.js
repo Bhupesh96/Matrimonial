@@ -93,16 +93,16 @@ const UserProfile = () => {
     return `${new Date(diff).getUTCFullYear() - 1970} Years`;
   };
 
-  if (loading) return <Preloader />;
+  // if (loading) return <Preloader />;
 
-  if (!profile) {
-    return (
-      <div style={{ padding: 40, textAlign: "center" }}>
-        No profile found. Please login or set <code>profileID</code> in
-        localStorage.
-      </div>
-    );
-  }
+  // if (!profile) {
+  //   return (
+  //     <div style={{ padding: 40, textAlign: "center" }}>
+  //       No profile found. Please login or set <code>profileID</code> in
+  //       localStorage.
+  //     </div>
+  //   );
+  // }
 
   const imageSrc = profile.ProfilePhoto ? profile.ProfilePhoto : DEFAULT_IMG;
 

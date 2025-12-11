@@ -380,3 +380,18 @@ export const fetchTestimonials = async () => {
   if (!data || data.status !== true) throw new Error(data.message);
   return data.data || [];
 };
+export const addTestimonial = async (formData) => {
+  const res = await fetch(
+    `${process.env.REACT_APP_API_URL}?api=testimonial_add`,
+    {
+      method: "POST",
+      body: formData,
+    }
+  );
+
+  const json = await res.json();
+  if (json.status !== 200) {
+    throw new Error(json.message || "Something went wrong");
+  }
+  return json;
+};

@@ -1,0 +1,72 @@
+.exp-title {
+  text-align: center;
+  font-size: 32px;
+  font-weight: 700;
+  color: #d32163;
+}
+
+.exp-subtext {
+  text-align: center;
+  color: #777;
+  margin-bottom: 40px;
+}
+
+.exp-list {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+  gap: 25px;
+  margin-bottom: 60px;
+}
+
+.exp-card {
+  background: white;
+  padding: 20px;
+  border-radius: 14px;
+  border: 1px solid #eee;
+  box-shadow: 0 4px 18px rgba(0, 0, 0, 0.06);
+  display: flex;
+  gap: 15px;
+}
+
+.exp-img-box img {
+  width: 80px;
+  height: 80px;
+  border-radius: 10px;
+  object-fit: cover;
+}
+
+.exp-message {
+  font-size: 15px;
+  margin-top: 5px;
+  color: #444;
+}
+
+.exp-form-box {
+  padding: 30px;
+  background: #fff;
+  border-radius: 12px;
+  border: 1px solid #eee;
+  box-shadow: 0 4px 14px rgba(0, 0, 0, 0.05);
+  max-width: 600px;
+  margin: 0 auto 80px;
+}
+
+.exp-form input,
+.exp-form textarea {
+  width: 100%;
+  padding: 12px;
+  margin-bottom: 16px;
+  border-radius: 10px;
+  border: 1px solid #ddd;
+}
+
+.exp-btn {
+  width: 100%;
+  padding: 14px;
+  background: linear-gradient(90deg, #d32163, #ff5a8f);
+  border: none;
+  color: white;
+  font-size: 16px;
+  border-radius: 10px;
+  cursor: pointer;
+}

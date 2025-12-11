@@ -6,6 +6,7 @@ import "swiper/css/pagination";
 import "../assets/css/CustomerReviews.css";
 
 import { fetchTestimonials } from "../api";
+import { Link } from "react-router-dom";
 
 const CustomerReviews = () => {
   const [reviews, setReviews] = useState([]);
@@ -92,9 +93,9 @@ const CustomerReviews = () => {
         </Swiper>
 
         <div className="review-cta">
-          <a href="#!" className="cta-btn">
+          <Link to="/experiences" className="cta-btn">
             View More Experiences
-          </a>
+          </Link>
         </div>
       </div>
     </section>

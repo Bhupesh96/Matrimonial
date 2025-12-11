@@ -17,6 +17,7 @@ import ProtectedRoute from "./components/ProtectedRoute";
 import LoginModal from "./pages/LoginModal";
 import Community from "./pages/Community";
 import CoupleStories from "./pages/CoupleStories";
+import Experiences from "./pages/Experiences";
 
 function App() {
   const [showLogin, setShowLogin] = React.useState(false);
@@ -49,6 +50,7 @@ function App() {
         <Route path="contact" element={<Contact />} />
         <Route path="blog-detail" element={<BolgDetail />} />
         <Route path="community" element={<Community />} />
+        <Route path="experiences" element={<Experiences />} />
         {/* 🔐 PROTECTED ROUTES */}
         <Route
           path="all-profiles"
