@@ -2,15 +2,27 @@ import React, { useEffect, useState } from "react";
 import { fetchTestimonials, addTestimonial } from "../api";
 import "../assets/css/ExperiencePage.css";
 
+import PoopUpSearch from "../components/PoopUpSearch";
+import TopMenu from "../components/TopMenu";
+import MenuPopUp from "../components/MenuPopUp";
+import ContactExpert from "../components/ContactExpert";
+import MainMenu from "../components/MainMenu";
+import MobileMenu from "../components/MobileMenu";
+import DashboardMenu from "../components/DashBoardMenu";
+import Footer from "../components/Footer";
+import CopyRight from "../components/CopyRight";
+import AlertService from "../services/AlertServices";
+
 const Experiences = () => {
   const [reviews, setReviews] = useState([]);
   const [loading, setLoading] = useState(false);
-
   const [name, setName] = useState("");
   const [message, setMessage] = useState("");
   const [photo, setPhoto] = useState(null);
 
-  const storedProfileID = localStorage.getItem("profileID");
+  // Default preview image
+  const defaultPreview = "/images/default.png";
+  const [photoPreview, setPhotoPreview] = useState(defaultPreview);
 
   const fullURL = (img) =>
     img?.startsWith("http")
@@ -28,7 +40,7 @@ const Experiences = () => {
 
         setReviews(approved);
       } catch (err) {
-        console.log("Testimonial load error:", err);
+        AlertService.showError("Failed to load reviews");
       }
     };
 
@@ -38,109 +50,172 @@ const Experiences = () => {
   const handleSubmit = async (e) => {
     e.preventDefault();
 
-    if (!storedProfileID && name.trim() === "") {
-      alert("Please enter your name");
+    if (name.trim() === "") {
+      AlertService.showError("Please enter your name");
       return;
     }
     if (message.trim() === "") {
-      alert("Please write your experience");
+      AlertService.showError("Please write your experience");
       return;
     }
 
     const formData = new FormData();
-
-    if (storedProfileID) {
-      formData.append("ProfileID", storedProfileID);
-    } else {
-      formData.append("PersonName", name);
-    }
-
+    formData.append("PersonName", name);
+    if (photo) formData.append("PersonPhoto", photo);
     formData.append("Message", message);
     formData.append("IsApproved", 0);
 
-    if (photo) {
-      formData.append("PersonPhoto", photo);
-    }
-
     try {
       setLoading(true);
+      const data = await addTestimonial(formData);
 
-      const res = await addTestimonial(formData);
-
-      alert("Experience submitted successfully! Waiting for approval.");
+      AlertService.showSuccess(data.message);
 
       setName("");
       setMessage("");
       setPhoto(null);
+      setPhotoPreview(defaultPreview);
     } catch (err) {
-      alert(err.message);
+      AlertService.showError(err.message);
     } finally {
       setLoading(false);
     }
   };
 
   return (
-    <div className="experience-page container" style={{ marginTop: "120px" }}>
-      <h2 className="exp-title">Member Experiences</h2>
-      <p className="exp-subtext">Read experiences shared by happy members.</p>
+    <div>
+      <PoopUpSearch />
+      <TopMenu />
+      <MenuPopUp />
+      <ContactExpert />
+      <MainMenu />
+      <MobileMenu />
+      <DashboardMenu />
 
-      {/* ALL EXPERIENCES */}
-      <div className="exp-list">
-        {reviews.map((r) => (
-          <div className="exp-card" key={r.TestimonialID}>
-            <div className="exp-img-box">
-              <img
-                src={
-                  r.PersonPhoto
-                    ? fullURL(r.PersonPhoto)
-                    : process.env.PUBLIC_URL + "/images/default.png"
-                }
-                alt={r.PersonName}
-              />
-            </div>
+      <div className="qa-wrapper">
+        <div className="home-tit">
+          <p>Read experiences shared by happy members.</p>
+          <h2>
+            <span>Member Experiences</span>
+          </h2>
+          <span className="leaf1"></span>
+        </div>
 
-            <div className="exp-content">
-              <h4>{r.PersonName}</h4>
-              <p className="exp-message">{r.TestimonialMessage}</p>
+        {/* 2 COLUMN LAYOUT */}
+        <div className="exp-container">
+          {/* LEFT — FORM */}
+          <div className="exp-left">
+            <div className="exp-form-box">
+              <form className="exp-form" onSubmit={handleSubmit}>
+                <div>
+                  <h2>Share Your Experience</h2>
+                  <p>
+                    <span>How has the platform helped you grow?</span>
+                  </p>
+                </div>
+
+                <div className="exp-field">
+                  <label>Your Name</label>
+                  <input
+                    type="text"
+                    placeholder="Enter your name"
+                    value={name}
+                    onChange={(e) => setName(e.target.value)}
+                    required
+                  />
+                </div>
+
+                <div className="exp-field mt-15">
+                  <label>Your Story</label>
+                  <textarea
+                    rows="4"
+                    placeholder="Share your experience…"
+                    value={message}
+                    onChange={(e) => setMessage(e.target.value)}
+                    required
+                  ></textarea>
+                </div>
+
+                {/* PHOTO + PREVIEW + BUTTONS */}
+                <div className="exp-actions-row">
+                  <img
+                    src={photoPreview}
+                    alt="Preview"
+                    className="photo-preview-inline"
+                  />
+
+                  <label className="file-btn-inline">
+                    <svg
+                      width="20"
+                      height="20"
+                      fill="none"
+                      stroke="#333"
+                      strokeWidth="2"
+                      strokeLinecap="round"
+                      strokeLinejoin="round"
+                      viewBox="0 0 24 24"
+                    >
+                      <path d="M4 7h4l2-3h4l2 3h4v12H4z" />
+                      <circle cx="12" cy="13" r="3" />
+                    </svg>
+                    <span>Upload</span>
+
+                    <input
+                      type="file"
+                      accept="image/*"
+                      onChange={(e) => {
+                        const file = e.target.files[0];
+                        setPhoto(file);
+                        if (file) setPhotoPreview(URL.createObjectURL(file));
+                        else setPhotoPreview(defaultPreview);
+                      }}
+                    />
+                  </label>
+
+                  <button
+                    type="submit"
+                    className="post-btn-inline"
+                    disabled={loading}
+                  >
+                    {loading ? "Posting..." : "Post"}
+                  </button>
+                </div>
+              </form>
             </div>
           </div>
-        ))}
+
+          {/* RIGHT — REVIEWS */}
+          <div className="exp-right">
+            <div className="exp-list">
+              {reviews.map((r) => (
+                <div className="exp-card" key={r.TestimonialID}>
+                  <div className="exp-card-header">
+                    <div className="review-photo-wrapper">
+                      <img
+                        src={
+                          r.PersonPhoto
+                            ? fullURL(r.PersonPhoto)
+                            : "/images/default.png"
+                        }
+                        alt={r.PersonName}
+                        className="review-photo"
+                      />
+                    </div>
+                    <h5 className="exp-name">{r.PersonName}</h5>
+                  </div>
+
+                  <div className="exp-inner-divider"></div>
+
+                  <p className="exp-message">{r.TestimonialMessage}</p>
+                </div>
+              ))}
+            </div>
+          </div>
+        </div>
       </div>
 
-      {/* SUBMIT FORM */}
-      <div className="exp-form-box">
-        <h3>Share Your Experience</h3>
-
-        <form className="exp-form" onSubmit={handleSubmit}>
-          {!storedProfileID && (
-            <input
-              type="text"
-              placeholder="Your Name"
-              value={name}
-              onChange={(e) => setName(e.target.value)}
-              required
-            />
-          )}
-
-          <input
-            type="file"
-            accept="image/*"
-            onChange={(e) => setPhoto(e.target.files[0])}
-          />
-
-          <textarea
-            rows="4"
-            placeholder="Write your experience here..."
-            value={message}
-            onChange={(e) => setMessage(e.target.value)}
-            required
-          ></textarea>
-
-          <button type="submit" className="exp-btn" disabled={loading}>
-            {loading ? "Submitting..." : "Submit Experience"}
-          </button>
-        </form>
-      </div>
+      <Footer />
+      <CopyRight />
     </div>
   );
 };

@@ -1,4 +1,3 @@
-// src/services/AlertService.js
 import { toast } from "react-toastify";
 
 /**
@@ -13,15 +12,35 @@ const showSuccessAndRedirect = (message, navigate, path) => {
     pauseOnHover: true,
     draggable: true,
     theme: "colored",
-
     style: {
       borderRadius: "12px",
       fontSize: "15px",
       padding: "14px 18px",
       boxShadow: "0px 4px 18px rgba(0,0,0,0.15)",
     },
-
     onClose: () => navigate(path),
+  });
+};
+
+/**
+ * Modern success toast (No Redirect)
+ * ADD THIS FUNCTION
+ */
+const showSuccess = (message) => {
+  toast.success(message, {
+    position: "top-right",
+    autoClose: 3000,
+    hideProgressBar: false,
+    closeOnClick: true,
+    pauseOnHover: true,
+    draggable: true,
+    theme: "colored",
+    style: {
+      borderRadius: "12px",
+      fontSize: "15px",
+      padding: "14px 18px",
+      boxShadow: "0px 4px 18px rgba(0,0,0,0.15)",
+    },
   });
 };
 
@@ -37,7 +56,6 @@ const showError = (message) => {
     pauseOnHover: true,
     draggable: true,
     theme: "colored",
-
     style: {
       borderRadius: "12px",
       fontSize: "15px",
@@ -49,6 +67,7 @@ const showError = (message) => {
 
 const AlertService = {
   showSuccessAndRedirect,
+  showSuccess, // <--- Don't forget to export it here
   showError,
 };
 

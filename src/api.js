@@ -389,9 +389,14 @@ export const addTestimonial = async (formData) => {
     }
   );
 
-  const json = await res.json();
-  if (json.status !== 200) {
-    throw new Error(json.message || "Something went wrong");
+  const data = await res.json();
+
+  // --- CHANGE THIS LINE ---
+  // Old: if (data.status !== 200) {
+  // New: Check for both 200 AND true
+  if (data.status !== 200 && data.status !== true) {
+    throw new Error(data.message || "Something went wrong");
   }
-  return json;
+
+  return data;
 };

@@ -1,72 +1,458 @@
-.exp-title {
-  text-align: center;
-  font-size: 32px;
-  font-weight: 700;
-  color: #d32163;
-}
-
-.exp-subtext {
-  text-align: center;
-  color: #777;
-  margin-bottom: 40px;
-}
-
-.exp-list {
-  display: grid;
-  grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
-  gap: 25px;
-  margin-bottom: 60px;
-}
-
-.exp-card {
-  background: white;
-  padding: 20px;
-  border-radius: 14px;
-  border: 1px solid #eee;
-  box-shadow: 0 4px 18px rgba(0, 0, 0, 0.06);
+/* ===========================
+   2 COLUMN LAYOUT WRAPPER
+=========================== */
+.exp-container {
   display: flex;
-  gap: 15px;
+  gap: 35px;
+  max-width: 1300px;
+  margin: 0 auto;
+  padding: 30px 20px;
 }
 
-.exp-img-box img {
-  width: 80px;
-  height: 80px;
-  border-radius: 10px;
-  object-fit: cover;
+/* Left column (Form) */
+.exp-left {
+  width: 40%;
+  min-width: 380px;
 }
 
-.exp-message {
-  font-size: 15px;
-  margin-top: 5px;
-  color: #444;
+/* Right column (Reviews) */
+.exp-right {
+  width: 60%;
 }
+
+/* ===========================
+   PREMIUM FORM UI
+=========================== */
 
 .exp-form-box {
-  padding: 30px;
-  background: #fff;
-  border-radius: 12px;
-  border: 1px solid #eee;
-  box-shadow: 0 4px 14px rgba(0, 0, 0, 0.05);
-  max-width: 600px;
-  margin: 0 auto 80px;
+  max-width: 100%;
+  padding: 40px 32px;
+
+  border-radius: 26px;
+  background: rgba(255, 255, 255, 0.65);
+  backdrop-filter: blur(18px);
+
+  border: 1px solid rgba(255, 255, 255, 0.45);
+  box-shadow: 0 10px 32px rgba(0, 0, 0, 0.15),
+    0 0 1px rgba(255, 255, 255, 0.9) inset;
+
+  animation: fadeUp 0.5s ease forwards;
 }
 
+.exp-form-box h3 {
+  font-size: 26px;
+  font-weight: 700;
+  color: #d32163;
+  margin-bottom: 25px;
+  text-align: center;
+}
+
+/* Inputs */
 .exp-form input,
 .exp-form textarea {
   width: 100%;
-  padding: 12px;
-  margin-bottom: 16px;
-  border-radius: 10px;
-  border: 1px solid #ddd;
+  padding: 14px 16px;
+  margin-bottom: 18px;
+
+  border-radius: 14px;
+  border: 1px solid rgba(210, 210, 210, 0.65);
+
+  background: rgba(255, 255, 255, 0.85);
+  backdrop-filter: blur(8px);
+
+  font-size: 15px;
+  color: #333;
+
+  transition: all 0.25s ease;
 }
 
+.exp-form input:focus,
+.exp-form textarea:focus {
+  border-color: #d32163;
+  background: rgba(255, 255, 255, 0.95);
+  box-shadow: 0 8px 18px rgba(211, 33, 99, 0.15);
+}
+
+/* File Upload */
+.exp-form input[type="file"] {
+  border: 1px dashed rgba(210, 210, 210, 0.8);
+  background: rgba(255, 255, 255, 0.7);
+  padding: 16px;
+  cursor: pointer;
+}
+
+.exp-form input[type="file"]:hover {
+  border-color: #d32163;
+}
+
+/* Submit Button */
 .exp-btn {
   width: 100%;
-  padding: 14px;
-  background: linear-gradient(90deg, #d32163, #ff5a8f);
+  padding: 16px;
+  border-radius: 16px;
   border: none;
+
+  background: linear-gradient(135deg, #d32163, #ff5fa0);
   color: white;
-  font-size: 16px;
-  border-radius: 10px;
+
+  font-size: 17px;
+  font-weight: 600;
   cursor: pointer;
+
+  transition: 0.3s ease;
+  box-shadow: 0 8px 20px rgba(211, 33, 99, 0.35);
+}
+
+.exp-btn:hover {
+  transform: translateY(-2px);
+  box-shadow: 0 12px 30px rgba(211, 33, 99, 0.45);
+}
+
+/* ===========================
+   REVIEWS LIST
+=========================== */
+
+.exp-list {
+  display: flex;
+  flex-direction: column;
+  gap: 25px;
+}
+
+/* Review Card */
+/* ===========================
+   PREMIUM LEFT-ALIGNED REVIEW CARD
+=========================== */
+
+.exp-card {
+  width: 100%;
+  padding: 22px;
+  border-radius: 18px;
+
+  background: rgba(255, 255, 255, 0.55);
+  backdrop-filter: blur(18px);
+
+  border: 1px solid rgba(255, 255, 255, 0.45);
+  box-shadow: 0 6px 20px rgba(0, 0, 0, 0.09),
+    0 0 1px rgba(255, 255, 255, 0.8) inset;
+
+  transition: all 0.25s ease;
+}
+
+.exp-card:hover {
+  transform: translateY(-3px);
+  box-shadow: 0 14px 32px rgba(0, 0, 0, 0.15);
+}
+
+/* HEADER: PHOTO + NAME ROW */
+.exp-card-header {
+  display: flex;
+  align-items: center;
+  gap: 15px;
+  margin-bottom: 10px;
+}
+
+/* PHOTO */
+.exp-img-box img {
+  width: 70px;
+  height: 70px;
+  border-radius: 12px;
+  object-fit: cover;
+  object-position: center;
+
+  box-shadow: 0 6px 18px rgba(0, 0, 0, 0.12),
+    0 0 1px rgba(255, 255, 255, 0.5) inset;
+}
+
+/* NAME */
+.exp-name {
+  font-size: 18px;
+  font-weight: 700;
+  color: #d32163;
+  margin: 0;
+}
+
+/* REVIEW TEXT FULL WIDTH */
+.exp-message {
+  margin-top: 8px;
+  color: #333;
+  font-size: 15px;
+  line-height: 1.55;
+  opacity: 0.85;
+}
+
+/* ===========================
+   GLASS FORM CONTAINER
+=========================== */
+.exp-form-box {
+  padding: 35px;
+  border-radius: 22px;
+
+  background: rgba(255, 255, 255, 0.45);
+  backdrop-filter: blur(18px);
+  -webkit-backdrop-filter: blur(18px);
+
+  border: 1px solid rgba(255, 255, 255, 0.35);
+  box-shadow: 0 10px 28px rgba(0, 0, 0, 0.12);
+}
+
+/* Title + Subtitle */
+.exp-form-title {
+  font-size: 24px;
+  font-weight: 700;
+  margin-bottom: 6px;
+  color: #222;
+}
+
+.exp-form-sub {
+  font-size: 14px;
+  color: #666;
+  margin-bottom: 25px;
+}
+
+/* ===========================
+   FORM ROWS
+=========================== */
+.exp-row {
+  display: flex;
+  gap: 18px;
+  width: 100%;
+}
+
+.exp-field {
+  flex: 1;
+  display: flex;
+  flex-direction: column;
+}
+
+.exp-field label {
+  font-size: 13px;
+  font-weight: 600;
+  color: #444;
+  margin-bottom: 6px;
+}
+
+/* Glass Inputs */
+.exp-field input,
+.exp-field textarea {
+  width: 100%;
+  padding: 14px 16px;
+  border-radius: 14px;
+
+  background: rgba(255, 255, 255, 0.65);
+  border: 1px solid rgba(200, 200, 200, 0.6);
+
+  font-size: 15px;
+  color: #333;
+
+  backdrop-filter: blur(8px);
+  transition: all 0.25s ease;
+}
+
+.exp-field input:focus,
+.exp-field textarea:focus {
+  border-color: #0078ff;
+  background: rgba(255, 255, 255, 0.85);
+  box-shadow: 0 0 0 3px rgba(0, 120, 255, 0.2);
+}
+
+.mt-15 {
+  margin-top: 15px;
+}
+
+/* ===========================
+   BUTTON ROW
+=========================== */
+.exp-btn-row {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-top: 22px;
+}
+
+/* Photo (SVG) Button */
+.file-btn {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+
+  padding: 12px 20px;
+  border-radius: 12px;
+
+  background: rgba(255, 255, 255, 0.55);
+  border: 1px solid rgba(210, 210, 210, 0.8);
+  cursor: pointer;
+
+  transition: all 0.25s ease;
+}
+
+.file-btn:hover {
+  background: rgba(255, 255, 255, 0.75);
+}
+
+.file-btn input {
+  display: none;
+}
+
+/* Submit Button */
+.post-btn {
+  padding: 12px 28px;
+  border-radius: 12px;
+  border: none;
+
+  background: linear-gradient(135deg, #409cff, #0078ff);
+  color: white;
+
+  font-size: 16px;
+  font-weight: 600;
+  cursor: pointer;
+
+  transition: 0.3s ease;
+  box-shadow: 0 6px 18px rgba(0, 120, 255, 0.3);
+}
+
+.post-btn:hover {
+  transform: translateY(-2px);
+  box-shadow: 0 10px 24px rgba(0, 120, 255, 0.45);
+}
+.exp-inner-divider {
+  width: 100%;
+  height: 1px;
+  background: rgba(0, 0, 0, 0.08);
+  margin: 10px 0 12px;
+  border-radius: 50px;
+}
+
+/* Responsive */
+@media (max-width: 768px) {
+  .exp-row {
+    flex-direction: column;
+  }
+}
+.photo-preview-box {
+  margin-top: 12px;
+  display: flex;
+  justify-content: flex-start;
+}
+
+.photo-preview-img {
+  width: 80px;
+  height: 80px;
+  border-radius: 14px;
+  object-fit: cover;
+  box-shadow: 0 6px 14px rgba(0, 0, 0, 0.15);
+  border: 1px solid #ddd;
+}
+.exp-actions-row {
+  display: flex;
+  align-items: center;
+  margin-top: 20px;
+  gap: 16px;
+}
+
+.exp-actions-row > .photo-preview-inline {
+  flex-shrink: 0; /* Keep size fixed */
+}
+
+.file-btn-inline {
+  flex-shrink: 0; /* Keep upload button fixed */
+}
+
+.post-btn-inline {
+  margin-left: auto; /* Pushes post button to the right end */
+}
+
+/* Preview Image */
+.photo-preview-inline {
+  width: 60px;
+  height: 60px;
+  border-radius: 12px;
+  object-fit: cover;
+  border: 1px solid #ccc;
+  box-shadow: 0 3px 8px rgba(0, 0, 0, 0.12);
+}
+
+/* Upload Button (Inline Style) */
+.file-btn-inline {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  padding: 10px 16px;
+  border-radius: 12px;
+  background: rgba(255, 255, 255, 0.55);
+  border: 1px solid rgba(210, 210, 210, 0.8);
+  cursor: pointer;
+  transition: 0.25s ease;
+}
+
+.file-btn-inline:hover {
+  background: rgba(255, 255, 255, 0.8);
+}
+
+.file-btn-inline input {
+  display: none;
+}
+
+/* Post button small version */
+.post-btn-inline {
+  padding: 12px 22px;
+  border-radius: 12px;
+  border: none;
+  background: linear-gradient(135deg, #409cff, #0078ff);
+  color: white;
+  font-size: 15px;
+  font-weight: 600;
+  cursor: pointer;
+  transition: 0.3s ease;
+  box-shadow: 0 6px 18px rgba(0, 120, 255, 0.25);
+}
+
+.post-btn-inline:hover {
+  transform: translateY(-2px);
+  box-shadow: 0 10px 24px rgba(0, 120, 255, 0.35);
+}
+.review-photo-wrapper {
+  width: 70px;
+  height: 70px;
+  border-radius: 14px; /* Rounded corners */
+  background: rgba(245, 245, 245, 0.8); /* Soft neutral background */
+  border: 1px solid rgba(0, 0, 0, 0.06); /* Light border */
+  
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  overflow: hidden; /* Ensures photo stays inside rounded frame */
+}
+
+.review-photo {
+  width: 90%;
+  height: 90%;
+  object-fit: contain; /* Never crop */
+  border-radius: 12px; /* Slight rounding on inner image */
+}
+
+/* ===========================
+   Mobile Responsive
+=========================== */
+
+@media (max-width: 900px) {
+  .exp-container {
+    flex-direction: column;
+  }
+
+  .exp-left,
+  .exp-right {
+    width: 100%;
+  }
+}
+
+/* Animation */
+@keyframes fadeUp {
+  from {
+    opacity: 0;
+    transform: translateY(10px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
 }
