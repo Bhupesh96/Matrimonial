@@ -132,13 +132,14 @@ const MainMenu = () => {
                         <Link to="/contact">Contact</Link>
                       </li>
 
-                      {/* --- HIDDEN IF LOGGED IN --- */}
+                      {/* SHOW LOGIN ONLY IF NOT LOGGED IN */}
                       {!profileName && (
                         <li>
                           <Link to="/login">Login</Link>
                         </li>
                       )}
 
+                      {/* SHOW REGISTER ONLY IF NOT LOGGED IN */}
                       {!profileName && (
                         <li>
                           <Link to="/sign-up">Register</Link>
@@ -152,51 +153,61 @@ const MainMenu = () => {
                   <Link to="/community">Community</Link>
                 </li>
 
-                {/* --- HIDDEN IF LOGGED IN --- */}
                 {!profileName && (
                   <li>
                     <Link to="/sign-up">Register</Link>
                   </li>
                 )}
 
+                {/* DASHBOARD MENU */}
                 <li className="smenu-pare">
                   <span className="smenu">Dashboard</span>
                   <div className="smenu-open smenu-single">
                     <ul>
-                      <li>
-                        <Link to={`/user-profile/${profileID}`}>
-                          My profile
-                        </Link>
-                      </li>
-                      <li>
-                        <Link to="/user-profile-edit">Edit full profile</Link>
-                      </li>
+                      {/* 1. MY PROFILE (Only if Logged In) */}
+                      {profileName && (
+                        <li>
+                          <Link to={`/user-profile/${profileID}`}>
+                            My profile
+                          </Link>
+                        </li>
+                      )}
 
-                      {/* --- HIDDEN IF LOGGED IN --- */}
+                      {/* 2. EDIT PROFILE (Only if Logged In) */}
+                      {profileName && (
+                        <li>
+                          <Link to="/user-profile-edit">Edit full profile</Link>
+                        </li>
+                      )}
+
+                      {/* 3. LOGIN (Only if NOT Logged In) */}
                       {!profileName && (
                         <li>
                           <Link to="/login">Login</Link>
                         </li>
                       )}
 
-                      <li>
-                        <Link
-                          to="#"
-                          onClick={(e) => {
-                            e.preventDefault(); // stop navigation
-                            handleLogout(); // run logout
-                          }}
-                        >
-                          Logout
-                        </Link>
-                      </li>
+                      {/* 4. LOGOUT (Only if Logged In) */}
+                      {profileName && (
+                        <li>
+                          <Link
+                            to="#"
+                            onClick={(e) => {
+                              e.preventDefault();
+                              handleLogout();
+                            }}
+                          >
+                            Logout
+                          </Link>
+                        </li>
+                      )}
                     </ul>
                   </div>
                 </li>
               </ul>
             </div>
 
-            {/* USER PROFILE */}
+            {/* USER PROFILE BADGE (Only if Logged In) */}
             {profileName && (
               <div className="al">
                 <div className="head-pro">
