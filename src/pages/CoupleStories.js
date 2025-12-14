@@ -1,4 +1,5 @@
 import React, { useEffect, useState } from "react";
+import { useLocation } from "react-router-dom"; // Optional: Use this if you are using react-router
 import "../assets/css/CoupleStories.css";
 
 import Preloader from "../components/Preloader";
@@ -17,7 +18,7 @@ const CoupleStories = () => {
   const [stories, setStories] = useState([]);
   const [loading, setLoading] = useState(true);
 
-  /* LIGHTBOX */
+  // LIGHTBOX STATE
   const [lightboxOpen, setLightboxOpen] = useState(false);
   const [galleryImages, setGalleryImages] = useState([]);
   const [currentIndex, setCurrentIndex] = useState(0);
@@ -41,6 +42,7 @@ const CoupleStories = () => {
       ? img
       : `https://techwithus.in/matro/admin/plug/${img}`;
 
+  // 1. FETCH DATA
   useEffect(() => {
     const loadStories = async () => {
       try {
@@ -58,6 +60,28 @@ const CoupleStories = () => {
     };
     loadStories();
   }, []);
+
+  // 2. HANDLE SCROLLING AFTER DATA LOADS
+  useEffect(() => {
+    // Only run if not loading and stories exist
+    if (!loading && stories.length > 0) {
+      // Get the hash from URL (e.g., #story-4)
+      const hash = window.location.hash;
+
+      if (hash) {
+        // Remove the '#' to get the ID
+        const id = hash.substring(1);
+        const element = document.getElementById(id);
+
+        if (element) {
+          // Timeout ensures DOM is fully painted before scrolling
+          setTimeout(() => {
+            element.scrollIntoView({ behavior: "smooth", block: "center" });
+          }, 100);
+        }
+      }
+    }
+  }, [loading, stories]); // Dependencies ensure this runs after data fetch
 
   return (
     <div>
@@ -87,7 +111,12 @@ const CoupleStories = () => {
               );
 
               return (
-                <div className="story-card" key={story.StoryID}>
+                <div
+                  className="story-card"
+                  key={story.StoryID}
+                  // 3. IMPORTANT: ADD UNIQUE ID HERE
+                  id={`story-${story.StoryID}`}
+                >
                   {/* TITLE */}
                   <div className="cs-title-box">
                     <h2 className="cs-title">

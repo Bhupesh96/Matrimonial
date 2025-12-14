@@ -23,6 +23,7 @@ import PhotoGallery from "../components/PhotoGallery";
 import BlogSection from "../components/BlogSection";
 import FindMatchSection from "../components/FindMatchSection";
 import CopyRight from "../components/CopyRight";
+import MyAboutUS from "../components/MyAboutUS";
 
 const Home = () => {
   // 2. Add loading state, default to true
@@ -60,13 +61,13 @@ const Home = () => {
       <QuickAccess />
       <CustomerReviews />
       <WhyChooseUs />
-      <AboutSection2 />
-      <AboutWelcome />
-      <AboutCounter />
+      <MyAboutUS/>
+      {/* <AboutWelcome /> */}
+      {/* <AboutCounter /> */}
       <HowItWorks />
       <RecentCouples />
       <MeetOurTeam />
-      <PhotoGallery />
+      {/* <PhotoGallery /> */}
       <BlogSection />
       <FindMatchSection />
       <Footer />

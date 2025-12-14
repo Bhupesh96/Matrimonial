@@ -3,9 +3,8 @@ import { Link } from "react-router-dom";
 import AlertService from "../services/AlertServices";
 import { logoutUser } from "../api";
 import { useNavigate } from "react-router-dom";
-
 import { useRef } from "react";
-import MobileMenu from "./MobileMenu";
+
 const MainMenu = () => {
   const [profileName, setProfileName] = useState("");
   const [profilePhoto, setProfilePhoto] = useState("");
@@ -13,13 +12,11 @@ const MainMenu = () => {
 
   const navigate = useNavigate();
   const menuRef = useRef(null);
+
   const handleLogout = async () => {
     try {
       await logoutUser();
-
       AlertService.showSuccessAndRedirect("Logout successful", navigate, "/");
-
-      // Optional redirect:
       navigate("/");
     } catch (err) {
       AlertService.showError(err.message);
@@ -128,42 +125,25 @@ const MainMenu = () => {
                       <li>
                         <Link to="/all-profiles">All profiles</Link>
                       </li>
-                      {/* <li>
-                        <a href="profile-details.html">Profile details</a>
-                      </li> */}
-                      {/* <li>
-                        <a href="wedding.html">Wedding</a>
-                      </li> */}
-                      {/* <li>
-                        <a href="blog.html">Blog</a>
-                      </li> */}
-                      {/* <li>
-                        <Link to="/blog-detail">Blog detail</Link>
-                      </li> */}
                       <li>
                         <Link to="/about">About</Link>
                       </li>
                       <li>
                         <Link to="/contact">Contact</Link>
                       </li>
-                      {/* <li>
-                        <a href="photo-gallery.html">Photo gallery</a>
-                      </li> */}
-                      {/* <li>
-                        <a href="photo-gallery-1.html">Photo gallery 1</a>
-                      </li> */}
-                      <li>
-                        <Link to="/login">Login</Link>
-                      </li>
+
+                      {/* --- HIDDEN IF LOGGED IN --- */}
+                      {!profileName && (
+                        <li>
+                          <Link to="/login">Login</Link>
+                        </li>
+                      )}
+
                       {!profileName && (
                         <li>
                           <Link to="/sign-up">Register</Link>
                         </li>
                       )}
-
-                      {/* <li>
-                        <a href="plans.html">Pricing plans</a>
-                      </li> */}
                     </ul>
                   </div>
                 </li>
@@ -171,6 +151,8 @@ const MainMenu = () => {
                 <li>
                   <Link to="/community">Community</Link>
                 </li>
+
+                {/* --- HIDDEN IF LOGGED IN --- */}
                 {!profileName && (
                   <li>
                     <Link to="/sign-up">Register</Link>
@@ -186,24 +168,17 @@ const MainMenu = () => {
                           My profile
                         </Link>
                       </li>
-                      {/* <li>
-                        <a href="user-interests.html">Interests</a>
-                      </li> */}
-                      {/* <li>
-                        <a href="user-chat.html">Chat lists</a>
-                      </li> */}
-                      {/* <li>
-                        <a href="user-plan.html">My plan details</a>
-                      </li> */}
-                      {/* <li>
-                        <Link to="user-profile-edit">Profile settings</Link>
-                      </li> */}
                       <li>
                         <Link to="/user-profile-edit">Edit full profile</Link>
                       </li>
-                      <li>
-                        <Link to="/login">Login</Link>
-                      </li>
+
+                      {/* --- HIDDEN IF LOGGED IN --- */}
+                      {!profileName && (
+                        <li>
+                          <Link to="/login">Login</Link>
+                        </li>
+                      )}
+
                       <li>
                         <Link
                           to="#"

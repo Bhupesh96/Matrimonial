@@ -15,7 +15,7 @@ import { fetchCommunityEvents } from "../api";
 
 const Community = () => {
   const [posts, setPosts] = useState([]);
-  const [loading, setLoading] = useState(true); // ⬅ added
+  const [loading, setLoading] = useState(true);
 
   useEffect(() => {
     const loadEvents = async () => {
@@ -31,19 +31,39 @@ const Community = () => {
       } catch (err) {
         console.log("Community API Error:", err);
       } finally {
-        setLoading(false); // ⬅ hide loader
+        setLoading(false);
       }
     };
 
     loadEvents();
   }, []);
 
+  // --- SCROLL LOGIC ADDED HERE ---
+  useEffect(() => {
+    // Check if data is loaded and a hash exists in URL
+    if (!loading && posts.length > 0 && window.location.hash) {
+      const id = window.location.hash.substring(1); // remove '#'
+      const element = document.getElementById(id);
+
+      if (element) {
+        setTimeout(() => {
+          element.scrollIntoView({ behavior: "smooth", block: "center" });
+          // Optional: Add a temporary highlight effect
+          element.style.transition = "background-color 0.5s";
+          element.style.backgroundColor = "#fff9db"; // light yellow highlight
+          setTimeout(() => {
+            element.style.backgroundColor = "transparent";
+          }, 1500);
+        }, 100);
+      }
+    }
+  }, [loading, posts]);
+
   const fullURL = (img) =>
     img.startsWith("http")
       ? img
       : `https://techwithus.in/matro/admin/plug/${img}`;
 
-  // ---------- PRELOADER HERE ----------
   if (loading) return <Preloader />;
 
   return (
@@ -68,7 +88,12 @@ const Community = () => {
 
           <div className="community-mail-wrapper">
             {posts.map((post) => (
-              <div className="mail-item" key={post.EventID}>
+              <div
+                className="mail-item"
+                key={post.EventID}
+                // --- ID ADDED HERE FOR SCROLLING ---
+                id={`event-${post.EventID}`}
+              >
                 <h2 className="mail-subject">{post.EventTitle}</h2>
                 <p className="mail-salutation">Dear Community Members,</p>
 

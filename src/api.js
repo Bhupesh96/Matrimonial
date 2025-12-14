@@ -362,7 +362,7 @@ export const checkProfileCompleteness = async (userID) => {
     FETCH COMMUNITY EVENTS (Active + Expired)
   ---------------------------------------------------- */
 export const fetchCommunityEvents = async () => {
-  const url = `${API_BASE_URL}?api=list_community`;
+  const url = `${API_BASE_URL}?api=list_community&active=1`;
 
   const data = await apiFetch(url);
 
@@ -370,7 +370,7 @@ export const fetchCommunityEvents = async () => {
   return data.data || [];
 };
 export const fetchCoupleStories = async () => {
-  const url = `${API_BASE_URL}?api=list_couple_stories`;
+  const url = `${API_BASE_URL}?api=list_couple_stories&active=1`;
   const data = await apiFetch(url);
 
   if (!data || data.status !== true) throw new Error(data.message);

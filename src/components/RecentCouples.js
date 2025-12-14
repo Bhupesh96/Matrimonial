@@ -1,54 +1,26 @@
+import React, { useEffect, useState } from "react";
+// IMPORT NOTE: Adjust this path to point to your actual api.js file location
+import { fetchCoupleStories } from "../api";
+
 const RecentCouples = () => {
-  const couples = [
-    {
-      img: "images/couples/6.jpg",
-      name: "Dany & July",
-      location: "New York",
-      link: "wedding-video.html",
-    },
-    {
-      img: "images/couples/7.jpg",
-      name: "Dany & July",
-      location: "New York",
-      link: "wedding-video.html",
-    },
-    {
-      img: "images/couples/8.jpg",
-      name: "Dany & July",
-      location: "New York",
-      link: "wedding-video.html",
-    },
-    {
-      img: "images/couples/9.jpg",
-      name: "Dany & July",
-      location: "New York",
-      link: "wedding-video.html",
-    },
-    {
-      img: "images/couples/10.jpg",
-      name: "Dany & July",
-      location: "New York",
-      link: "wedding-video.html",
-    },
-    {
-      img: "images/couples/3.jpg",
-      name: "Dany & July",
-      location: "New York",
-      link: "wedding-video.html",
-    },
-    {
-      img: "images/couples/4.jpg",
-      name: "Dany & July",
-      location: "New York",
-      link: "wedding-video.html",
-    },
-    {
-      img: "images/couples/5.jpg",
-      name: "Dany & July",
-      location: "New York",
-      link: "wedding.html",
-    },
-  ];
+  const [couples, setCouples] = useState([]);
+
+  // CONFIG: Base URL for images based on your API location.
+  // Since api is at .../admin/plug/api/, images are likely at .../admin/
+  const IMG_BASE_URL = "https://techwithus.in/matro/admin/plug/";
+
+  useEffect(() => {
+    const loadData = async () => {
+      try {
+        const data = await fetchCoupleStories();
+        setCouples(data);
+      } catch (error) {
+        console.error("Error fetching couple stories:", error);
+      }
+    };
+
+    loadData();
+  }, []);
 
   return (
     <section>
@@ -68,22 +40,40 @@ const RecentCouples = () => {
 
         <div className="hom-coup-test">
           <ul className="couple-sli">
-            {couples.map((couple, index) => (
-              <li key={index}>
-                <div className="hom-coup-box">
-                  <span className="leaf"></span>
-                  <img src={couple.img} alt={couple.name} loading="lazy" />
-                  <div className="bx">
-                    <h4>
-                      {couple.name} <span>{couple.location}</span>
-                    </h4>
-                    <a href={couple.link} className="sml-cta cta-dark">
-                      View more
-                    </a>
+            {couples && couples.length > 0 ? (
+              couples.map((couple) => (
+                <li key={couple.StoryID}>
+                  <div className="hom-coup-box">
+                    <span className="leaf"></span>
+                    <img
+                      src={`${IMG_BASE_URL}${couple.StoryImage}`}
+                      alt={couple.CoupleName}
+                      loading="lazy"
+                      onError={(e) => {
+                        // Optional: Fallback if image fails to load
+                        e.target.onerror = null;
+                        e.target.src = "images/couples/default.jpg";
+                      }}
+                    />
+                    <div className="bx">
+                      <h4>
+                        {couple.CoupleName}
+                        {/* Displaying StoryTitle where Location used to be */}
+                        <span>{couple.StoryTitle}</span>
+                      </h4>
+                      <a
+                        href={`/couple-stories#story-${couple.StoryID}`}
+                        className="sml-cta cta-dark"
+                      >
+                        View more
+                      </a>
+                    </div>
                   </div>
-                </div>
-              </li>
-            ))}
+                </li>
+              ))
+            ) : (
+              <div className="text-center">No couple stories found.</div>
+            )}
           </ul>
         </div>
       </div>
