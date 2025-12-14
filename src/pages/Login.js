@@ -76,7 +76,7 @@ const Login = () => {
 
     try {
       const data = await loginUser({ identifier, password });
-
+      console.log("Login data: ", JSON.stringify(data, null, 2));
       if (data.data && data.data.ProfileID) {
         localStorage.setItem("profileID", data.data.ProfileID);
         localStorage.setItem("userID", data.data.UserID);

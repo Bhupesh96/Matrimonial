@@ -201,7 +201,7 @@ const Experiences = () => {
                         className="review-photo"
                       />
                     </div>
-                    <h5 className="exp-name">{r.PersonName}</h5>
+                    <h5>{r.PersonName}</h5>
                   </div>
 
                   <div className="exp-inner-divider"></div>
@@ -213,7 +213,6 @@ const Experiences = () => {
           </div>
         </div>
       </div>
-
       <Footer />
       <CopyRight />
     </div>

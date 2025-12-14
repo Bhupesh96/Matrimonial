@@ -6,17 +6,16 @@ const API_BASE_URL = process.env.REACT_APP_API_URL;
 const apiFetch = async (url, options = {}) => {
   try {
     const res = await fetch(url, {
-      credentials: "include", // <-- FIX FOR LIVE SERVER
+      credentials: "include", // always enforced
       ...options,
+      credentials: "include", // enforce again
     });
 
     const data = await res.json();
 
     if (data.status === 401) {
-      if (localStorage.getItem("profileID")) {
-        localStorage.clear();
-        window.location.href = `${process.env.REACT_APP_BASENAME || ""}/login`;
-      }
+      localStorage.clear();
+      window.location.href = `${process.env.REACT_APP_BASENAME || ""}/login`;
       return data;
     }
 
@@ -91,7 +90,6 @@ export const getProfileDetails = async () => {
 
   const data = await apiFetch(url, {
     method: "GET",
-    credentials: "include",
   });
 
   if (!data || data.status !== 200) throw new Error(data.message);
@@ -164,7 +162,7 @@ const PROFILE_FIELDS = [
   "ContactCity",
 ];
 
-export const updateProfile = async (payload, profilePhoto) => {
+export const updateProfile = async (payload) => {
   const profileID = localStorage.getItem("profileID");
   const userID = localStorage.getItem("userID");
 
@@ -173,22 +171,21 @@ export const updateProfile = async (payload, profilePhoto) => {
 
   const formData = new FormData();
 
-  PROFILE_FIELDS.forEach((field) => {
-    if (payload[field] !== undefined && payload[field] !== null) {
-      formData.append(field, payload[field]);
+  Object.keys(payload).forEach((key) => {
+    if (payload[key] !== undefined && payload[key] !== null) {
+      formData.append(key, payload[key]);
     }
   });
-
-  if (profilePhoto) {
-    formData.append("ProfilePhoto", profilePhoto);
-  }
 
   const data = await apiFetch(`${API_BASE_URL}?api=update_profile`, {
     method: "POST",
     body: formData,
   });
 
-  if (!data || data.status !== 200) throw new Error(data.message);
+  if (!data || data.status !== 200) {
+    throw new Error(data.message || "Profile update failed");
+  }
+
   return data;
 };
 
@@ -214,7 +211,6 @@ export const fetchApprovedProfiles = async () => {
 
   const data = await apiFetch(url, {
     method: "GET",
-    credentials: "include",
   });
 
   if (!data || data.status !== 200) throw new Error(data.message);
@@ -224,21 +220,29 @@ export const fetchApprovedProfiles = async () => {
 /* ----------------------------------------------------
     UPDATE PROFILE PICTURE
   ---------------------------------------------------- */
-export const updateProfilePicture = async (file) => {
-  const profileID = localStorage.getItem("profileID");
-  const userID = localStorage.getItem("userID");
-
+export const updateProfilePicture = async (profilePhoto, galleryFiles = []) => {
   const formData = new FormData();
-  formData.append("ProfileID", profileID);
-  formData.append("UserID", userID);
-  formData.append("ProfilePhoto", file);
+
+  formData.append("ProfileID", localStorage.getItem("profileID"));
+  formData.append("UserID", localStorage.getItem("userID"));
+
+  if (profilePhoto) {
+    formData.append("ProfilePhoto", profilePhoto);
+  }
+
+  galleryFiles.forEach((file) => {
+    formData.append("GalleryImages[]", file);
+  });
 
   const data = await apiFetch(`${API_BASE_URL}?api=update_profile_picture`, {
     method: "POST",
     body: formData,
   });
 
-  if (!data || data.status !== 200) throw new Error(data.message);
+  if (!data || data.status !== 200) {
+    throw new Error(data.message || "Image upload failed");
+  }
+
   return data;
 };
 
@@ -309,7 +313,6 @@ export const logoutUser = async () => {
 
   const data = await apiFetch(url, {
     method: "POST",
-    credentials: "include",
   });
 
   // Always clear localStorage

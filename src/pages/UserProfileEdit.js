@@ -12,7 +12,12 @@ import CopyRight from "../components/CopyRight";
 import Footer from "../components/Footer";
 import Preloader from "../components/Preloader";
 
-import { getProfileDetails, updateProfile, fetchMasterData } from "../api";
+import {
+  getProfileDetails,
+  updateProfile,
+  fetchMasterData,
+  updateProfilePicture,
+} from "../api";
 import AlertService from "../services/AlertServices";
 
 const renderOptions = (list) =>
@@ -31,6 +36,8 @@ const UserProfileEdit = () => {
   const [profileData, setProfileData] = useState({});
   const [profilePhoto, setProfilePhoto] = useState(null);
   const [profilePhotoName, setProfilePhotoName] = useState("");
+  const [galleryFiles, setGalleryFiles] = useState([]);
+  const [galleryPreview, setGalleryPreview] = useState([]);
 
   const [dropdowns, setDropdowns] = useState({
     cities: [],
@@ -163,6 +170,15 @@ const UserProfileEdit = () => {
       ProfilePhoto: URL.createObjectURL(e.target.files[0]),
     }));
   };
+  const onGalleryChange = (e) => {
+    const files = Array.from(e.target.files || []);
+    if (!files.length) return;
+
+    setGalleryFiles(files);
+
+    const previews = files.map((file) => URL.createObjectURL(file));
+    setGalleryPreview(previews);
+  };
 
   const buildPayload = () => {
     const p = { ...profileData };
@@ -219,7 +235,14 @@ const UserProfileEdit = () => {
 
     try {
       const payload = buildPayload();
-      await updateProfile(payload, profilePhoto);
+
+      // 1️⃣ Update profile TEXT data only
+      await updateProfile(payload);
+
+      // 2️⃣ Upload profile photo + gallery (only if selected)
+      if (profilePhoto || galleryFiles.length > 0) {
+        await updateProfilePicture(profilePhoto, galleryFiles);
+      }
 
       AlertService.showSuccessAndRedirect(
         "Profile updated successfully!",
@@ -495,6 +518,62 @@ const UserProfileEdit = () => {
                 <div style={{ marginTop: 8, fontSize: 13 }}>
                   {profilePhotoName || "No file chosen"}
                 </div>
+              </div>
+              {/* ---------------- GALLERY UPLOAD ---------------- */}
+              <div className="mt-4">
+                <h5 style={{ fontWeight: 600 }}>Photo Gallery</h5>
+
+                <label htmlFor="galleryInput" style={{ cursor: "pointer" }}>
+                  <div
+                    style={{
+                      padding: "10px 18px",
+                      borderRadius: 30,
+                      backgroundColor: "#6c757d",
+                      color: "#fff",
+                      display: "inline-block",
+                      marginBottom: 12,
+                    }}
+                  >
+                    Upload Gallery Photos
+                  </div>
+                </label>
+
+                <input
+                  id="galleryInput"
+                  type="file"
+                  accept="image/*"
+                  multiple
+                  style={{ display: "none" }}
+                  onChange={onGalleryChange}
+                />
+
+                {/* PREVIEW */}
+                {galleryPreview.length > 0 && (
+                  <div
+                    style={{
+                      display: "flex",
+                      gap: 10,
+                      flexWrap: "wrap",
+                      marginTop: 10,
+                    }}
+                  >
+                    {galleryPreview.map((img, i) => (
+                      <img
+                        key={i}
+                        src={img}
+                        alt="preview"
+                        style={{
+                          width: 90,
+                          height: 90,
+                          objectFit: "cover",
+                          borderRadius: 10,
+                          border: "1px solid #ddd",
+                          boxShadow: "0 3px 8px rgba(0,0,0,0.15)",
+                        }}
+                      />
+                    ))}
+                  </div>
+                )}
               </div>
             </div>
           </div>

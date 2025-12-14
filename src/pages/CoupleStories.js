@@ -17,61 +17,45 @@ const CoupleStories = () => {
   const [stories, setStories] = useState([]);
   const [loading, setLoading] = useState(true);
 
-  // Lightbox state
+  /* LIGHTBOX */
   const [lightboxOpen, setLightboxOpen] = useState(false);
-  const [currentImage, setCurrentImage] = useState("");
   const [galleryImages, setGalleryImages] = useState([]);
   const [currentIndex, setCurrentIndex] = useState(0);
 
   const openLightbox = (images, index) => {
     setGalleryImages(images);
     setCurrentIndex(index);
-    setCurrentImage(images[index]);
     setLightboxOpen(true);
   };
 
   const closeLightbox = () => setLightboxOpen(false);
-
-  const nextImage = () => {
-    const next = (currentIndex + 1) % galleryImages.length;
-    setCurrentIndex(next);
-    setCurrentImage(galleryImages[next]);
-  };
-
-  const prevImage = () => {
-    const prev =
-      (currentIndex - 1 + galleryImages.length) % galleryImages.length;
-    setCurrentIndex(prev);
-    setCurrentImage(galleryImages[prev]);
-  };
+  const nextImage = () =>
+    setCurrentIndex((currentIndex + 1) % galleryImages.length);
+  const prevImage = () =>
+    setCurrentIndex(
+      (currentIndex - 1 + galleryImages.length) % galleryImages.length
+    );
 
   const fullURL = (img) =>
     img.startsWith("http")
       ? img
       : `https://techwithus.in/matro/admin/plug/${img}`;
-  useEffect(() => {
-    window.scrollTo(0, 0);
-  }, []);
 
   useEffect(() => {
     const loadStories = async () => {
       try {
         let result = await fetchCoupleStories();
-
-        const activeStories = result.filter((s) => Number(s.IsActive) === 1);
-
-        const sorted = activeStories.sort(
+        const active = result.filter((s) => Number(s.IsActive) === 1);
+        active.sort(
           (a, b) => new Date(b.WeddingDate) - new Date(a.WeddingDate)
         );
-
-        setStories(sorted);
+        setStories(active);
       } catch (err) {
-        console.log("Couple Stories Fetch Error:", err);
+        console.log("Couple Stories Error:", err);
       } finally {
-        setLoading(false); // 🔥 Preloader will hide here
+        setLoading(false);
       }
     };
-
     loadStories();
   }, []);
 
@@ -87,7 +71,7 @@ const CoupleStories = () => {
       <DashboardMenu />
 
       <section className="qa-wrapper">
-        <div className="container">
+        <div className="container cs-container">
           <div className="home-tit">
             <p>Heart-warming journeys from our trusted community.</p>
             <h2>
@@ -99,40 +83,40 @@ const CoupleStories = () => {
           <div className="story-list-wrapper">
             {stories.map((story) => {
               const gallery = JSON.parse(story.AdditionalImages || "[]").map(
-                (i) => fullURL(i)
+                fullURL
               );
 
               return (
-                <div className="story-mail-item" key={story.StoryID}>
-                  {/* TITLE BOX */}
-                  <div className="cs-box cs-title-box">
+                <div className="story-card" key={story.StoryID}>
+                  {/* TITLE */}
+                  <div className="cs-title-box">
                     <h2 className="cs-title">
                       {story.CoupleName} – {story.StoryTitle}
                     </h2>
                     <p className="cs-date">Wedding Date: {story.WeddingDate}</p>
                   </div>
 
-                  {/* MAIN IMAGE (unchanged) */}
+                  {/* MAIN IMAGE */}
                   <img
                     src={fullURL(story.StoryImage)}
-                    alt={story.CoupleName}
                     className="story-main-img"
+                    alt={story.CoupleName}
                     onClick={() => openLightbox([fullURL(story.StoryImage)], 0)}
                   />
 
-                  {/* SHORT STORY BOX */}
-                  <div className="cs-box cs-short-box">
-                    <p className="cs-short-title">Short Story</p>
-                    <p className="cs-short">{story.ShortDescription}</p>
+                  {/* SHORT STORY */}
+                  <div className="cs-box">
+                    <p className="cs-box-title">Short Story</p>
+                    <p className="cs-text">{story.ShortDescription}</p>
                   </div>
 
-                  {/* FULL STORY BOX */}
-                  <div className="cs-box cs-long-box">
-                    <p className="cs-long-title">Full Story</p>
-                    <p className="cs-long">{story.FullStory}</p>
+                  {/* FULL STORY */}
+                  <div className="cs-box">
+                    <p className="cs-box-title">Full Story</p>
+                    <p className="cs-text">{story.FullStory}</p>
                   </div>
 
-                  {/* GALLERY (unchanged) */}
+                  {/* GALLERY */}
                   {gallery.length > 0 && (
                     <div className="story-gallery">
                       {gallery.map((img, i) => (
@@ -159,9 +143,11 @@ const CoupleStories = () => {
           <span className="lightbox-close" onClick={closeLightbox}>
             &times;
           </span>
-
-          <img src={currentImage} className="lightbox-img" alt="Preview" />
-
+          <img
+            src={galleryImages[currentIndex]}
+            className="lightbox-img"
+            alt=""
+          />
           {galleryImages.length > 1 && (
             <>
               <button className="lightbox-prev" onClick={prevImage}>

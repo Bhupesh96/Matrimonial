@@ -23,46 +23,33 @@ const HeroSection = () => {
     { id: "41-50", name: "41 to 50" },
   ];
 
-  /* -----------------------------------------
-      LOAD GOTRA + CITY MASTER
-  ------------------------------------------ */
+  /* LOAD MASTER DATA */
   useEffect(() => {
     fetchMasterData("gotras").then(setGotras);
     fetchMasterData("cities").then(setCities);
   }, []);
 
-  /* -----------------------------------------
-      LOAD BANNERS (CAROUSEL)
-  ------------------------------------------ */
+  /* LOAD BANNERS */
   useEffect(() => {
     const loadBanner = async () => {
-      try {
-        let banners = await fetchBanners("top");
-        console.log("BANNERS RECEIVED:", JSON.stringify(banners, null, 2)); // 👈 ADD THIS
+      const list = await fetchBanners("top");
 
-        banners = banners.sort((a, b) => a.DisplayOrder - b.DisplayOrder);
-
-        banners = banners.map((b) => ({
+      const final = list
+        .sort((a, b) => a.DisplayOrder - b.DisplayOrder)
+        .map((b) => ({
           ...b,
           fullImage: b.BannerImage.startsWith("http")
             ? b.BannerImage
             : `https://techwithus.in${b.BannerImage}`,
         }));
 
-        console.log("FINAL BANNERS:", JSON.stringify(banners, null, 2)); // 👈 ADD THIS
-
-        setBanners(banners);
-      } catch (error) {
-        console.log("Banner error:", error);
-      }
+      setBanners(final);
     };
 
     loadBanner();
   }, []);
 
-  /* -----------------------------------------
-      SEARCH HANDLER
-  ------------------------------------------ */
+  /* SEARCH */
   const handleSearch = (e) => {
     e.preventDefault();
     const params = new URLSearchParams({
@@ -79,18 +66,25 @@ const HeroSection = () => {
       {/* BACKGROUND CAROUSEL */}
       {banners.length > 0 && (
         <Carousel
-          autoPlay={true}
-          infiniteLoop={true}
+          autoPlay
+          infiniteLoop
           showThumbs={false}
           showStatus={false}
           interval={4000}
           stopOnHover={false}
-          swipeable={true}
-          emulateTouch={true}
+          swipeable
+          emulateTouch
           className="hero-carousel"
         >
           {banners.map((b) => (
-            <div key={b.BannerID}>
+            <div key={b.BannerID} className="hero-slide">
+              {/* BLUR BACKGROUND */}
+              <div
+                className="hero-blur-bg"
+                style={{ backgroundImage: `url(${b.fullImage})` }}
+              ></div>
+
+              {/* MAIN IMAGE (NO CROP) */}
               <img
                 src={b.fullImage}
                 alt={b.BannerTitle}
@@ -101,21 +95,19 @@ const HeroSection = () => {
         </Carousel>
       )}
 
-      {/* DARK OVERLAY */}
+      {/* OVERLAY */}
       <div className="hero-overlay"></div>
 
       {/* CONTENT */}
       <div className="hero-content">
         <h1>
-          Find Your <span className="hero-highlight">Perfect Match</span> <br />
-          <span className="hero-highlight hindi" style={{ fontSize: "28px" }}>
-            सही जीवनसाथी
-          </span>{" "}
-          खोजें
+          Find Your <span className="hero-highlight">Perfect Match</span>
+          <br />
+          <span className="hero-highlight hindi">सही जीवनसाथी</span> खोजें
         </h1>
 
         <p className="subtext">
-          Trusted by thousands of families to help find the right life partner.{" "}
+          Trusted by thousands of families to find the right life partner.
           <br />
           हजारों परिवारों द्वारा विश्वसनीय सेवा।
         </p>

@@ -62,6 +62,7 @@ const UserProfile = () => {
           `${API}?api=get_profile&ProfileID=${profileID}`
         );
         const json = await res.json();
+
         if (json.status === 200 && Array.isArray(json.data) && json.data[0]) {
           // normalize keys to match edit page if needed
           const p = json.data[0];
@@ -93,18 +94,19 @@ const UserProfile = () => {
     return `${new Date(diff).getUTCFullYear() - 1970} Years`;
   };
 
-  // if (loading) return <Preloader />;
+  if (loading) return <Preloader />;
 
-  // if (!profile) {
-  //   return (
-  //     <div style={{ padding: 40, textAlign: "center" }}>
-  //       No profile found. Please login or set <code>profileID</code> in
-  //       localStorage.
-  //     </div>
-  //   );
-  // }
+  if (!profile) {
+    return (
+      <div style={{ padding: 40, textAlign: "center" }}>
+        No profile found. Please login or set <code>profileID</code> in
+        localStorage.
+      </div>
+    );
+  }
 
-  const imageSrc = profile.ProfilePhoto ? profile.ProfilePhoto : DEFAULT_IMG;
+  const imageSrc =
+    profile?.ProfilePhoto || profile?.ProfileImageURL || DEFAULT_IMG;
 
   // two-line partner expectation fallback
   const partnerExpectations =
@@ -250,6 +252,55 @@ const UserProfile = () => {
             {/* BUTTONS */}
           </div>
         </div>
+        {/* ================= GALLERY SECTION ================= */}
+        {profile.gallery_images && profile.gallery_images.length > 0 && (
+          <div
+            className="p-4 mb-4 rounded shadow-sm"
+            style={{
+              background: "white",
+              border: "1px solid #eee",
+              borderRadius: 15,
+            }}
+          >
+            <h4 className="fw-bold mb-4" style={{ color: "#d32163" }}>
+              Photo Gallery
+            </h4>
+
+            <div
+              style={{
+                display: "grid",
+                gridTemplateColumns: "repeat(auto-fill, minmax(180px, 1fr))",
+                gap: 16,
+              }}
+            >
+              {profile.gallery_images.map((img, i) => (
+                <div
+                  key={i}
+                  style={{
+                    borderRadius: 12,
+                    overflow: "hidden",
+                    border: "1px solid #ddd",
+                    boxShadow: "0 6px 16px rgba(0,0,0,0.08)",
+                    background: "#fff",
+                  }}
+                >
+                  <img
+                    src={img}
+                    alt={`Gallery ${i + 1}`}
+                    style={{
+                      width: "100%",
+                      height: 200,
+                      objectFit: "cover",
+                      cursor: "pointer",
+                      transition: "0.3s",
+                    }}
+                    onClick={() => window.open(img, "_blank")}
+                  />
+                </div>
+              ))}
+            </div>
+          </div>
+        )}
 
         {/* ============= SECTIONS ============= */}
 
