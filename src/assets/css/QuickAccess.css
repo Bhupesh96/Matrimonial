@@ -93,11 +93,90 @@
 
 /* RESPONSIVE */
 @media (max-width: 768px) {
+  .qa-wrapper {
+    padding: 50px 0;
+  }
+
+  .qa-header {
+    margin-bottom: 35px;
+    padding: 0 15px;
+  }
+
+  .qa-header p {
+    font-size: 14px;
+  }
+
   .qa-header h2 {
     font-size: 26px;
   }
 
   .qa-card {
     padding: 26px 18px;
+    margin-bottom: 20px;
+  }
+
+  .qa-icon img {
+    width: 60px;
+    height: 60px;
+    padding: 10px;
+    margin-bottom: 15px;
+  }
+
+  .qa-card h4 {
+    font-size: 18px;
+  }
+
+  .qa-card p {
+    font-size: 13px;
+    margin-bottom: 14px;
+  }
+
+  .qa-btn {
+    padding: 9px 16px;
+    font-size: 13px;
+  }
+}
+
+@media (max-width: 480px) {
+  .qa-wrapper {
+    padding: 40px 0;
+  }
+
+  .qa-header {
+    margin-bottom: 30px;
+  }
+
+  .qa-header p {
+    font-size: 12px;
+    letter-spacing: 0.5px;
+  }
+
+  .qa-header h2 {
+    font-size: 22px;
+  }
+
+  .qa-card {
+    padding: 22px 15px;
+  }
+
+  .qa-icon img {
+    width: 55px;
+    height: 55px;
+    padding: 8px;
+    margin-bottom: 12px;
+  }
+
+  .qa-card h4 {
+    font-size: 16px;
+  }
+
+  .qa-card p {
+    font-size: 12px;
+    margin-bottom: 12px;
+  }
+
+  .qa-btn {
+    padding: 8px 14px;
+    font-size: 12px;
   }
 }

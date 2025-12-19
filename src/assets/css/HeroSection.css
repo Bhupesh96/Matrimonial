@@ -245,6 +245,7 @@
   .hero-container {
     height: 78vh;
     margin-top: 0;
+    padding: 0 15px;
   }
 
   .hero-slide,
@@ -255,17 +256,66 @@
   .carousel .control-arrow {
     display: none !important;
   }
+
+  .hero-content {
+    padding: 0 10px;
+  }
+
+  .hero-content h1 {
+    font-size: 28px;
+    line-height: 1.2;
+  }
+
+  .hero-content .subtext {
+    font-size: 14px;
+  }
+
+  .hero-search {
+    flex-direction: column;
+    gap: 10px;
+    padding: 14px;
+    margin-top: 25px;
+  }
+
+  .hero-search select,
+  .hero-search button {
+    width: 100%;
+    min-width: auto;
+    padding: 12px 16px;
+    font-size: 15px;
+    min-height: 44px; /* Touch-friendly */
+  }
 }
 
 /* EXTRA SMALL */
 @media (max-width: 480px) {
   .hero-container {
     height: 85vh;
+    padding: 0 10px;
   }
 
   .hero-slide,
   .hero-banner-img {
     height: 85vh;
+  }
+
+  .hero-content h1 {
+    font-size: 24px;
+  }
+
+  .hero-content .subtext {
+    font-size: 13px;
+  }
+
+  .hero-search {
+    padding: 12px;
+    margin-top: 20px;
+  }
+
+  .hero-search select,
+  .hero-search button {
+    padding: 11px 14px;
+    font-size: 14px;
   }
 }
 

@@ -140,3 +140,103 @@
   font-weight: bold;
   color: #583c07;
 }
+
+/* ======================================================
+   MOBILE RESPONSIVE STYLES
+====================================================== */
+
+@media (max-width: 768px) {
+  /* Modal adjustments */
+  .complete-profile-modal {
+    margin: 10px;
+    max-width: calc(100% - 20px);
+  }
+
+  .premium-icon-wrapper {
+    width: 70px;
+    height: 70px;
+    margin-bottom: 15px;
+  }
+
+  .premium-heart-icon {
+    font-size: 28px;
+  }
+
+  .premium-heading {
+    font-size: 16px;
+  }
+
+  .premium-subtext {
+    font-size: 14px;
+  }
+
+  /* Filter box */
+  .filter-box-premium {
+    padding: 18px 15px;
+    margin-bottom: 20px;
+  }
+
+  .filter-title {
+    font-size: 16px;
+    margin-bottom: 16px;
+  }
+
+  .filter-label {
+    font-size: 13px;
+    margin-bottom: 5px;
+  }
+
+  .filter-select {
+    padding: 9px 11px;
+    font-size: 13px;
+  }
+
+  .filter-clo {
+    font-size: 24px;
+    top: 20px;
+    right: 20px;
+  }
+}
+
+@media (max-width: 480px) {
+  .complete-profile-modal {
+    margin: 5px;
+    max-width: calc(100% - 10px);
+    border-radius: 12px;
+  }
+
+  .premium-icon-wrapper {
+    width: 60px;
+    height: 60px;
+  }
+
+  .premium-heart-icon {
+    font-size: 24px;
+  }
+
+  .premium-heading {
+    font-size: 15px;
+  }
+
+  .premium-subtext {
+    font-size: 13px;
+    line-height: 20px;
+  }
+
+  .filter-box-premium {
+    padding: 15px 12px;
+  }
+
+  .filter-title {
+    font-size: 15px;
+  }
+
+  .filter-label {
+    font-size: 12px;
+  }
+
+  .filter-select {
+    padding: 8px 10px;
+    font-size: 12px;
+  }
+}

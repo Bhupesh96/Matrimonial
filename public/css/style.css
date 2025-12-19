@@ -11029,6 +11029,54 @@ select {
 /* When the browser is between 0px and 769px wide,below css will be applied.
 /*-------------------------------------------------------*/
 @media screen and (max-width: 769px) {
+  /* General mobile optimizations */
+  .container {
+    padding-left: 15px;
+    padding-right: 15px;
+  }
+
+  /* Form improvements for mobile */
+  .form-login .form-group input,
+  .form-login .form-group select,
+  .form-login .form-group textarea {
+    font-size: 16px; /* Prevents zoom on iOS */
+    padding: 12px 14px;
+    min-height: 44px; /* Touch-friendly */
+  }
+
+  .form-login .btn {
+    min-height: 44px;
+    padding: 12px 20px;
+    font-size: 16px;
+    width: 100%;
+  }
+
+  /* Input and select general improvements */
+  input[type="text"],
+  input[type="email"],
+  input[type="password"],
+  input[type="tel"],
+  input[type="number"],
+  select,
+  textarea {
+    font-size: 16px !important; /* Prevents zoom on iOS */
+    padding: 12px 14px !important;
+    min-height: 44px !important;
+    box-sizing: border-box !important;
+  }
+
+  /* Button improvements */
+  button,
+  .btn,
+  input[type="submit"],
+  input[type="button"],
+  a.btn {
+    min-height: 44px;
+    padding: 12px 20px;
+    font-size: 16px;
+    touch-action: manipulation;
+  }
+
   .bl,
   .carousel-indicators,
   .fil-mob-view {
@@ -11074,6 +11122,50 @@ select {
   .ban-search ul li.sr-btn {
     width: 100%;
     margin-top: 5px;
+  }
+
+  /* TopMenu mobile optimization */
+  .head-top {
+    display: none; /* Hide top menu on mobile - use mobile menu instead */
+  }
+
+  /* Footer mobile optimization */
+  .wed-hom-footer {
+    padding: 0px 0px 60px;
+    margin-top: 40px;
+  }
+
+  .foot-supp {
+    width: 90%;
+    padding: 25px 15px 18px;
+    margin: -40px auto 0px;
+  }
+
+  .foot-supp h2 {
+    font-size: 14px;
+    line-height: 22px;
+  }
+
+  .foot-supp h2 span {
+    font-size: 13px;
+  }
+
+  .wed-foot-link {
+    padding: 60px 0px 40px;
+  }
+
+  .wed-foot-link div {
+    margin-bottom: 20px;
+  }
+
+  .wed-hom-footer h4 {
+    font-size: 15px;
+    padding-bottom: 20px;
+  }
+
+  .wed-hom-footer p {
+    font-size: 14px;
+    line-height: 24px;
   }
 
   .land-pack ul li {
@@ -12144,6 +12236,77 @@ select {
 /* When the browser is between 0px and 480px wide,below css will be applied.
 /*-------------------------------------------------------*/
 @media screen and (max-width: 480px) {
+  /* Form optimizations */
+  .form-login .form-group input,
+  .form-login .form-group select,
+  .form-login .form-group textarea {
+    font-size: 16px; /* Prevents zoom on iOS */
+    padding: 12px 14px;
+    height: auto;
+    min-height: 44px; /* Touch-friendly minimum */
+  }
+
+  .form-login .form-group textarea {
+    min-height: 100px;
+    resize: vertical;
+  }
+
+  .form-login .btn {
+    width: 100%;
+    padding: 14px 20px;
+    font-size: 16px;
+    min-height: 44px;
+  }
+
+  .form-tit {
+    padding-bottom: 12px;
+    margin-bottom: 20px;
+  }
+
+  .form-tit h1 {
+    font-size: 22px;
+    line-height: 32px;
+  }
+
+  .form-tit h4 {
+    font-size: 13px;
+  }
+
+  .form-tit p {
+    font-size: 13px;
+  }
+
+  /* Input and select improvements */
+  input[type="text"],
+  input[type="email"],
+  input[type="password"],
+  input[type="tel"],
+  input[type="number"],
+  select,
+  textarea {
+    font-size: 16px !important; /* Prevents zoom on iOS */
+    padding: 12px 14px !important;
+    min-height: 44px !important; /* Touch-friendly */
+    width: 100% !important;
+    box-sizing: border-box !important;
+  }
+
+  textarea {
+    min-height: 100px;
+    resize: vertical;
+  }
+
+  /* Button improvements */
+  button,
+  .btn,
+  input[type="submit"],
+  input[type="button"] {
+    min-height: 44px;
+    padding: 12px 20px;
+    font-size: 16px;
+    touch-action: manipulation; /* Prevents double-tap zoom */
+  }
+
   .land-pack ul li {
     width: 100%;
   }
