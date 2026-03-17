@@ -31,6 +31,7 @@ jobs:
           username: ${{ secrets.FTP_USERNAME }}
           password: ${{ secrets.FTP_PASSWORD }}
           protocol: ftp
-          server-dir: /public_html/matro/
+          port: 21
+          server-dir: /public_html/
           local-dir: ./build/
           dangerous-clean-slate: false
