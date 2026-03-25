@@ -8,6 +8,7 @@ export const apiFetch = async (url, options = {}) => {
     // Automatically attach the token to headers if the user is logged in
     const headers = {
       ...options.headers,
+      "X-API-KEY": "YourSuperSecretKeyHere123!@#", // <-- MUST MATCH PHP
     };
 
     if (token) {
