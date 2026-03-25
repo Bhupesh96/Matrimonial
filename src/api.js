@@ -318,24 +318,34 @@ export const fetchMyRequests = async () => {
   if (!data || data.status !== 200) throw new Error(data.message);
   return data.data;
 };
-
 /* ----------------------------------------------------
     LOGOUT USER
   ---------------------------------------------------- */
 export const logoutUser = async () => {
-  const url = `${API_BASE_URL}?api=user_logout`;
+  // 1. Get the profile ID of the current user
+  const profileID = localStorage.getItem("profileID") || "";
+
+  // 2. Attach the profile_id to the URL exactly as api_config.php expects
+  const url = `${API_BASE_URL}?api=user_logout&profile_id=${profileID}`;
 
   const data = await apiFetch(url, {
     method: "POST",
+    headers: { "Content-Type": "application/json" },
+    // 3. Send a body so the server doesn't block an "empty" POST request
+    body: JSON.stringify({ profile_id: profileID }),
   });
 
   // Always clear localStorage
   localStorage.clear();
 
-  if (!data || data.status !== 200) throw new Error(data.message);
+  if (!data || data.status !== 200) {
+    // Even if the backend fails, we still force the frontend to log out
+    window.location.href = "/login";
+    throw new Error(data.message || "Logout failed");
+  }
+
   return data;
 };
-
 /* ----------------------------------------------------
     CONTACT US
   ---------------------------------------------------- */
@@ -398,19 +408,13 @@ export const fetchTestimonials = async () => {
   return data.data || [];
 };
 export const addTestimonial = async (formData) => {
-  const res = await fetch(
-    `${process.env.REACT_APP_API_URL}?api=testimonial_add`,
-    {
-      method: "POST",
-      body: formData,
-    },
-  );
+  // Use apiFetch instead of raw fetch!
+  const data = await apiFetch(`${API_BASE_URL}?api=testimonial_add`, {
+    method: "POST",
+    body: formData, // apiFetch handles the headers for FormData automatically
+  });
 
-  const data = await res.json();
-
-  // --- CHANGE THIS LINE ---
-  // Old: if (data.status !== 200) {
-  // New: Check for both 200 AND true
+  // Check for both 200 AND true
   if (data.status !== 200 && data.status !== true) {
     throw new Error(data.message || "Something went wrong");
   }
