@@ -19,7 +19,6 @@ import Community from "./pages/Community";
 import CoupleStories from "./pages/CoupleStories";
 import Experiences from "./pages/Experiences";
 
-
 function App() {
   const [showLogin, setShowLogin] = React.useState(false);
 
@@ -35,12 +34,13 @@ function App() {
     <Router basename={process.env.REACT_APP_BASENAME}>
       <ToastContainer position="top-right" autoClose={3000} theme="colored" />
       {/* GLOBAL LOGIN MODAL */}
-
+      // Change your App.js login modal success handler:
       <LoginModal
         show={showLogin}
         onClose={closeLogin}
         onSuccess={() => {
-          setShowLogin(false); // hide modal after successful login
+          setShowLogin(false);
+          window.location.reload(); // Force react to re-evaluate local storage
         }}
       />
       <Routes>

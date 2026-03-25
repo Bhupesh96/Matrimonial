@@ -15,7 +15,11 @@ const apiFetch = async (url, options = {}) => {
 
     if (data.status === 401) {
       localStorage.clear();
-      window.location.href = `${process.env.REACT_APP_BASENAME || ""}/login`;
+      const basename =
+        process.env.REACT_APP_BASENAME === "/"
+          ? ""
+          : process.env.REACT_APP_BASENAME || "";
+      window.location.href = `${basename}/login`;
       return data;
     }
 
@@ -389,7 +393,7 @@ export const addTestimonial = async (formData) => {
     {
       method: "POST",
       body: formData,
-    }
+    },
   );
 
   const data = await res.json();
