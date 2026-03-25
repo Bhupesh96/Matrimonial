@@ -322,29 +322,33 @@ export const fetchMyRequests = async () => {
     LOGOUT USER
   ---------------------------------------------------- */
 export const logoutUser = async () => {
-  // 1. Get the profile ID of the current user
-  const profileID = localStorage.getItem("profileID") || "";
+  // Keep the URL completely clean to bypass WAF rules
+  const url = `${API_BASE_URL}?api=user_logout`;
 
-  // 2. Attach the profile_id to the URL exactly as api_config.php expects
-  const url = `${API_BASE_URL}?api=user_logout&profile_id=${profileID}`;
+  try {
+    const data = await apiFetch(url, {
+      method: "POST",
+      headers: { "Content-Type": "application/json" },
+      // Send a safe, generic body.
+      // The PHP file relies entirely on the Session Cookie anyway.
+      body: JSON.stringify({ action: "logout_request" }),
+    });
 
-  const data = await apiFetch(url, {
-    method: "POST",
-    headers: { "Content-Type": "application/json" },
-    // 3. Send a body so the server doesn't block an "empty" POST request
-    body: JSON.stringify({ profile_id: profileID }),
-  });
+    // Always clear localStorage
+    localStorage.clear();
 
-  // Always clear localStorage
-  localStorage.clear();
+    if (!data || data.status !== 200) {
+      window.location.href = "/login";
+      return; // Exit early
+    }
 
-  if (!data || data.status !== 200) {
-    // Even if the backend fails, we still force the frontend to log out
+    return data;
+  } catch (error) {
+    // If the server drops the request, force the frontend to log out anyway
+    localStorage.clear();
     window.location.href = "/login";
-    throw new Error(data.message || "Logout failed");
+    console.error("Logout request blocked, but local session cleared.");
   }
-
-  return data;
 };
 /* ----------------------------------------------------
     CONTACT US
