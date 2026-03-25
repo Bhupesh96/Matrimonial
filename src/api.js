@@ -1,14 +1,24 @@
 const API_BASE_URL = process.env.REACT_APP_API_URL;
 
-/* ----------------------------------------------------
-    GLOBAL FETCH WRAPPER – handles 401 & auto-logout
-  ---------------------------------------------------- */
-const apiFetch = async (url, options = {}) => {
+export const apiFetch = async (url, options = {}) => {
+  // <-- Add 'export' here
   try {
+    const token = localStorage.getItem("login_token");
+
+    // Automatically attach the token to headers if the user is logged in
+    const headers = {
+      ...options.headers,
+    };
+
+    if (token) {
+      headers["Authorization"] = `Bearer ${token}`;
+      headers["token"] = token; // Added in case your PHP backend looks for a 'token' header
+    }
+
     const res = await fetch(url, {
-      credentials: "include", // always enforced
+      credentials: "include", // Enforce cookies
       ...options,
-      credentials: "include", // enforce again
+      headers, // Pass the headers with the token
     });
 
     const data = await res.json();
@@ -28,7 +38,6 @@ const apiFetch = async (url, options = {}) => {
     throw new Error("Network error: " + err.message);
   }
 };
-
 /* ----------------------------------------------------
     MASTER DATA
   ---------------------------------------------------- */

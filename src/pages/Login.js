@@ -1,6 +1,6 @@
 import React, { useState } from "react";
 import { Link, useNavigate } from "react-router-dom";
-import { loginUser } from "../api";
+import { loginUser, apiFetch } from "../api";
 import AlertService from "../services/AlertServices";
 
 // Layout Components
@@ -84,17 +84,16 @@ const Login = () => {
         localStorage.setItem("login_token", data.login_token);
 
         // Fetch profile photo
-        fetch(
+        apiFetch(
           `${API_BASE_URL}?api=get_profile&ProfileID=${data.data.ProfileID}`,
-          { credentials: "include" },
         )
-          .then((res) => res.json())
           .then((profileRes) => {
             const photo = profileRes?.data?.[0]?.ProfilePhoto;
             if (photo) {
               localStorage.setItem("profilePhoto", photo);
             }
-          });
+          })
+          .catch((err) => console.error("Failed to fetch profile photo:", err));
       }
 
       AlertService.showSuccessAndRedirect(

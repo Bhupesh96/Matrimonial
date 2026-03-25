@@ -12,6 +12,7 @@ import Footer from "../components/Footer";
 import CopyRight from "../components/CopyRight";
 import { Link } from "react-router-dom";
 import { useParams } from "react-router-dom";
+import { apiFetch } from "../api";
 const API = process.env.REACT_APP_API_URL;
 
 // master types (lowercase)
@@ -39,11 +40,9 @@ const UserProfile = () => {
   useEffect(() => {
     (async () => {
       try {
-        // Fix 1: Add credentials to the master data fetch
+        // Use apiFetch for master data
         const masterPromises = masterTypes.map((t) =>
-          fetch(`${API}?api=get_master&master_type=${t}`, {
-            credentials: "include",
-          }).then((r) => r.json()),
+          apiFetch(`${API}?api=get_master&master_type=${t}`),
         );
         const masterResults = await Promise.all(masterPromises);
         const masterObj = {};
@@ -60,22 +59,10 @@ const UserProfile = () => {
           return;
         }
 
-        // Fix 2: Add credentials to the profile fetch
-        const res = await fetch(
+        // Use apiFetch for the user profile
+        const json = await apiFetch(
           `${API}?api=get_profile&ProfileID=${profileID}`,
-          {
-            credentials: "include",
-          },
         );
-        const json = await res.json();
-
-        // If the backend returns a 401 here, you might also want to handle the redirect
-        // to login manually, just like your apiFetch wrapper does.
-        if (json.status === 401) {
-          localStorage.clear();
-          window.location.href = "/login";
-          return;
-        }
 
         if (json.status === 200 && Array.isArray(json.data) && json.data[0]) {
           const p = json.data[0];
