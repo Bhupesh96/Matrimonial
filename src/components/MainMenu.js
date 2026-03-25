@@ -16,13 +16,14 @@ const MainMenu = () => {
   const handleLogout = async () => {
     try {
       await logoutUser();
-      AlertService.showSuccessAndRedirect("Logout successful", navigate, "/");
-      navigate("/");
     } catch (err) {
-      AlertService.showError(err.message);
+      console.warn("Logout error:", err.message);
+    } finally {
+      // Force the UI to update and send them to the home page
+      AlertService.showSuccessAndRedirect("Logout successful", navigate, "/");
+      window.location.href = "/"; // Full page reload ensures states reset
     }
   };
-
   useEffect(() => {
     const name = localStorage.getItem("profileName");
     const photo = localStorage.getItem("profilePhoto");

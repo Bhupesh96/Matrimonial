@@ -23,18 +23,14 @@ const MobileMenu = () => {
   const handleLogout = async () => {
     try {
       await logoutUser();
-      localStorage.clear();
-
-      setOpen(false);
-
-      AlertService.showSuccessAndRedirect("Logout successful", navigate, "/");
-
-      navigate("/");
     } catch (err) {
-      AlertService.showError(err.message);
+      console.warn("Logout error:", err.message);
+    } finally {
+      setOpen(false);
+      AlertService.showSuccessAndRedirect("Logout successful", navigate, "/");
+      window.location.href = "/"; // Full page reload ensures states reset
     }
   };
-
   return (
     <>
       {/* Mobile menu icon */}

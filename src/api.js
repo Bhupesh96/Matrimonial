@@ -322,32 +322,29 @@ export const fetchMyRequests = async () => {
     LOGOUT USER
   ---------------------------------------------------- */
 export const logoutUser = async () => {
-  // Keep the URL completely clean to bypass WAF rules
-  const url = `${API_BASE_URL}?api=user_logout`;
+  // 1. Grab ID BEFORE clearing anything
+  const profileID = localStorage.getItem("profileID") || "";
+
+  const url = `${API_BASE_URL}?api=user_logout&profile_id=${profileID}`;
 
   try {
     const data = await apiFetch(url, {
       method: "POST",
       headers: { "Content-Type": "application/json" },
-      // Send a safe, generic body.
-      // The PHP file relies entirely on the Session Cookie anyway.
-      body: JSON.stringify({ action: "logout_request" }),
+      // 2. CRITICAL: Send a body so the server firewall doesn't throw a 403 Forbidden
+      body: JSON.stringify({ action: "logout", profile_id: profileID }),
     });
 
-    // Always clear localStorage
-    localStorage.clear();
-
-    if (!data || data.status !== 200) {
-      window.location.href = "/login";
-      return; // Exit early
-    }
-
     return data;
-  } catch (error) {
-    // If the server drops the request, force the frontend to log out anyway
+  } catch (err) {
+    console.warn(
+      "Server logout rejected, but forcing local logout anyway.",
+      err,
+    );
+    return null;
+  } finally {
+    // 3. ALWAYS clear local storage at the very end
     localStorage.clear();
-    window.location.href = "/login";
-    console.error("Logout request blocked, but local session cleared.");
   }
 };
 /* ----------------------------------------------------
