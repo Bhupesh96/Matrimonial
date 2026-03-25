@@ -34,7 +34,7 @@ function App() {
     <Router basename={process.env.REACT_APP_BASENAME}>
       <ToastContainer position="top-right" autoClose={3000} theme="colored" />
       {/* GLOBAL LOGIN MODAL */}
-      // Change your App.js login modal success handler:
+
       <LoginModal
         show={showLogin}
         onClose={closeLogin}
