@@ -39,9 +39,11 @@ const UserProfile = () => {
   useEffect(() => {
     (async () => {
       try {
-        // load masters in parallel
+        // Fix 1: Add credentials to the master data fetch
         const masterPromises = masterTypes.map((t) =>
-          fetch(`${API}?api=get_master&master_type=${t}`).then((r) => r.json())
+          fetch(`${API}?api=get_master&master_type=${t}`, {
+            credentials: "include",
+          }).then((r) => r.json()),
         );
         const masterResults = await Promise.all(masterPromises);
         const masterObj = {};
@@ -51,23 +53,33 @@ const UserProfile = () => {
         setMasters(masterObj);
 
         // load profile
-
         const profileID = id || localStorage.getItem("profileID");
         if (!profileID) {
           setProfile(null);
           setLoading(false);
           return;
         }
+
+        // Fix 2: Add credentials to the profile fetch
         const res = await fetch(
-          `${API}?api=get_profile&ProfileID=${profileID}`
+          `${API}?api=get_profile&ProfileID=${profileID}`,
+          {
+            credentials: "include",
+          },
         );
         const json = await res.json();
 
+        // If the backend returns a 401 here, you might also want to handle the redirect
+        // to login manually, just like your apiFetch wrapper does.
+        if (json.status === 401) {
+          localStorage.clear();
+          window.location.href = "/login";
+          return;
+        }
+
         if (json.status === 200 && Array.isArray(json.data) && json.data[0]) {
-          // normalize keys to match edit page if needed
           const p = json.data[0];
           console.log("User profile: ", JSON.stringify(p, null, 2));
-          // keep original keys
           setProfile(p);
         } else {
           setProfile(null);
@@ -79,7 +91,7 @@ const UserProfile = () => {
         setLoading(false);
       }
     })();
-  }, []);
+  }, [id]); // Note: good practice to add 'id' to the dependency array
 
   const lookup = (type, id) => {
     if (!id) return "-";
