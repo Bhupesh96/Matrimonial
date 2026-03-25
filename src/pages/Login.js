@@ -85,7 +85,8 @@ const Login = () => {
 
         // Fetch profile photo
         fetch(
-          `${API_BASE_URL}?api=get_profile&ProfileID=${data.data.ProfileID}`
+          `${API_BASE_URL}?api=get_profile&ProfileID=${data.data.ProfileID}`,
+          { credentials: "include" },
         )
           .then((res) => res.json())
           .then((profileRes) => {
@@ -99,7 +100,7 @@ const Login = () => {
       AlertService.showSuccessAndRedirect(
         lang === "en" ? "Login successful!" : "लॉगिन सफल!",
         navigate,
-        "/"
+        "/",
       );
     } catch (error) {
       AlertService.showError(error.message);
