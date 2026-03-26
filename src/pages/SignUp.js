@@ -537,7 +537,7 @@ const SignUp = () => {
       <Footer />
       <CopyRight />
 
-      {/* CUSTOM SUCCESS MODAL */}
+      {/* CUSTOM SUCCESS MODAL (ELEGANT WEDDING THEME) */}
       {showSuccessModal && (
         <div
           onClick={handleCloseModalAndRedirect}
@@ -547,7 +547,8 @@ const SignUp = () => {
             left: 0,
             width: "100%",
             height: "100%",
-            backgroundColor: "rgba(0, 0, 0, 0.7)",
+            backgroundColor: "rgba(0, 0, 0, 0.6)",
+            backdropFilter: "blur(4px)",
             display: "flex",
             justifyContent: "center",
             alignItems: "center",
@@ -555,94 +556,178 @@ const SignUp = () => {
           }}
         >
           <div
-            onClick={(e) => e.stopPropagation()} // Prevent clicks inside from closing it instantly
+            onClick={(e) => e.stopPropagation()}
+            className="wedding-modal"
             style={{
-              backgroundColor: "#fff",
-              padding: "40px",
-              borderRadius: "15px",
+              backgroundColor: "#ffffff",
+              padding: "40px 30px",
+              borderRadius: "12px",
               textAlign: "center",
-              maxWidth: "450px",
+              maxWidth: "420px",
               width: "90%",
-              boxShadow: "0px 10px 30px rgba(0,0,0,0.3)",
-              animation: "fadeIn 0.3s ease-out",
+              boxShadow: "0px 20px 40px rgba(0,0,0,0.2)",
+              border: "1px solid #eaddd7", // Subtle cream/gold border
+              position: "relative",
+              overflow: "hidden",
             }}
           >
-            <div style={{ marginBottom: "20px" }}>
+            {/* Elegant Top Accent Line */}
+            <div
+              style={{
+                position: "absolute",
+                top: 0,
+                left: 0,
+                right: 0,
+                height: "5px",
+                background: "#8C5A3C", // Solid brand color
+              }}
+            ></div>
+
+            {/* Professional Checkmark Icon */}
+            <div
+              style={{
+                width: "70px",
+                height: "70px",
+                margin: "0 auto 20px auto",
+                background: "#fffafb",
+                border: "2px solid #8C5A3C",
+                borderRadius: "50%",
+                display: "flex",
+                justifyContent: "center",
+                alignItems: "center",
+                boxShadow: "0 4px 15px rgba(211, 33, 99, 0.1)",
+              }}
+            >
               <i
-                className="fa fa-check-circle"
-                style={{ fontSize: "60px", color: "#28a745" }}
+                className="fa fa-check"
+                style={{ fontSize: "30px", color: "#8C5A3C" }}
               ></i>
             </div>
 
             <h2
               style={{
-                color: "#333",
-                fontWeight: "bold",
-                marginBottom: "15px",
+                color: "#222",
+                fontWeight: "700",
+                fontSize: "24px",
+                marginBottom: "12px",
+                fontFamily: "Georgia, serif", // Gives a wedding invitation feel
               }}
             >
-              {lang === "en" ? "Registration Successful!" : "पंजीकरण सफल!"}
+              {lang === "en" ? "Registration Successful" : "पंजीकरण सफल!"}
             </h2>
             <p
-              style={{ color: "#666", fontSize: "16px", marginBottom: "25px" }}
+              style={{
+                color: "#555",
+                fontSize: "15px",
+                marginBottom: "25px",
+                lineHeight: "1.5",
+              }}
             >
               {lang === "en"
-                ? "Please save your login credentials below."
-                : "कृपया अपना लॉगिन विवरण सुरक्षित रखें।"}
+                ? "Your profile has been successfully created. Please save your login credentials below."
+                : "आपकी प्रोफ़ाइल सफलतापूर्वक बन गई है। कृपया अपना लॉगिन विवरण नीचे सुरक्षित रखें।"}
             </p>
 
+            {/* Elegant Credentials Box (Ivory/Cream tone) */}
             <div
               style={{
-                backgroundColor: "#f8f9fa",
+                backgroundColor: "#fbfaf8",
                 padding: "20px",
-                borderRadius: "10px",
-                border: "1px dashed #ccc",
+                borderRadius: "8px",
+                border: "1px solid #eaddd7",
                 marginBottom: "30px",
                 textAlign: "left",
               }}
             >
-              <p
+              <div
                 style={{
-                  fontSize: "18px",
-                  margin: "0 0 10px 0",
-                  color: "#333",
+                  marginBottom: "12px",
+                  display: "flex",
+                  justifyContent: "space-between",
+                  alignItems: "center",
                 }}
               >
-                <strong>User ID:</strong>{" "}
-                <span style={{ color: "#d32163", marginLeft: "10px" }}>
+                <span
+                  style={{
+                    fontSize: "13px",
+                    color: "#888",
+                    fontWeight: "600",
+                    textTransform: "uppercase",
+                    letterSpacing: "0.5px",
+                  }}
+                >
+                  {lang === "en" ? "User ID" : "यूज़र आईडी"}
+                </span>
+                <span
+                  style={{ color: "#222", fontSize: "18px", fontWeight: "700" }}
+                >
                   {userID}
                 </span>
-              </p>
-              <p style={{ fontSize: "18px", margin: "0", color: "#333" }}>
-                <strong>Password:</strong>{" "}
-                <span style={{ color: "#d32163", marginLeft: "10px" }}>
+              </div>
+
+              {/* Divider Line */}
+              <div
+                style={{
+                  width: "100%",
+                  height: "1px",
+                  background: "#eaddd7",
+                  marginBottom: "12px",
+                }}
+              ></div>
+
+              <div
+                style={{
+                  display: "flex",
+                  justifyContent: "space-between",
+                  alignItems: "center",
+                }}
+              >
+                <span
+                  style={{
+                    fontSize: "13px",
+                    color: "#888",
+                    fontWeight: "600",
+                    textTransform: "uppercase",
+                    letterSpacing: "0.5px",
+                  }}
+                >
+                  {lang === "en" ? "Password" : "पासवर्ड"}
+                </span>
+                <span
+                  style={{
+                    color: "#8C5A3C",
+                    fontSize: "18px",
+                    fontWeight: "700",
+                  }}
+                >
                   {phone}
                 </span>
-              </p>
+              </div>
             </div>
 
             <button
+              className="wedding-btn"
               onClick={handleCloseModalAndRedirect}
               style={{
                 width: "100%",
-                padding: "12px",
-                backgroundColor: "#007bff",
+                padding: "14px",
+                background: "#8C5A3C",
                 color: "#fff",
                 border: "none",
-                borderRadius: "8px",
-                fontSize: "18px",
-                fontWeight: "bold",
+                borderRadius: "6px", // Structured button instead of pill
+                fontSize: "16px",
+                fontWeight: "600",
                 cursor: "pointer",
-                transition: "background-color 0.2s",
+                transition: "background-color 0.3s ease",
               }}
             >
-              {lang === "en" ? "OK, Go to Home" : "ठीक है, होम पर जाएं"}
+              {lang === "en" ? "Continue to Dashboard" : "डैशबोर्ड पर जाएं"}
             </button>
           </div>
         </div>
       )}
 
-      {/* LANGUAGE SWITCH & ANIMATION CSS */}
+      {/* LANGUAGE SWITCH & WEDDING ANIMATION CSS */}
       <style>{`
         .lang-btn {
           background: transparent;
@@ -650,15 +735,26 @@ const SignUp = () => {
           color: #777;
           font-size: 15px;
           cursor: pointer;
+          transition: 0.3s;
         }
         .active-lang-btn {
           font-weight: bold;
-          color: #007bff;
-          border-bottom: 2px solid #007bff;
+          color: #d32163;
+          border-bottom: 2px solid #d32163;
         }
-        @keyframes fadeIn {
-          from { opacity: 0; transform: scale(0.9); }
-          to { opacity: 1; transform: scale(1); }
+        
+        /* Modal Appearance Animation */
+        .wedding-modal {
+          animation: modalFadeIn 0.3s ease-out forwards;
+        }
+        @keyframes modalFadeIn {
+          from { opacity: 0; transform: translateY(20px); }
+          to { opacity: 1; transform: translateY(0); }
+        }
+
+        /* Button Hover */
+        .wedding-btn:hover {
+          background-color: #704931 !important;
         }
       `}</style>
     </div>
