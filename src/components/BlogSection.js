@@ -1,21 +1,23 @@
-import React, { useEffect, useState } from "react";
+import { useEffect, useState } from "react";
+import { Link } from "react-router-dom";
+import "swiper/css";
+import "swiper/css/navigation";
+import { Autoplay, Navigation } from "swiper/modules";
+import { Swiper, SwiperSlide } from "swiper/react";
 import { fetchCommunityEvents } from "../api";
 
 const BlogSection = () => {
   const [events, setEvents] = useState([]);
-  const [currentIndex, setCurrentIndex] = useState(0);
-  const [isPaused, setIsPaused] = useState(false); // 1. State to pause auto-slide
 
   // CONFIG: Base URL for images
   const IMG_BASE_URL = "https://techwithus.in/matro/admin/plug/";
-  const itemsToShow = 3; // Show 3 items at a time
 
   useEffect(() => {
     const loadEvents = async () => {
       try {
         const data = await fetchCommunityEvents();
         const sortedData = data.sort(
-          (a, b) => new Date(b.EventDate) - new Date(a.EventDate)
+          (a, b) => new Date(b.EventDate) - new Date(a.EventDate),
         );
         setEvents(sortedData);
       } catch (error) {
@@ -24,22 +26,6 @@ const BlogSection = () => {
     };
     loadEvents();
   }, []);
-
-  // 2. AUTO-SLIDE LOGIC
-  useEffect(() => {
-    // Only run if not paused and we have more items than shown
-    if (isPaused || events.length <= itemsToShow) return;
-
-    const interval = setInterval(() => {
-      setCurrentIndex((prevIndex) => {
-        // If we are at the end, loop back to 0, else go to next
-        return prevIndex < events.length - itemsToShow ? prevIndex + 1 : 0;
-      });
-    }, 2000); // Speed: 4 seconds
-
-    // Cleanup interval on unmount or when dependencies change
-    return () => clearInterval(interval);
-  }, [events.length, isPaused]);
 
   const fullURL = (img) => {
     if (!img) return "images/blog/default.jpg";
@@ -67,22 +53,6 @@ const BlogSection = () => {
     }
   };
 
-  const nextSlide = () => {
-    if (currentIndex < events.length - itemsToShow) {
-      setCurrentIndex(currentIndex + 1);
-    } else {
-      setCurrentIndex(0);
-    }
-  };
-
-  const prevSlide = () => {
-    if (currentIndex > 0) {
-      setCurrentIndex(currentIndex - 1);
-    } else {
-      setCurrentIndex(events.length - itemsToShow);
-    }
-  };
-
   return (
     <section>
       <div className="hom-blog">
@@ -97,184 +67,168 @@ const BlogSection = () => {
               <span className="tit-ani-"></span>
             </div>
 
-            {/* 3. WRAPPER WITH MOUSE EVENTS TO PAUSE/RESUME */}
             <div
               className="blog"
-              style={{ position: "relative" }}
-              onMouseEnter={() => setIsPaused(true)} // Stop sliding on hover
-              onMouseLeave={() => setIsPaused(false)} // Resume sliding on leave
+              style={{ position: "relative", padding: "0 15px" }}
             >
-              {events.length > itemsToShow && (
-                <>
-                  <button
-                    onClick={prevSlide}
-                    style={{
-                      position: "absolute",
-                      left: "-40px",
-                      top: "50%",
-                      transform: "translateY(-50%)",
-                      background: "#fff",
-                      border: "1px solid #ddd",
-                      borderRadius: "50%",
-                      width: "40px",
-                      height: "40px",
-                      cursor: "pointer",
-                      zIndex: 10,
-                      boxShadow: "0 2px 5px rgba(0,0,0,0.1)",
-                      fontSize: "18px",
-                      color: "#333",
-                    }}
-                  >
-                    ❮
-                  </button>
-                  <button
-                    onClick={nextSlide}
-                    style={{
-                      position: "absolute",
-                      right: "-40px",
-                      top: "50%",
-                      transform: "translateY(-50%)",
-                      background: "#fff",
-                      border: "1px solid #ddd",
-                      borderRadius: "50%",
-                      width: "40px",
-                      height: "40px",
-                      cursor: "pointer",
-                      zIndex: 10,
-                      boxShadow: "0 2px 5px rgba(0,0,0,0.1)",
-                      fontSize: "18px",
-                      color: "#333",
-                    }}
-                  >
-                    ❯
-                  </button>
-                </>
-              )}
-
-              <div style={{ overflow: "hidden", width: "100%" }}>
-                <ul
-                  style={{
-                    display: "flex",
-                    transition: "transform 0.5s ease-in-out",
-                    transform: `translateX(-${
-                      currentIndex * (100 / itemsToShow)
-                    }%)`,
-                    padding: 0,
-                    margin: 0,
-                    width: `${(events.length / itemsToShow) * 100}%`,
+              {events.length > 0 ? (
+                <Swiper
+                  modules={[Autoplay, Navigation]}
+                  spaceBetween={30}
+                  slidesPerView={3}
+                  navigation={true} // Enables built-in prev/next arrows
+                  autoplay={{
+                    delay: 4000,
+                    disableOnInteraction: false,
+                    pauseOnMouseEnter: true, // Native Swiper pause on hover!
                   }}
+                  breakpoints={{
+                    320: { slidesPerView: 1 }, // Mobile: 1 item
+                    768: { slidesPerView: 2 }, // Tablet: 2 items
+                    1024: { slidesPerView: 3 }, // Desktop: 3 items
+                  }}
+                  style={{ padding: "10px 0" }} // Room for box-shadows
                 >
-                  {events.length > 0 ? (
-                    events.map((event) => (
-                      <li
-                        key={event.EventID}
+                  {events.map((event) => (
+                    <SwiperSlide key={event.EventID} style={{ height: "auto" }}>
+                      <div
+                        className="blog-box"
                         style={{
-                          flex: "0 0 33.333%",
-                          maxWidth: "33.333%",
-                          boxSizing: "border-box",
-                          padding: "0 15px",
+                          height: "100%", // Forces equal height columns
+                          display: "flex",
+                          flexDirection: "column",
+                          background: "#fff",
+                          borderRadius: "12px",
+                          boxShadow: "0 4px 15px rgba(0,0,0,0.06)",
+                          overflow: "hidden",
+                          border: "1px solid #f0f0f0",
                         }}
                       >
-                        <div className="blog-box">
-                          <div style={{ position: "relative" }}>
-                            <img
-                              src={fullURL(event.EventPosterURL)}
-                              alt={event.EventTitle}
-                              loading="lazy"
-                              style={{
-                                height: "300px",
-                                width: "80%",
-                                objectFit: "contain",
-                              }}
-                            />
-                            <span
-                              style={{
-                                position: "absolute",
-                                top: "10px",
-                                left: "10px",
-                                background: "#ff4d4d",
-                                color: "#fff",
-                                padding: "3px 10px",
-                                fontSize: "11px",
-                                borderRadius: "3px",
-                                textTransform: "uppercase",
-                              }}
-                            >
-                              {event.EventType}
-                            </span>
+                        {/* IMAGE CONTAINER */}
+                        <div
+                          style={{
+                            position: "relative",
+                            width: "100%",
+                            height: "240px",
+                          }}
+                        >
+                          <img
+                            src={fullURL(event.EventPosterURL)}
+                            alt={event.EventTitle}
+                            loading="lazy"
+                            style={{
+                              width: "100%",
+                              height: "100%",
+                              objectFit: "cover", // Fixes the unequal image sizes perfectly
+                            }}
+                          />
+                          <span
+                            style={{
+                              position: "absolute",
+                              top: "15px",
+                              left: "15px",
+                              background: "#e5026b",
+                              color: "#fff",
+                              padding: "4px 12px",
+                              fontSize: "11px",
+                              borderRadius: "4px",
+                              textTransform: "uppercase",
+                              fontWeight: "600",
+                              letterSpacing: "1px",
+                              boxShadow: "0 2px 8px rgba(0,0,0,0.2)",
+                            }}
+                          >
+                            {event.EventType}
+                          </span>
+                        </div>
+
+                        {/* CONTENT CONTAINER */}
+                        <div
+                          style={{
+                            padding: "25px",
+                            display: "flex",
+                            flexDirection: "column",
+                            flexGrow: 1, // Pushes the button to the bottom
+                          }}
+                        >
+                          <div
+                            style={{
+                              color: "#888",
+                              fontSize: "13px",
+                              marginBottom: "10px",
+                              display: "flex",
+                              alignItems: "center",
+                              gap: "6px",
+                              fontWeight: "500",
+                            }}
+                          >
+                            <i className="fa fa-clock-o"></i>
+                            {formatDateTime(event.EventDate, event.EventTime)}
                           </div>
 
-                          <div style={{ padding: "15px 0" }}>
-                            <div
-                              style={{
-                                color: "#777",
-                                fontSize: "12px",
-                                marginBottom: "5px",
-                                display: "flex",
-                                alignItems: "center",
-                                gap: "5px",
-                                fontWeight: "600",
-                              }}
-                            >
-                              <svg
-                                width="14"
-                                height="14"
-                                fill="none"
-                                stroke="currentColor"
-                                strokeWidth="2"
-                                viewBox="0 0 24 24"
-                              >
-                                <circle cx="12" cy="12" r="10"></circle>
-                                <path d="M12 6v6l4 2"></path>
-                              </svg>
-                              {formatDateTime(event.EventDate, event.EventTime)}
-                            </div>
+                          <h2
+                            style={{
+                              fontSize: "19px",
+                              fontWeight: "700",
+                              margin: "0 0 12px",
+                              lineHeight: "1.4",
+                              color: "#222",
+                            }}
+                          >
+                            {event.EventTitle}
+                          </h2>
 
-                            <h2
-                              style={{
-                                fontSize: "18px",
-                                fontWeight: "bold",
-                                margin: "5px 0 10px",
-                                lineHeight: "1.3",
-                              }}
-                            >
-                              {event.EventTitle}
-                            </h2>
+                          <p
+                            style={{
+                              fontSize: "14px",
+                              color: "#666",
+                              lineHeight: "1.6",
+                              marginBottom: "20px",
+                            }}
+                          >
+                            {event.ShortDescription.length > 90
+                              ? event.ShortDescription.substring(0, 90) + "..."
+                              : event.ShortDescription}
+                          </p>
 
-                            <p style={{ fontSize: "13px", color: "#555" }}>
-                              {event.ShortDescription.length > 80
-                                ? event.ShortDescription.substring(0, 80) +
-                                  "..."
-                                : event.ShortDescription}
-                            </p>
-
-                            <a
-                              href={`/community#event-${event.EventID}`}
-                              className="cta-dark"
+                          {/* CTA BUTTON (Pushed to bottom) */}
+                          <div style={{ marginTop: "auto" }}>
+                            <Link
+                              to={`/community#event-${event.EventID}`}
                               style={{
-                                marginTop: "10px",
                                 display: "inline-block",
+                                padding: "8px 0",
+                                color: "#e5026b",
+                                fontWeight: "600",
+                                fontSize: "14px",
+                                textTransform: "uppercase",
+                                borderBottom: "2px solid #e5026b",
+                                textDecoration: "none",
                               }}
                             >
-                              <span>Read more</span>
-                            </a>
+                              Read more{" "}
+                              <i
+                                className="fa fa-angle-right"
+                                style={{ marginLeft: "4px" }}
+                              ></i>
+                            </Link>
                           </div>
                         </div>
-                      </li>
-                    ))
-                  ) : (
-                    <div
-                      style={{
-                        width: "100%",
-                        textAlign: "center",
-                        padding: "20px",
-                      }}
-                    >
-                      Loading events...
-                    </div>
-                  )}
-                </ul>
-              </div>
+                      </div>
+                    </SwiperSlide>
+                  ))}
+                </Swiper>
+              ) : (
+                <div
+                  style={{
+                    width: "100%",
+                    textAlign: "center",
+                    padding: "40px",
+                  }}
+                >
+                  Loading events...
+                </div>
+              )}
             </div>
           </div>
         </div>

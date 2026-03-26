@@ -356,7 +356,10 @@ const UserProfile = () => {
           {
             title: "Education & Job",
             rows: [
-              { label: "Degree", value: profile.EducationDegreeName },
+              {
+                label: "Degree",
+                value: profile.EducationDegree || profile.EducationDegreeName,
+              }, // <--- Updated!
               { label: "Education Detail", value: profile.EducationDetail },
               { label: "Occupation", value: profile.OccupationName },
               { label: "Organization", value: profile.OrganizationName },

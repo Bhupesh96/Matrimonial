@@ -39,11 +39,11 @@ const MainMenu = () => {
           <div className="hom-nav">
             {/* LOGO */}
             <div className="logo">
-              <span className="menu desk-menu">
+              {/* <span className="menu desk-menu">
                 <i></i>
                 <i></i>
                 <i></i>
-              </span>
+              </span> */}
               <Link to="/" className="logo-brand">
                 <img
                   src={`${process.env.PUBLIC_URL}/images/logo-b.png`}
@@ -74,7 +74,6 @@ const MainMenu = () => {
                               <Link
                                 to="/all-profiles"
                                 className="fclick"
-                                aria-label="Open profile list"
                               ></Link>
                             </div>
                           </li>

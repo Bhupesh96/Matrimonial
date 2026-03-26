@@ -1,24 +1,23 @@
-import React, { useEffect, useState } from "react";
+import { useEffect, useState } from "react";
+import { useLocation, useNavigate } from "react-router-dom";
 import "../assets/css/ProfileList.css";
-import { useLocation } from "react-router-dom";
 
 import {
+  checkProfileCompleteness,
   fetchApprovedProfiles,
-  sendConnectionRequest,
+  fetchMasterData,
   fetchMyRequests,
   manageConnectionRequest,
-  fetchMasterData,
-  checkProfileCompleteness,
+  sendConnectionRequest,
 } from "../api";
-import Preloader from "../components/Preloader";
-import { useNavigate } from "react-router-dom";
 import "../assets/css/ProfileData.css";
+import Preloader from "../components/Preloader";
+
 const ProfileList = () => {
   const location = useLocation();
   const query = new URLSearchParams(location.search);
 
   const defaultAge = query.get("age") || "";
-
   const defaultCity = query.get("city") || "";
   const defaultGotra = query.get("gotra") || "";
 
@@ -42,12 +41,19 @@ const ProfileList = () => {
 
   const navigate = useNavigate();
 
+  // --- HELPER: Handle Broken Images ---
+  const handleImageError = (e) => {
+    e.target.onerror = null; // Prevent infinite loop
+    e.target.src = `${process.env.PUBLIC_URL}/images/default.png`;
+  };
+
   const calculateAge = (dob) => {
     if (!dob) return "NA";
     const diff = Date.now() - new Date(dob).getTime();
     const age = new Date(diff).getUTCFullYear() - 1970;
     return `${age} Years old`;
   };
+
   useEffect(() => {
     const loadMasterData = async () => {
       try {
@@ -88,10 +94,10 @@ const ProfileList = () => {
         const allOutgoing = reqData.outgoing_requests || [];
 
         const pendingIncoming = allIncoming.filter(
-          (r) => r.RequestStatus === "Pending"
+          (r) => r.RequestStatus === "Pending",
         );
         const pendingOutgoing = allOutgoing.filter(
-          (r) => r.RequestStatus === "Pending"
+          (r) => r.RequestStatus === "Pending",
         );
 
         const acceptedMatches = [
@@ -101,8 +107,6 @@ const ProfileList = () => {
 
         setIncoming(pendingIncoming);
         setOutgoing(pendingOutgoing);
-        console.log("Accepted Matches Raw Data:", acceptedMatches);
-
         setMatches(acceptedMatches);
       } catch (err) {
         console.error("Request load error:", err);
@@ -111,6 +115,7 @@ const ProfileList = () => {
 
     loadRequests();
   }, []);
+
   const handleCheckBeforeSend = async (p) => {
     const userID = localStorage.getItem("userID");
 
@@ -118,15 +123,14 @@ const ProfileList = () => {
       const check = await checkProfileCompleteness(userID);
 
       if (!check.is_complete) {
-        setProfileCheck(check); // store response
-        setShowIncompleteModal(true); // open custom modal
+        setProfileCheck(check);
+        setShowIncompleteModal(true);
         return;
       }
 
       // ✔ Profile complete → open Send Interest modal
       setSelectedProfile(p);
       setRequestStatus("");
-      // Trigger existing modal
       document.getElementById("openSendInterestBtn").click();
     } catch (error) {
       alert("Error checking profile: " + error.message);
@@ -157,7 +161,7 @@ const ProfileList = () => {
 
       if (action === "Reject") {
         setIncoming((prev) =>
-          prev.filter((req) => req.RequestID !== requestId)
+          prev.filter((req) => req.RequestID !== requestId),
         );
       }
 
@@ -165,7 +169,7 @@ const ProfileList = () => {
         const acceptedReq = incoming.find((r) => r.RequestID === requestId);
 
         setIncoming((prev) =>
-          prev.filter((req) => req.RequestID !== requestId)
+          prev.filter((req) => req.RequestID !== requestId),
         );
 
         if (acceptedReq) {
@@ -184,17 +188,25 @@ const ProfileList = () => {
 
   const handleViewProfile = (id) => navigate(`/user-profile/${id}`);
 
-  /* ---------------- REMOVE MATCHED FROM ALL PROFILES ---------------- */
+  /* ---------------- REMOVE MATCHED & APPLY FILTERS ---------------- */
   const filteredProfiles = profiles
     .filter((p) => !matches.some((m) => m.ProfileID === p.ProfileID))
     .filter((p) => {
-      // Age filter
+      // Safely check age and handle "NA"
       if (filterAge) {
-        const [minAge, maxAge] = filterAge.split("-");
-        const age = calculateAge(p.DateOfBirth).split(" ")[0]; // numeric only
+        const ageString = calculateAge(p.DateOfBirth).split(" ")[0];
+        if (ageString === "NA") return false;
 
-        if (filterAge === "40+" && age < 40) return false;
-        if (maxAge && (age < minAge || age > maxAge)) return false;
+        const ageNum = parseInt(ageString, 10);
+
+        if (filterAge === "40+" && ageNum < 40) return false;
+
+        if (filterAge !== "40+") {
+          const [minAge, maxAge] = filterAge.split("-");
+          if (ageNum < parseInt(minAge, 10) || ageNum > parseInt(maxAge, 10)) {
+            return false;
+          }
+        }
       }
 
       // City filter
@@ -337,7 +349,11 @@ const ProfileList = () => {
                         <li key={i}>
                           <div className="profile-card">
                             <div className="profile-image-wrapper">
-                              <img src={imageSrc} alt={fullName} />
+                              <img
+                                src={imageSrc}
+                                alt={fullName}
+                                onError={handleImageError}
+                              />
                             </div>
 
                             <div className="profile-details">
@@ -419,7 +435,7 @@ const ProfileList = () => {
                 </div>
               )}
 
-              {/* ---------------- OUTGOING REQUESTS (MATCHING UI) ---------------- */}
+              {/* ---------------- OUTGOING REQUESTS ---------------- */}
               {activeTab === "outgoing" && (
                 <div className="all-list-sh">
                   {outgoing.length === 0 && (
@@ -440,7 +456,11 @@ const ProfileList = () => {
                         <li key={i}>
                           <div className="profile-card">
                             <div className="profile-image-wrapper">
-                              <img src={imageSrc} alt={fullName} />
+                              <img
+                                src={imageSrc}
+                                alt={fullName}
+                                onError={handleImageError}
+                              />
 
                               <div
                                 className={`status-badge ${
@@ -505,7 +525,11 @@ const ProfileList = () => {
                             <div className="profile-card">
                               {/* IMAGE */}
                               <div className="profile-image-wrapper">
-                                <img src={imageSrc} alt={fullName} />
+                                <img
+                                  src={imageSrc}
+                                  alt={fullName}
+                                  onError={handleImageError}
+                                />
                               </div>
 
                               {/* DETAILS */}
@@ -564,13 +588,21 @@ const ProfileList = () => {
               <button className="btn-close" data-bs-dismiss="modal"></button>
             </div>
 
-            <div className="modal-body">
+            <div className="modal-body text-center">
               <img
                 src={
-                  selectedProfile?.ProfilePhoto || "matro/images/default.png"
+                  selectedProfile?.ProfilePhoto ||
+                  `${process.env.PUBLIC_URL}/images/default.png`
                 }
-                alt=""
-                style={{ width: 150, height: 180, borderRadius: 10 }}
+                alt="Profile"
+                style={{
+                  width: 150,
+                  height: 180,
+                  objectFit: "cover",
+                  borderRadius: 10,
+                  margin: "0 auto 15px auto",
+                }}
+                onError={handleImageError}
               />
 
               <h5>{selectedProfile?.firstname}</h5>
@@ -600,6 +632,7 @@ const ProfileList = () => {
         data-bs-target="#sendInter"
       ></button>
 
+      {/* INCOMPLETE PROFILE MODAL */}
       {showIncompleteModal && (
         <div
           className="modal fade show custom-modal-backdrop"
@@ -620,15 +653,12 @@ const ProfileList = () => {
 
               {/* BODY */}
               <div className="modal-body text-center">
-                {/* Matrimony Icon Circle */}
                 <div className="premium-icon-wrapper">
                   <i className="fa fa-heart premium-heart-icon"></i>
                 </div>
 
-                {/* Headline */}
                 <h5 className="premium-heading">Your Profile is Incomplete</h5>
 
-                {/* Subtext */}
                 <p className="premium-subtext">
                   To send interest and connect with matches, please update your
                   profile details.

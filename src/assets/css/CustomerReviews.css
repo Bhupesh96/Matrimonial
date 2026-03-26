@@ -49,15 +49,17 @@
   border-radius: 18px;
   padding: 25px;
   text-align: center;
-  min-height: 320px;
+
+  /* Flexbox magic to make content stretch */
+  height: 100%;
+  display: flex;
+  flex-direction: column;
 
   position: relative;
   overflow: hidden;
-
   border: 1px solid rgba(240, 200, 120, 0.35);
   box-shadow: 0 10px 25px rgba(0, 0, 0, 0.07);
 }
-
 /* =======================
    Image + Floating Dots
 ======================= */
@@ -118,11 +120,11 @@
 }
 
 .review-name {
-  margin-top: 15px;
+  margin-top: auto; /* Pushes this element to the absolute bottom */
+  padding-top: 15px;
   font-weight: 700;
   font-size: 17px;
 }
-
 .review-city {
   color: #999;
   font-size: 14px;
@@ -199,7 +201,7 @@
 
   .review-card {
     padding: 20px;
-    min-height: 280px;
+
     margin-bottom: 15px;
   }
 
@@ -256,7 +258,6 @@
 
   .review-card {
     padding: 18px 15px;
-    min-height: 260px;
   }
 
   .review-img-box {
@@ -285,4 +286,7 @@
     padding: 9px 20px;
     font-size: 13px;
   }
+}
+.review-swiper .swiper-slide {
+  height: auto;
 }

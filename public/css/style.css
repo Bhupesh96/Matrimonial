@@ -2674,7 +2674,9 @@ table td {
   background-clip: padding-box;
   border: 1px solid #dfdfdf;
   border-radius: 3px;
-  transition: border-color 0.15s ease-in-out, box-shadow 0.15s ease-in-out;
+  transition:
+    border-color 0.15s ease-in-out,
+    box-shadow 0.15s ease-in-out;
 }
 
 .form-login .form-group .chosen-container a.chosen-single {
@@ -3124,7 +3126,8 @@ table td {
 }
 
 .lhs-search ul li:nth-child(2) input {
-  background: url("../images/icon/search.html") center center / 17px no-repeat,
+  background:
+    url("../images/icon/search.html") center center / 17px no-repeat,
     rgb(217, 220, 225);
   border: 0px;
   font-size: 14px;
@@ -4417,7 +4420,8 @@ span.mail::before {
 }
 
 .chosen-rtl .chosen-search input[type="text"] {
-  background: url("../images/icon/chosen-sprite.png") -28px -20px no-repeat,
+  background:
+    url("../images/icon/chosen-sprite.png") -28px -20px no-repeat,
     rgb(255, 255, 255);
   direction: rtl;
   padding: 4px 5px 4px 20px;
@@ -6404,7 +6408,9 @@ span.mail::before {
   border: 1px solid rgb(232, 232, 232);
   text-indent: 0px;
   line-height: 12px;
-  transition: border-color 0.4s ease 0s, color 0.4s ease 0s;
+  transition:
+    border-color 0.4s ease 0s,
+    color 0.4s ease 0s;
   width: calc(100% - 80px);
   font-size: 14px;
   background: rgb(255, 255, 255);
@@ -12610,4 +12616,75 @@ select {
   .wedd-info ul li i {
     margin-right: 7px;
   }
+}
+/* =========================================
+   MASTER MOBILE HEADER FIX
+========================================= */
+@media (max-width: 992px) {
+  /* 1. Force hide ALL desktop menu parts and the old template's mobile icons */
+  .hom-nav .bl,
+  .hom-nav .al,
+  .desk-menu,
+  .mob-sec,
+  .mob-me-ic {
+    display: none !important;
+  }
+
+  /* 2. Fix the Logo container so it sits cleanly on the left */
+  .hom-nav .logo {
+    display: flex !important;
+    align-items: center !important;
+    width: 100% !important;
+    float: none !important;
+    padding: 10px 0 !important;
+  }
+
+  /* Keep the logo size reasonable on small screens */
+  .hom-nav .logo-brand img.ic-logo {
+    width: 160px !important;
+    height: auto !important;
+    margin-left: 0 !important;
+  }
+
+  /* 3. Hide the top contact bar on mobile (saves space) */
+  .head-top {
+    display: none !important;
+  }
+}
+/* 1. Make the container a flex row so it stretches children */
+.bl .smenu-box ul {
+  display: flex;
+  flex-wrap: wrap; /* Allows wrapping if screen gets too small */
+  align-items: stretch; /* Forces all columns to be equal height */
+}
+
+/* 2. Ensure the list items stretch fully */
+.bl .smenu-box ul li {
+  display: flex;
+  /* width: 25%; is already handled by your existing CSS, keep it */
+}
+
+/* 3. Make the box itself fill the height of the li */
+.menu-box {
+  width: 100%; /* Ensure it fills the li */
+  display: flex;
+  flex-direction: column;
+  justify-content: space-between; /* Pushes the button to the bottom */
+}
+
+/* 4. Fix the overlay overlaying the new flex layout */
+.menu-box > a,
+.menu-box > .fclick {
+  display: flex !important;
+  flex-direction: column;
+  justify-content: flex-end; /* Keeps text near the bottom */
+  height: 100%;
+  width: 100%;
+  z-index: 2; /* Put above the before pseudo element */
+  position: relative;
+}
+
+/* Ensure the text inside doesn't mess up the flex layout */
+.menu-box h5 {
+  margin-top: auto; /* Pushes the title down */
 }

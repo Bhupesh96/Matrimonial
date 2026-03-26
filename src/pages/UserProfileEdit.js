@@ -1,4 +1,4 @@
-import { useEffect, useState } from "react";
+import { useEffect, useRef, useState } from "react";
 import { useNavigate } from "react-router-dom";
 
 import ContactExpert from "../components/ContactExpert";
@@ -38,7 +38,7 @@ const UserProfileEdit = () => {
   const [profilePhotoName, setProfilePhotoName] = useState("");
   const [galleryFiles, setGalleryFiles] = useState([]);
   const [galleryPreview, setGalleryPreview] = useState([]);
-
+  const [isEduDropdownOpen, setIsEduDropdownOpen] = useState(false);
   const [dropdowns, setDropdowns] = useState({
     cities: [],
     heights: [],
@@ -55,6 +55,24 @@ const UserProfileEdit = () => {
     bloodGroups: [],
     relationships: [],
   });
+  const eduDropdownRef = useRef(null);
+  useEffect(() => {
+    function handleClickOutside(event) {
+      if (
+        eduDropdownRef.current &&
+        !eduDropdownRef.current.contains(event.target)
+      ) {
+        setIsEduDropdownOpen(false);
+      }
+    }
+
+    // Bind the event listener
+    document.addEventListener("mousedown", handleClickOutside);
+    return () => {
+      // Unbind the event listener on clean up
+      document.removeEventListener("mousedown", handleClickOutside);
+    };
+  }, []);
   const IMG_BASE =
     process.env.REACT_APP_IMG_BASE_URL ||
     "https://techwithus.in/matro/admin/plug/";
@@ -174,7 +192,17 @@ const UserProfileEdit = () => {
     const { name, value } = e.target;
     setProfileData((prev) => ({ ...prev, [name]: value }));
   };
-
+  const handleMultiSelectChange = (e) => {
+    const { name, options } = e.target;
+    const values = [];
+    for (let i = 0; i < options.length; i++) {
+      if (options[i].selected && options[i].value !== "") {
+        values.push(options[i].value);
+      }
+    }
+    // Save as a comma-separated string (e.g., "1,3,5")
+    setProfileData((prev) => ({ ...prev, [name]: values.join(",") }));
+  };
   const onPhotoChange = (e) => {
     if (!e.target.files?.[0]) return;
 
@@ -209,10 +237,13 @@ const UserProfileEdit = () => {
     };
 
     if (p.EducationDegreeID) {
-      p.EducationDegree = findText(
-        dropdowns.educationDegrees,
-        p.EducationDegreeID,
-      );
+      // Split the comma-separated IDs, find their text names, and join them back
+      const selectedIds = String(p.EducationDegreeID).split(",");
+      const selectedNames = selectedIds
+        .map((id) => findText(dropdowns.educationDegrees, id.trim()))
+        .filter(Boolean); // Remove empty values
+
+      p.EducationDegree = selectedNames.join(", ");
     }
 
     if (p.OccupationID) {
@@ -290,7 +321,29 @@ const UserProfileEdit = () => {
     bloodGroups,
     relationships,
   } = dropdowns;
+  // --- NEW HANDLER FOR CHECKBOX DROPDOWN ---
+  const handleEduCheckboxChange = (id) => {
+    const currentSelected = profileData.EducationDegreeID
+      ? String(profileData.EducationDegreeID).split(",").filter(Boolean)
+      : [];
 
+    const idStr = String(id);
+    let newSelected;
+
+    if (currentSelected.includes(idStr)) {
+      // Uncheck: remove ID from array
+      newSelected = currentSelected.filter((item) => item !== idStr);
+    } else {
+      // Check: add ID to array
+      newSelected = [...currentSelected, idStr];
+    }
+
+    // Save back as comma-separated string
+    setProfileData((prev) => ({
+      ...prev,
+      EducationDegreeID: newSelected.join(","),
+    }));
+  };
   return (
     <div>
       <PoopUpSearch />
@@ -760,16 +813,114 @@ const UserProfileEdit = () => {
             <h4>Education & Job</h4>
 
             <div className="mt-3">
-              <label>Education Degree</label>
-              <select
-                className="form-select mb-3"
-                name="EducationDegreeID"
-                value={profileData.EducationDegreeID || ""}
-                onChange={handleChange}
+              <div
+                ref={eduDropdownRef} /* <--- Add the ref right here */
+                style={{ position: "relative", marginBottom: "16px" }}
               >
-                <option value="">Select Degree</option>
-                {renderOptions(educationDegrees)}
-              </select>
+                {/* The clickable dropdown box */}
+                <div
+                  className="form-control d-flex justify-content-between align-items-center"
+                  style={{
+                    cursor: "pointer",
+                    backgroundColor: "#fff",
+                    minHeight: "40px",
+                  }}
+                  onClick={() => setIsEduDropdownOpen(!isEduDropdownOpen)}
+                >
+                  <span
+                    style={{
+                      overflow: "hidden",
+                      textOverflow: "ellipsis",
+                      whiteSpace: "nowrap",
+                    }}
+                  >
+                    {profileData.EducationDegreeID
+                      ? String(profileData.EducationDegreeID)
+                          .split(",")
+                          .map((id) => {
+                            const found = educationDegrees.find(
+                              (d) => String(d.id) === String(id),
+                            );
+                            return found ? found.name : "";
+                          })
+                          .filter(Boolean)
+                          .join(", ") || "Select Degrees"
+                      : "Select Degrees"}
+                  </span>
+                  <i
+                    className={`fa fa-chevron-${isEduDropdownOpen ? "up" : "down"}`}
+                  ></i>
+                </div>
+
+                {/* The dropdown list with checkboxes */}
+                {isEduDropdownOpen && (
+                  <div
+                    style={{
+                      position: "absolute",
+                      top: "100%",
+                      left: 0,
+                      right: 0,
+                      backgroundColor: "#fff",
+                      border: "1px solid #ccc",
+                      borderRadius: "6px",
+                      maxHeight: "220px",
+                      overflowY: "auto",
+                      zIndex: 1000,
+                      boxShadow: "0 8px 16px rgba(0,0,0,0.15)",
+                      marginTop: "4px",
+                    }}
+                  >
+                    {educationDegrees.map((item) => {
+                      const isSelected = profileData.EducationDegreeID
+                        ? String(profileData.EducationDegreeID)
+                            .split(",")
+                            .includes(String(item.id))
+                        : false;
+
+                      return (
+                        <label
+                          key={item.id}
+                          style={{
+                            display: "block",
+                            padding: "10px 15px",
+                            margin: 0,
+                            cursor: "pointer",
+                            borderBottom: "1px solid #f0f0f0",
+                            backgroundColor: isSelected ? "#f8faff" : "#fff",
+                            transition: "background-color 0.2s",
+                          }}
+                          onMouseEnter={(e) =>
+                            (e.currentTarget.style.backgroundColor = "#f1f1f1")
+                          }
+                          onMouseLeave={(e) =>
+                            (e.currentTarget.style.backgroundColor = isSelected
+                              ? "#f8faff"
+                              : "#fff")
+                          }
+                        >
+                          <input
+                            type="checkbox"
+                            checked={isSelected}
+                            onChange={() => handleEduCheckboxChange(item.id)}
+                            style={{
+                              marginRight: "10px",
+                              transform: "scale(1.2)",
+                              cursor: "pointer",
+                            }}
+                          />
+                          {item.name}
+                        </label>
+                      );
+                    })}
+                  </div>
+                )}
+              </div>
+              <small
+                className="text-muted d-block mb-3"
+                style={{ fontSize: "12px", marginTop: "-4px" }}
+              >
+                Hold Ctrl (Windows) or Cmd (Mac) to select multiple options.
+              </small>
 
               <label>Education Detail</label>
               <input
@@ -843,7 +994,7 @@ const UserProfileEdit = () => {
                 {renderOptions(preferenceMarriageAreas)}
               </select>
 
-              <label>Paitthi/Nivas Khor</label>
+              <label>Paitrik/Niwas Khor</label>
               <input
                 className="form-control mb-3"
                 name="PaitthiNivasKhor"

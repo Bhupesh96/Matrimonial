@@ -1,0 +1,59 @@
+/* 1. Add padding to the Swiper container to make room for the arrows outside the cards */
+.hom-blog .swiper {
+  /* 50px on left/right gives the arrows their own lane */
+  padding: 15px 60px 40px 60px !important;
+}
+
+/* 2. Style the native Swiper arrows into premium white circles */
+.hom-blog .swiper-button-prev,
+.hom-blog .swiper-button-next {
+  background: #ffffff;
+  width: 45px;
+  height: 45px;
+  border-radius: 50%;
+  box-shadow: 0 4px 15px rgba(0, 0, 0, 0.12);
+  color: #333; /* Color of the arrow icon */
+  top: 50%;
+  transform: translateY(-50%);
+  margin-top: 0;
+  transition: all 0.3s ease;
+}
+
+.hom-blog .swiper-button-prev:hover,
+.hom-blog .swiper-button-next:hover {
+  background: #e5026b; /* Accent color on hover */
+  color: #ffffff;
+  box-shadow: 0 6px 20px rgba(229, 2, 107, 0.3);
+}
+
+/* 3. Shrink and thicken the default Swiper icon font */
+.hom-blog .swiper-button-prev::after,
+.hom-blog .swiper-button-next::after {
+  font-size: 18px;
+  font-weight: 900;
+}
+
+/* 4. Pin them to the absolute edges of the padded container */
+.hom-blog .swiper-button-prev {
+  left: 5px;
+}
+
+.hom-blog .swiper-button-next {
+  right: 5px;
+}
+
+/* =========================================
+   MOBILE OPTIMIZATION
+========================================= */
+@media (max-width: 768px) {
+  .hom-blog .swiper {
+    /* Remove the massive side padding on mobile so cards fill the screen */
+    padding: 10px 15px 40px 15px !important;
+  }
+
+  /* Hide the arrows entirely on mobile (users prefer to swipe with their thumbs) */
+  .hom-blog .swiper-button-prev,
+  .hom-blog .swiper-button-next {
+    display: none !important;
+  }
+}

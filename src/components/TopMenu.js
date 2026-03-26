@@ -38,7 +38,7 @@ const TopMenu = () => {
                 </a>
               </li>
               <li>
-                <a href="#!">
+                <a href="#!" onClick={(e) => e.preventDefault()}>
                   <i className="fa fa-facebook" aria-hidden="true"></i>
                 </a>
               </li>

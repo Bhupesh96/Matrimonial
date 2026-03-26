@@ -1,17 +1,17 @@
-import React, { useEffect, useState } from "react";
+import { useEffect, useState } from "react";
 import "../assets/css/Community.css";
 
-import Preloader from "../components/Preloader";
-import PoopUpSearch from "../components/PoopUpSearch";
-import TopMenu from "../components/TopMenu";
-import MenuPopUp from "../components/MenuPopUp";
+import { fetchCommunityEvents } from "../api";
 import ContactExpert from "../components/ContactExpert";
-import MainMenu from "../components/MainMenu";
-import MobileMenu from "../components/MobileMenu";
+import CopyRight from "../components/CopyRight";
 import DashboardMenu from "../components/DashBoardMenu";
 import Footer from "../components/Footer";
-import CopyRight from "../components/CopyRight";
-import { fetchCommunityEvents } from "../api";
+import MainMenu from "../components/MainMenu";
+import MenuPopUp from "../components/MenuPopUp";
+import MobileMenu from "../components/MobileMenu";
+import PoopUpSearch from "../components/PoopUpSearch";
+import Preloader from "../components/Preloader";
+import TopMenu from "../components/TopMenu";
 
 const Community = () => {
   const [posts, setPosts] = useState([]);
@@ -24,7 +24,7 @@ const Community = () => {
 
         let events = await fetchCommunityEvents();
         events = events.sort(
-          (a, b) => new Date(b.EventDate) - new Date(a.EventDate)
+          (a, b) => new Date(b.EventDate) - new Date(a.EventDate),
         );
 
         setPosts(events);
