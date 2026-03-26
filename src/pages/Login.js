@@ -96,11 +96,16 @@ const Login = () => {
           .catch((err) => console.error("Failed to fetch profile photo:", err));
       }
 
-      AlertService.showSuccessAndRedirect(
-        lang === "en" ? "Login successful!" : "लॉगिन सफल!",
-        navigate,
-        "/",
-      );
+      // ADD THIS INSTEAD:
+      // Optional: If you still want the popup to show up while the page changes instantly
+      if (AlertService.showSuccess) {
+        AlertService.showSuccess(
+          lang === "en" ? "Login successful!" : "लॉगिन सफल!",
+        );
+      }
+
+      // Redirect immediately without waiting
+      navigate("/");
     } catch (error) {
       AlertService.showError(error.message);
     } finally {
