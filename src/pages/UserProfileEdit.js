@@ -811,7 +811,7 @@ const UserProfileEdit = () => {
           {/* -------------------------------------- */}
           <div className="edit-pro-parti mb-5">
             <h4>Education & Job</h4>
-
+            <label>Degree</label>
             <div className="mt-3">
               <div
                 ref={eduDropdownRef} /* <--- Add the ref right here */
@@ -915,14 +915,9 @@ const UserProfileEdit = () => {
                   </div>
                 )}
               </div>
-              <small
-                className="text-muted d-block mb-3"
-                style={{ fontSize: "12px", marginTop: "-4px" }}
-              >
-                Hold Ctrl (Windows) or Cmd (Mac) to select multiple options.
-              </small>
 
               <label>Education Detail</label>
+
               <input
                 className="form-control mb-3"
                 name="EducationDetail"
@@ -994,7 +989,7 @@ const UserProfileEdit = () => {
                 {renderOptions(preferenceMarriageAreas)}
               </select>
 
-              <label>Paitrik/Niwas Khor</label>
+              <label>Paitrik/Niwas</label>
               <input
                 className="form-control mb-3"
                 name="PaitthiNivasKhor"
