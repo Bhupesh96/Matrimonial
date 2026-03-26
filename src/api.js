@@ -80,10 +80,13 @@ export const createProfile = async (profileData) => {
     body: JSON.stringify(profileData),
   });
 
-  if (!data || data.status !== 200) throw new Error(data.message);
+  // FIX: Allow both 200 (OK) and 201 (Created)
+  if (!data || (data.status !== 200 && data.status !== 201)) {
+    throw new Error(data.message);
+  }
+
   return data;
 };
-
 /* ----------------------------------------------------
     LOGIN USER
   ---------------------------------------------------- */
