@@ -1,36 +1,54 @@
 const API_BASE_URL = process.env.REACT_APP_API_URL;
 
+/* ----------------------------------------------------
+    GLOBAL FETCH WRAPPER
+  ---------------------------------------------------- */
 export const apiFetch = async (url, options = {}) => {
-  // <-- Add 'export' here
   try {
     const token = localStorage.getItem("login_token");
+    let finalUrl = url;
 
-    // Automatically attach the token to headers if the user is logged in
+    if (token && !finalUrl.includes("login_token=")) {
+      finalUrl += `&login_token=${token}&token=${token}`;
+    }
+
     const headers = {
+      "X-API-KEY": "YourSuperSecretKeyHere123!@#",
       ...options.headers,
-      "X-API-KEY": "YourSuperSecretKeyHere123!@#", // <-- MUST MATCH PHP
     };
 
     if (token) {
       headers["Authorization"] = `Bearer ${token}`;
-      headers["token"] = token; // Added in case your PHP backend looks for a 'token' header
+      headers["token"] = token;
+      headers["login_token"] = token;
     }
 
-    const res = await fetch(url, {
-      credentials: "include", // Enforce cookies
+    const res = await fetch(finalUrl, {
+      credentials: "include",
       ...options,
-      headers, // Pass the headers with the token
+      headers,
     });
 
     const data = await res.json();
 
+    // ==========================================
+    // THE FIX IS HERE
+    // ==========================================
     if (data.status === 401) {
-      localStorage.clear();
-      const basename =
-        process.env.REACT_APP_BASENAME === "/"
-          ? ""
-          : process.env.REACT_APP_BASENAME || "";
-      window.location.href = `${basename}/login`;
+      // Do not auto-refresh if the user is currently trying to log in!
+      if (
+        !finalUrl.includes("api=user_login") &&
+        !finalUrl.includes("api=admin_login")
+      ) {
+        localStorage.clear();
+        const basename =
+          process.env.REACT_APP_BASENAME === "/"
+            ? ""
+            : process.env.REACT_APP_BASENAME || "";
+        window.location.href = `${basename}/login`;
+      }
+
+      // Return the data so Login.js can throw the error and show the alert
       return data;
     }
 
