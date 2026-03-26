@@ -1,7 +1,14 @@
 import React, { useState, useEffect } from "react";
 import { Link, useNavigate } from "react-router-dom";
 
-import { createProfile, fetchMasterData, fetchNextUserID } from "../api";
+// IMPORT loginUser and apiFetch for auto-login
+import {
+  createProfile,
+  fetchMasterData,
+  fetchNextUserID,
+  loginUser,
+  apiFetch,
+} from "../api";
 import AlertService from "../services/AlertServices";
 
 import Preloader from "../components/Preloader";
@@ -14,6 +21,8 @@ import MobileMenu from "../components/MobileMenu";
 import DashboardMenu from "../components/DashBoardMenu";
 import Footer from "../components/Footer";
 import CopyRight from "../components/CopyRight";
+
+const API_BASE_URL = process.env.REACT_APP_API_URL;
 
 const renderOptions = (data) =>
   data?.map((item) => (
@@ -131,6 +140,9 @@ const SignUp = () => {
   const [loading, setLoading] = useState(true);
   const [phoneError, setPhoneError] = useState("");
 
+  // NEW STATE: Controls the visibility of the success modal
+  const [showSuccessModal, setShowSuccessModal] = useState(false);
+
   const handleMobileChange = (e) => {
     const numeric = e.target.value.replace(/[^0-9]/g, "").slice(0, 10);
     setPhone(numeric);
@@ -201,16 +213,63 @@ const SignUp = () => {
       Complexion: complexion,
       contact_mobile: phone,
     };
-    console.log("Sending details: ", JSON.stringify(payload, null, 2));
-    try {
-      const result = await createProfile(payload);
 
-      AlertService.showSuccessAndRedirect(result.message, navigate, "/login");
+    try {
+      // 1. Create Profile
+      await createProfile(payload);
+
+      // 2. Auto-Login right after creation
+      try {
+        // The mobile number acts as the password
+        const loginData = await loginUser({
+          identifier: userID,
+          password: phone,
+        });
+
+        if (loginData.data && loginData.data.ProfileID) {
+          localStorage.setItem("profileID", loginData.data.ProfileID);
+          localStorage.setItem("userID", loginData.data.UserID);
+          localStorage.setItem("profileName", loginData.data.ProfileName);
+          localStorage.setItem("login_token", loginData.login_token);
+
+          // Fetch profile photo
+          apiFetch(
+            `${API_BASE_URL}?api=get_profile&ProfileID=${loginData.data.ProfileID}`,
+          )
+            .then((profileRes) => {
+              const photo = profileRes?.data?.[0]?.ProfilePhoto;
+              if (photo) {
+                localStorage.setItem("profilePhoto", photo);
+              }
+            })
+            .catch((err) =>
+              console.error("Failed to fetch profile photo:", err),
+            );
+        }
+
+        // 3. Show Custom Success Modal instead of Alert
+        setShowSuccessModal(true);
+      } catch (loginErr) {
+        // Fallback: If login fails for some odd reason, redirect to login page
+        AlertService.showSuccessAndRedirect(
+          lang === "en"
+            ? "Registration successful! Please login."
+            : "पंजीकरण सफल! कृपया लॉगिन करें।",
+          navigate,
+          "/login",
+        );
+      }
     } catch (err) {
       AlertService.showError(err.message);
     } finally {
       setLoading(false);
     }
+  };
+
+  // Close Modal and Redirect Handler
+  const handleCloseModalAndRedirect = () => {
+    setShowSuccessModal(false);
+    navigate("/"); // Redirect to home page
   };
 
   if (loading) return <Preloader />;
@@ -478,7 +537,112 @@ const SignUp = () => {
       <Footer />
       <CopyRight />
 
-      {/* LANGUAGE SWITCH CSS */}
+      {/* CUSTOM SUCCESS MODAL */}
+      {showSuccessModal && (
+        <div
+          onClick={handleCloseModalAndRedirect}
+          style={{
+            position: "fixed",
+            top: 0,
+            left: 0,
+            width: "100%",
+            height: "100%",
+            backgroundColor: "rgba(0, 0, 0, 0.7)",
+            display: "flex",
+            justifyContent: "center",
+            alignItems: "center",
+            zIndex: 99999,
+          }}
+        >
+          <div
+            onClick={(e) => e.stopPropagation()} // Prevent clicks inside from closing it instantly
+            style={{
+              backgroundColor: "#fff",
+              padding: "40px",
+              borderRadius: "15px",
+              textAlign: "center",
+              maxWidth: "450px",
+              width: "90%",
+              boxShadow: "0px 10px 30px rgba(0,0,0,0.3)",
+              animation: "fadeIn 0.3s ease-out",
+            }}
+          >
+            <div style={{ marginBottom: "20px" }}>
+              <i
+                className="fa fa-check-circle"
+                style={{ fontSize: "60px", color: "#28a745" }}
+              ></i>
+            </div>
+
+            <h2
+              style={{
+                color: "#333",
+                fontWeight: "bold",
+                marginBottom: "15px",
+              }}
+            >
+              {lang === "en" ? "Registration Successful!" : "पंजीकरण सफल!"}
+            </h2>
+            <p
+              style={{ color: "#666", fontSize: "16px", marginBottom: "25px" }}
+            >
+              {lang === "en"
+                ? "Please save your login credentials below."
+                : "कृपया अपना लॉगिन विवरण सुरक्षित रखें।"}
+            </p>
+
+            <div
+              style={{
+                backgroundColor: "#f8f9fa",
+                padding: "20px",
+                borderRadius: "10px",
+                border: "1px dashed #ccc",
+                marginBottom: "30px",
+                textAlign: "left",
+              }}
+            >
+              <p
+                style={{
+                  fontSize: "18px",
+                  margin: "0 0 10px 0",
+                  color: "#333",
+                }}
+              >
+                <strong>User ID:</strong>{" "}
+                <span style={{ color: "#d32163", marginLeft: "10px" }}>
+                  {userID}
+                </span>
+              </p>
+              <p style={{ fontSize: "18px", margin: "0", color: "#333" }}>
+                <strong>Password:</strong>{" "}
+                <span style={{ color: "#d32163", marginLeft: "10px" }}>
+                  {phone}
+                </span>
+              </p>
+            </div>
+
+            <button
+              onClick={handleCloseModalAndRedirect}
+              style={{
+                width: "100%",
+                padding: "12px",
+                backgroundColor: "#007bff",
+                color: "#fff",
+                border: "none",
+                borderRadius: "8px",
+                fontSize: "18px",
+                fontWeight: "bold",
+                cursor: "pointer",
+                transition: "background-color 0.2s",
+              }}
+            >
+              {lang === "en" ? "OK, Go to Home" : "ठीक है, होम पर जाएं"}
+            </button>
+          </div>
+        </div>
+      )}
+
+      {/* LANGUAGE SWITCH & ANIMATION CSS */}
       <style>{`
         .lang-btn {
           background: transparent;
@@ -491,6 +655,10 @@ const SignUp = () => {
           font-weight: bold;
           color: #007bff;
           border-bottom: 2px solid #007bff;
+        }
+        @keyframes fadeIn {
+          from { opacity: 0; transform: scale(0.9); }
+          to { opacity: 1; transform: scale(1); }
         }
       `}</style>
     </div>

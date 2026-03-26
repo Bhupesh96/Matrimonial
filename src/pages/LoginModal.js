@@ -1,3 +1,4 @@
+// src/pages/LoginModal.js
 import React, { useState } from "react";
 import { loginUser } from "../api";
 import AlertService from "../services/AlertServices";
@@ -7,12 +8,16 @@ const LoginModal = ({ show, onClose, onSuccess }) => {
   const [identifier, setIdentifier] = useState("");
   const [password, setPassword] = useState("");
   const [loading, setLoading] = useState(false);
-  const [lang, setLang] = useState("en"); // 🌐 NEW LANGUAGE STATE
+  const [lang, setLang] = useState("en");
+
+  // NEW STATE FOR PASSWORD VISIBILITY
+  const [showPassword, setShowPassword] = useState(false);
+
   const navigate = useNavigate();
 
   if (!show) return null;
 
-  // 🌐 TRANSLATION TEXTS
+  // TRANSLATION TEXTS
   const t = {
     en: {
       title: "Sign in to your account",
@@ -48,7 +53,7 @@ const LoginModal = ({ show, onClose, onSuccess }) => {
       AlertService.showError(
         lang === "en"
           ? "Please enter both User ID and password."
-          : "कृपया यूज़र आईडी और पासवर्ड दर्ज करें।"
+          : "कृपया यूज़र आईडी और पासवर्ड दर्ज करें।",
       );
       setLoading(false);
       return;
@@ -67,7 +72,7 @@ const LoginModal = ({ show, onClose, onSuccess }) => {
       AlertService.showSuccessAndRedirect(
         lang === "en" ? "Login Successful" : "लॉगिन सफल",
         navigate,
-        {}
+        "/",
       );
 
       onSuccess && onSuccess();
@@ -109,7 +114,7 @@ const LoginModal = ({ show, onClose, onSuccess }) => {
           position: "relative",
         }}
       >
-        {/* ❌ Close Button */}
+        {/* Close Button */}
         <button
           onClick={onClose}
           style={{
@@ -200,7 +205,11 @@ const LoginModal = ({ show, onClose, onSuccess }) => {
 
         {/* Form */}
         <form onSubmit={handleSubmit}>
-          <label style={{ fontWeight: "600" }}>{t[lang].userId}</label>
+          <label
+            style={{ fontWeight: "600", display: "block", marginBottom: "5px" }}
+          >
+            {t[lang].userId}
+          </label>
           <input
             type="text"
             value={identifier}
@@ -213,24 +222,48 @@ const LoginModal = ({ show, onClose, onSuccess }) => {
               borderRadius: "10px",
               border: "1px solid #ddd",
               marginBottom: "18px",
+              boxSizing: "border-box",
             }}
           />
 
-          <label style={{ fontWeight: "600" }}>{t[lang].password}</label>
-          <input
-            type="password"
-            value={password}
-            placeholder={t[lang].placeholderPass}
-            onChange={(e) => setPassword(e.target.value)}
-            required
-            style={{
-              width: "100%",
-              padding: "14px",
-              borderRadius: "10px",
-              border: "1px solid #ddd",
-              marginBottom: "18px",
-            }}
-          />
+          <label
+            style={{ fontWeight: "600", display: "block", marginBottom: "5px" }}
+          >
+            {t[lang].password}
+          </label>
+
+          {/* UPDATED PASSWORD WRAPPER */}
+          <div style={{ position: "relative", marginBottom: "18px" }}>
+            <input
+              type={showPassword ? "text" : "password"}
+              value={password}
+              placeholder={t[lang].placeholderPass}
+              onChange={(e) => setPassword(e.target.value)}
+              required
+              style={{
+                width: "100%",
+                padding: "14px",
+                paddingRight: "45px", // Room for the eye icon
+                borderRadius: "10px",
+                border: "1px solid #ddd",
+                boxSizing: "border-box",
+              }}
+            />
+            <span
+              onClick={() => setShowPassword(!showPassword)}
+              style={{
+                position: "absolute",
+                right: "15px",
+                top: "50%",
+                transform: "translateY(-50%)",
+                cursor: "pointer",
+                color: "#777",
+                fontSize: "18px",
+              }}
+            >
+              <i className={showPassword ? "fa fa-eye-slash" : "fa fa-eye"}></i>
+            </span>
+          </div>
 
           <button
             type="submit"

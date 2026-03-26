@@ -21,7 +21,7 @@ const Login = () => {
   const [identifier, setIdentifier] = useState("");
   const [password, setPassword] = useState("");
   const [loading, setLoading] = useState(false);
-
+  const [showPassword, setShowPassword] = useState(false);
   const [lang, setLang] = useState("en"); // 🌐 Language State
   const navigate = useNavigate();
 
@@ -207,16 +207,38 @@ const Login = () => {
                           />
                         </div>
 
-                        <div className="form-group">
+                        {/* UPDATED PASSWORD FIELD */}
+                        <div
+                          className="form-group"
+                          style={{ position: "relative" }}
+                        >
                           <label className="lb">{t[lang].password}</label>
                           <input
-                            type="password"
+                            type={showPassword ? "text" : "password"}
                             className="form-control"
                             placeholder={t[lang].placeholderPass}
                             value={password}
                             onChange={(e) => setPassword(e.target.value)}
                             required
+                            style={{ paddingRight: "40px" }}
                           />
+                          <span
+                            onClick={() => setShowPassword(!showPassword)}
+                            style={{
+                              position: "absolute",
+                              right: "15px",
+                              top: "35px", // aligns icon vertically
+                              cursor: "pointer",
+                              color: "#c9c9c9",
+                              fontSize: "18px",
+                            }}
+                          >
+                            <i
+                              className={
+                                showPassword ? "fa fa-eye-slash" : "fa fa-eye"
+                              }
+                            ></i>
+                          </span>
                         </div>
 
                         <div className="form-group form-check">
