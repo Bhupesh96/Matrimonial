@@ -46,8 +46,8 @@ const MainMenu = () => {
               </span> */}
               <Link to="/" className="logo-brand">
                 <img
-                  src={`${process.env.PUBLIC_URL}/images/logo-b.png`}
-                  alt=""
+                  src={`${process.env.REACT_APP_BASENAME || ""}/images/logo-b.png`}
+                  alt="Logo"
                   loading="lazy"
                   className="ic-logo"
                 />
