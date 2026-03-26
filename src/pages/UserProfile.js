@@ -1,18 +1,17 @@
 // src/pages/UserProfile.js
-import React, { useEffect, useState } from "react";
-import Preloader from "../components/Preloader";
-import PoopUpSearch from "../components/PoopUpSearch";
-import TopMenu from "../components/TopMenu";
-import MenuPopUp from "../components/MenuPopUp";
-import ContactExpert from "../components/ContactExpert";
-import MainMenu from "../components/MainMenu";
-import MobileMenu from "../components/MobileMenu";
-import DashboardMenu from "../components/DashBoardMenu";
-import Footer from "../components/Footer";
-import CopyRight from "../components/CopyRight";
-import { Link } from "react-router-dom";
+import { useEffect, useState } from "react";
 import { useParams } from "react-router-dom";
 import { apiFetch } from "../api";
+import ContactExpert from "../components/ContactExpert";
+import CopyRight from "../components/CopyRight";
+import DashboardMenu from "../components/DashBoardMenu";
+import Footer from "../components/Footer";
+import MainMenu from "../components/MainMenu";
+import MenuPopUp from "../components/MenuPopUp";
+import MobileMenu from "../components/MobileMenu";
+import PoopUpSearch from "../components/PoopUpSearch";
+import Preloader from "../components/Preloader";
+import TopMenu from "../components/TopMenu";
 const API = process.env.REACT_APP_API_URL;
 
 // master types (lowercase)
@@ -34,7 +33,7 @@ const UserProfile = () => {
   const [profile, setProfile] = useState(null);
   const [masters, setMasters] = useState({});
 
-  const IMG_BASE = "https://techwithus.in/matro/admin/plug/";
+  const IMG_BASE = process.env.REACT_APP_IMG_BASE_URL;
   const DEFAULT_IMG = "images/default.png";
   const { id } = useParams();
   useEffect(() => {
@@ -104,8 +103,22 @@ const UserProfile = () => {
     );
   }
 
-  const imageSrc =
-    profile?.ProfilePhoto || profile?.ProfileImageURL || DEFAULT_IMG;
+  // --- NEW HELPER FUNCTION FOR IMAGES ---
+  const getFullImageUrl = (imagePath) => {
+    if (!imagePath) return DEFAULT_IMG;
+    // If it's already a full URL, return it
+    if (imagePath.startsWith("http")) return imagePath;
+
+    // Otherwise, attach the base URL from your PHP server
+    const cleanPath = imagePath.startsWith("/")
+      ? imagePath.substring(1)
+      : imagePath;
+    return `${IMG_BASE}${cleanPath}`;
+  };
+
+  // Safely grab the main profile picture
+  const rawImageSrc = profile?.ProfilePhoto || profile?.ProfileImageURL;
+  const imageSrc = rawImageSrc ? getFullImageUrl(rawImageSrc) : DEFAULT_IMG;
 
   // two-line partner expectation fallback
   const partnerExpectations =
@@ -284,7 +297,7 @@ const UserProfile = () => {
                   }}
                 >
                   <img
-                    src={img}
+                    src={getFullImageUrl(img)} /* <--- WRAPPED img HERE */
                     alt={`Gallery ${i + 1}`}
                     style={{
                       width: "100%",
@@ -293,7 +306,9 @@ const UserProfile = () => {
                       cursor: "pointer",
                       transition: "0.3s",
                     }}
-                    onClick={() => window.open(img, "_blank")}
+                    onClick={() =>
+                      window.open(getFullImageUrl(img), "_blank")
+                    } /* <--- WRAPPED img HERE */
                   />
                 </div>
               ))}

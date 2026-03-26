@@ -1,21 +1,21 @@
-import React, { useState, useEffect } from "react";
+import { useEffect, useState } from "react";
 import { useNavigate } from "react-router-dom";
 
-import PoopUpSearch from "../components/PoopUpSearch";
-import TopMenu from "../components/TopMenu";
-import MenuPopUp from "../components/MenuPopUp";
 import ContactExpert from "../components/ContactExpert";
-import MainMenu from "../components/MainMenu";
-import MobileMenu from "../components/MobileMenu";
-import DashboardMenu from "../components/DashBoardMenu";
 import CopyRight from "../components/CopyRight";
+import DashboardMenu from "../components/DashBoardMenu";
 import Footer from "../components/Footer";
+import MainMenu from "../components/MainMenu";
+import MenuPopUp from "../components/MenuPopUp";
+import MobileMenu from "../components/MobileMenu";
+import PoopUpSearch from "../components/PoopUpSearch";
 import Preloader from "../components/Preloader";
+import TopMenu from "../components/TopMenu";
 
 import {
+  fetchMasterData,
   getProfileDetails,
   updateProfile,
-  fetchMasterData,
   updateProfilePicture,
 } from "../api";
 import AlertService from "../services/AlertServices";
@@ -55,7 +55,23 @@ const UserProfileEdit = () => {
     bloodGroups: [],
     relationships: [],
   });
+  const IMG_BASE =
+    process.env.REACT_APP_IMG_BASE_URL ||
+    "https://techwithus.in/matro/admin/plug/";
 
+  // NEW HELPER FUNCTION
+  const getFullImageUrl = (imagePath) => {
+    if (!imagePath) return "/images/default.png";
+    // If it's already a full URL or a local blob (newly uploaded photo), return it directly
+    if (imagePath.startsWith("http") || imagePath.startsWith("blob:"))
+      return imagePath;
+
+    // Otherwise, attach the base URL from your PHP server
+    const cleanPath = imagePath.startsWith("/")
+      ? imagePath.substring(1)
+      : imagePath;
+    return `${IMG_BASE}${cleanPath}`;
+  };
   useEffect(() => {
     const loadAll = async () => {
       const profileID = localStorage.getItem("profileID");
@@ -84,7 +100,7 @@ const UserProfileEdit = () => {
         ];
 
         const masterResults = await Promise.all(
-          masters.map((m) => fetchMasterData(m))
+          masters.map((m) => fetchMasterData(m)),
         );
 
         const profile = await getProfileDetails();
@@ -131,7 +147,7 @@ const UserProfileEdit = () => {
         // Convert Rashi TEXT → ID
         if (profile.Rashi) {
           const found = masterResults[3].find(
-            (x) => x.name.toLowerCase() === profile.Rashi.toLowerCase()
+            (x) => x.name.toLowerCase() === profile.Rashi.toLowerCase(),
           );
           if (found) profile.Rashi = String(found.id);
         }
@@ -139,7 +155,7 @@ const UserProfileEdit = () => {
           const pref = masterResults[8].find(
             (x) =>
               x.name.toLowerCase() ===
-              String(profile.PreferredAreaOfMarriage).toLowerCase()
+              String(profile.PreferredAreaOfMarriage).toLowerCase(),
           );
           if (pref) profile.PreferredAreaOfMarriage = String(pref.id);
         }
@@ -195,7 +211,7 @@ const UserProfileEdit = () => {
     if (p.EducationDegreeID) {
       p.EducationDegree = findText(
         dropdowns.educationDegrees,
-        p.EducationDegreeID
+        p.EducationDegreeID,
       );
     }
 
@@ -218,7 +234,7 @@ const UserProfileEdit = () => {
     if (p.PreferredAreaOfMarriage) {
       p.PreferredAreaOfMarriage = findText(
         dropdowns.preferenceMarriageAreas,
-        p.PreferredAreaOfMarriage
+        p.PreferredAreaOfMarriage,
       );
     }
 
@@ -247,7 +263,7 @@ const UserProfileEdit = () => {
       AlertService.showSuccessAndRedirect(
         "Profile updated successfully!",
         navigate,
-        "/"
+        "/",
       );
     } catch (err) {
       AlertService.showError(err.message || "Update failed");
@@ -477,11 +493,9 @@ const UserProfileEdit = () => {
                   }}
                 >
                   <img
-                    src={
-                      profileData.ProfilePhoto ||
-                      profileData.ProfileImageURL ||
-                      "/images/default.png"
-                    }
+                    src={getFullImageUrl(
+                      profileData.ProfilePhoto || profileData.ProfileImageURL,
+                    )}
                     alt="Profile"
                     style={{
                       width: "100%",
@@ -523,7 +537,46 @@ const UserProfileEdit = () => {
               <div className="mt-4">
                 <h5 style={{ fontWeight: 600 }}>Photo Gallery</h5>
 
-                <label htmlFor="galleryInput" style={{ cursor: "pointer" }}>
+                {/* 1. SHOW EXISTING GALLERY IMAGES FROM SERVER */}
+                {profileData.gallery_images &&
+                  profileData.gallery_images.length > 0 && (
+                    <div style={{ marginBottom: "15px" }}>
+                      <div
+                        style={{
+                          fontSize: "13px",
+                          color: "#666",
+                          marginBottom: "8px",
+                        }}
+                      >
+                        Existing Photos:
+                      </div>
+                      <div
+                        style={{ display: "flex", gap: 10, flexWrap: "wrap" }}
+                      >
+                        {profileData.gallery_images.map((img, i) => (
+                          <img
+                            key={i}
+                            src={getFullImageUrl(img)} // <-- Wrap img in the helper here
+                            alt="gallery"
+                            style={{
+                              width: 90,
+                              height: 90,
+                              objectFit: "cover",
+                              borderRadius: 10,
+                              border: "1px solid #ddd",
+                              boxShadow: "0 2px 5px rgba(0,0,0,0.1)",
+                            }}
+                          />
+                        ))}
+                      </div>
+                    </div>
+                  )}
+
+                {/* 2. UPLOAD BUTTON */}
+                <label
+                  htmlFor="galleryInput"
+                  style={{ cursor: "pointer", marginTop: "10px" }}
+                >
                   <div
                     style={{
                       padding: "10px 18px",
@@ -534,7 +587,11 @@ const UserProfileEdit = () => {
                       marginBottom: 12,
                     }}
                   >
-                    Upload Gallery Photos
+                    <i
+                      className="fa fa-camera"
+                      style={{ marginRight: "6px" }}
+                    ></i>
+                    Upload New Gallery Photos
                   </div>
                 </label>
 
@@ -547,31 +604,42 @@ const UserProfileEdit = () => {
                   onChange={onGalleryChange}
                 />
 
-                {/* PREVIEW */}
+                {/* 3. PREVIEW NEWLY SELECTED IMAGES */}
                 {galleryPreview.length > 0 && (
-                  <div
-                    style={{
-                      display: "flex",
-                      gap: 10,
-                      flexWrap: "wrap",
-                      marginTop: 10,
-                    }}
-                  >
-                    {galleryPreview.map((img, i) => (
-                      <img
-                        key={i}
-                        src={img}
-                        alt="preview"
-                        style={{
-                          width: 90,
-                          height: 90,
-                          objectFit: "cover",
-                          borderRadius: 10,
-                          border: "1px solid #ddd",
-                          boxShadow: "0 3px 8px rgba(0,0,0,0.15)",
-                        }}
-                      />
-                    ))}
+                  <div style={{ marginTop: "10px" }}>
+                    <div
+                      style={{
+                        fontSize: "13px",
+                        color: "#007bff",
+                        marginBottom: "8px",
+                        fontWeight: "bold",
+                      }}
+                    >
+                      New Photos to Upload (Will be saved on Update):
+                    </div>
+                    <div
+                      style={{
+                        display: "flex",
+                        gap: 10,
+                        flexWrap: "wrap",
+                      }}
+                    >
+                      {galleryPreview.map((img, i) => (
+                        <img
+                          key={i}
+                          src={img}
+                          alt="preview"
+                          style={{
+                            width: 90,
+                            height: 90,
+                            objectFit: "cover",
+                            borderRadius: 10,
+                            border: "2px dashed #007bff",
+                            boxShadow: "0 3px 8px rgba(0,123,255,0.2)",
+                          }}
+                        />
+                      ))}
+                    </div>
                   </div>
                 )}
               </div>

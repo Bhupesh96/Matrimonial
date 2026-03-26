@@ -1,9 +1,7 @@
-import React, { useEffect, useState } from "react";
-import { Link } from "react-router-dom";
-import AlertService from "../services/AlertServices";
+import { useEffect, useRef, useState } from "react";
+import { Link, useNavigate } from "react-router-dom";
 import { logoutUser } from "../api";
-import { useNavigate } from "react-router-dom";
-import { useRef } from "react";
+import AlertService from "../services/AlertServices";
 
 const MainMenu = () => {
   const [profileName, setProfileName] = useState("");
