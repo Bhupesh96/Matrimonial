@@ -253,6 +253,7 @@ body {
   transition: background 0.2s ease, color 0.2s ease;
   text-transform: none !important;
   letter-spacing: 0.2px;
+  white-space: nowrap;
 }
 
 .dw-header .bl>ul>li>a:hover,
@@ -266,6 +267,11 @@ body {
   font-size: 10px;
   margin-left: 2px;
   opacity: 0.7;
+}
+
+/* Top utility bar (About / Contact / Couple Stories) — avoid label wrapping */
+.head-top .lhs ul li a {
+  white-space: nowrap;
 }
 
 /* ==========================================================================

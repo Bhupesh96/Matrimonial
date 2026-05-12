@@ -1,0 +1,48 @@
+================================================================================
+ADMIN: Show height text (HeightValue), not HeightID — Candidate Details modal
+================================================================================
+Your API already returns HeightValue, e.g. get_profile:
+  https://dewanganlink.in/matro/admin/plug/api/?api=get_profile&ProfileID=24
+
+The modal is probably printing HeightID (16) next to weight. Fix in HOSTINGER
+File Manager or your admin PHP/JS source (path is usually under public_html/matro/admin/).
+
+--------------------------------------------------------------------------------
+1) FIND THE CODE
+--------------------------------------------------------------------------------
+Search in the admin folder for any of:
+  HeightID
+  Height/Weight
+  candidatelist
+  Candidate Details
+  get_profile
+
+Open the file that builds the quick-view / modal HTML for a candidate.
+
+--------------------------------------------------------------------------------
+2) USE HeightValue FOR DISPLAY
+--------------------------------------------------------------------------------
+JavaScript (after you have the profile object from JSON, e.g. row = data[0]):
+
+  WRONG:  row.HeightID + " / " + row.Weight + "kg"
+  RIGHT:  (row.HeightValue || "-") + " / " + (row.Weight != null ? row.Weight + "kg" : "-")
+
+PHP (if you echo from an array $p):
+
+  WRONG:  echo $p['HeightID'] . " / " . $p['Weight'] . "kg";
+  RIGHT:  echo htmlspecialchars($p['HeightValue'] ?? '-') . " / "
+          . (isset($p['Weight']) ? (int)$p['Weight'] . "kg" : "-");
+
+If HeightValue is ever empty for old rows, join the heights master on HeightID
+in SQL or keep a small lookup — still do not show raw HeightID as "height".
+
+--------------------------------------------------------------------------------
+3) IF THE LIST API DOES NOT SEND HeightValue
+--------------------------------------------------------------------------------
+If the modal uses a *list* endpoint that only has HeightID, either:
+  - add HeightValue to that SQL/API response, OR
+  - call get_profile when opening the modal (you already have ProfileID).
+
+================================================================================
+After editing, save the file on the server and hard-refresh the admin page.
+================================================================================

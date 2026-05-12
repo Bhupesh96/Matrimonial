@@ -1,6 +1,6 @@
 // src/pages/LoginModal.js
 import React, { useState } from "react";
-import { getProfileDetails, loginUser } from "../api";
+import { getProfileDetails, loginUser, resolvePostLoginHomePath } from "../api";
 import AlertService from "../services/AlertServices";
 import { useNavigate } from "react-router-dom";
 
@@ -80,10 +80,17 @@ const LoginModal = ({ show, onClose, onSuccess }) => {
           .catch(() => {});
       }
 
+      let path = "/";
+      try {
+        path = await resolvePostLoginHomePath(data.data?.UserID);
+      } catch {
+        path = "/";
+      }
+
       AlertService.showSuccessAndRedirect(
         lang === "en" ? "Login Successful" : "लॉगिन सफल",
         navigate,
-        "/",
+        path,
       );
 
       onSuccess && onSuccess();

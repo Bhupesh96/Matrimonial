@@ -1,6 +1,18 @@
 # Hostinger / Apache / LiteSpeed — helps browsers pick up new React builds after deploy.
 # CRA serves hashed JS/CSS; if index.html is cached, users keep loading old chunk filenames.
 
+# --- React Router (SPA): direct URL / refresh on /community etc. ---
+# Without this, the server looks for a real folder "community" and returns 404.
+Options -MultiViews
+<IfModule mod_rewrite.c>
+  RewriteEngine On
+  RewriteBase /
+  RewriteRule ^index\.html$ - [L]
+  RewriteCond %{REQUEST_FILENAME} !-f
+  RewriteCond %{REQUEST_FILENAME} !-d
+  RewriteRule . /index.html [L]
+</IfModule>
+
 <IfModule mod_headers.c>
   <Files "index.html">
     Header set Cache-Control "no-store, no-cache, must-revalidate, max-age=0"

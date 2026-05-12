@@ -1,0 +1,26 @@
+================================================================================
+ADMIN PORTAL — Paitrik / Niwas (PaitthiNivasKhor) as city dropdown
+================================================================================
+The React member site now uses the same `cities` master list as a searchable
+dropdown and still saves the value in column/field **PaitthiNivasKhor** as the
+**city name** (string), e.g. "Bilaspur" — same as the API already expects.
+
+On the Hostinger PHP admin "edit profile" screen:
+
+1) Load cities from your existing master API or table (same source as
+   `get_master&master_type=cities` on the member site).
+
+2) Replace the free-text input for PaitthiNivasKhor / "Paitrik Niwas" with a
+   <select> (or Select2) populated with those cities. On save, POST the
+   **selected city name** into `PaitthiNivasKhor` (or keep your current field
+   name in the update query).
+
+3) When loading a profile for edit, set the select’s selected option by
+   matching `profile.PaitthiNivasKhor` to city name (case-insensitive is safer).
+
+4) Optional: if the stored value does not match any city (old typo), show the
+   raw value in a "legacy" note or default the select to empty so staff can fix.
+
+No database migration is required if the column already stores VARCHAR text.
+
+================================================================================

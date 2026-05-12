@@ -1,5 +1,5 @@
 import { useEffect, useState } from "react";
-import { useNavigate } from "react-router-dom";
+import { useNavigate, useSearchParams } from "react-router-dom";
 
 import usePageTitle from "../hooks/usePageTitle";
 import { resolveImageUrl } from "../utils/imageUrl";
@@ -39,6 +39,7 @@ const UserProfileEdit = () => {
       "Update your matrimonial details, photos, education, family, and partner expectations on Dewangan Links.",
   });
   const navigate = useNavigate();
+  const [searchParams, setSearchParams] = useSearchParams();
 
   const [loading, setLoading] = useState(true);
   const [submitting, setSubmitting] = useState(false);
@@ -129,6 +130,19 @@ const UserProfileEdit = () => {
 
         if (profile?.DateOfBirth) {
           profile.DateOfBirth = String(profile.DateOfBirth).split(" ")[0];
+        }
+
+        const citiesList = masterResults[0] || [];
+        if (profile.PaitthiNivasKhor && citiesList.length) {
+          const raw = String(profile.PaitthiNivasKhor).trim();
+          const cityHit = citiesList.find(
+            (c) =>
+              String(c.name).toLowerCase() === raw.toLowerCase() ||
+              String(c.id) === raw,
+          );
+          if (cityHit) {
+            profile.PaitthiNivasKhor = cityHit.name;
+          }
         }
 
         setDropdowns({
@@ -288,6 +302,17 @@ const UserProfileEdit = () => {
 
   if (loading) return <Preloader />;
 
+  const fromSignup = searchParams.get("from") === "signup";
+  const needsComplete = searchParams.get("complete") === "1";
+  const showProfileNudge = fromSignup || needsComplete;
+
+  const dismissProfileNudge = () => {
+    const next = new URLSearchParams(searchParams);
+    next.delete("from");
+    next.delete("complete");
+    setSearchParams(next, { replace: true });
+  };
+
   const {
     cities,
     heights,
@@ -317,6 +342,34 @@ const UserProfileEdit = () => {
       <DashboardMenu />
 
       <div className="container dw-edit-container">
+        {showProfileNudge ? (
+          <div
+            className="dw-profile-nudge"
+            role="status"
+            aria-live="polite"
+          >
+            <div className="dw-profile-nudge__text">
+              <strong>
+                {fromSignup
+                  ? "Welcome — your basic account is ready"
+                  : "Please complete your profile"}
+              </strong>
+              <p>
+                {fromSignup
+                  ? "Add education, profession, family details, partner expectations, and clear photos. Members with full profiles get trusted matches faster."
+                  : "Some sections are still missing. Fill education, job, family, preferences, and photos so others can know you better."}
+              </p>
+            </div>
+            <button
+              type="button"
+              className="dw-profile-nudge__close"
+              onClick={dismissProfileNudge}
+              aria-label="Dismiss"
+            >
+              ×
+            </button>
+          </div>
+        ) : null}
         <form onSubmit={handleSubmit}>
           {/* -------------------------------------- */}
           {/* BASIC DETAILS */}
@@ -799,13 +852,17 @@ const UserProfileEdit = () => {
                 />
               </div>
 
-              <label>Paitrik/Niwas</label>
-              <input
-                className="form-control mb-3"
-                name="PaitthiNivasKhor"
-                value={profileData.PaitthiNivasKhor || ""}
-                onChange={handleChange}
-              />
+              <label>Paitrik / Niwas (city)</label>
+              <div className="mb-3">
+                <SearchableSelect
+                  name="PaitthiNivasKhor"
+                  value={profileData.PaitthiNivasKhor || ""}
+                  options={cities}
+                  onChange={handleChange}
+                  valueField="name"
+                  placeholder="Search city"
+                />
+              </div>
 
               <label>Diet</label>
               <div className="mb-3">

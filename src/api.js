@@ -471,6 +471,37 @@ export const checkProfileCompleteness = async (userID) => {
   if (!data || data.status !== 200) throw new Error(data.message);
   return data;
 };
+
+/** True when backend profile_checker marks the profile as complete. */
+export function profileCheckerSaysComplete(check) {
+  if (!check || typeof check !== "object") return false;
+  const v = check.is_complete;
+  return (
+    v === true ||
+    v === 1 ||
+    v === "1" ||
+    v === "Y" ||
+    v === "y" ||
+    String(v).toLowerCase() === "true"
+  );
+}
+
+/**
+ * After login: home if profile is complete; otherwise edit profile so members
+ * finish education, family, photos, etc. (same rule as send-interest flow.)
+ */
+export async function resolvePostLoginHomePath(userID) {
+  if (!userID) return "/";
+  try {
+    const check = await checkProfileCompleteness(userID);
+    if (!profileCheckerSaysComplete(check)) {
+      return "/user-profile-edit?complete=1";
+    }
+  } catch {
+    return "/";
+  }
+  return "/";
+}
 /* ----------------------------------------------------
     FETCH COMMUNITY EVENTS (Active + Expired)
   ---------------------------------------------------- */

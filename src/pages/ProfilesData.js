@@ -9,6 +9,7 @@ import {
   fetchMyRequests,
   getProfileDetails,
   manageConnectionRequest,
+  profileCheckerSaysComplete,
   sendConnectionRequest,
 } from "../api";
 import "../assets/css/ProfileData.css";
@@ -184,7 +185,7 @@ const ProfileList = () => {
     try {
       const check = await checkProfileCompleteness(userID);
 
-      if (!check.is_complete) {
+      if (!profileCheckerSaysComplete(check)) {
         setProfileCheck(check);
         setShowIncompleteModal(true);
         return;

@@ -15,7 +15,7 @@ import { MultiSelect } from "primereact/multiselect";
  *
  * Props:
  *   - name        (string) form-field name (used by parent handleChange)
- *   - value       (string|number) selected id (matches option.id)
+ *   - value       (string|number) selected value (matches option.id or option.name per valueField)
  *   - options     ([{id,name}]) master data
  *   - onChange    (event) called as { target: { name, value } }
  *   - placeholder (string) text shown when empty
@@ -24,7 +24,9 @@ import { MultiSelect } from "primereact/multiselect";
  *   - multi       (boolean) render PrimeReact MultiSelect instead.
  *                 Multi-mode value is a comma-separated string of ids
  *                 (matches the "1,3,5" format used elsewhere in the app).
- *   - showClear   (boolean) show "x" to clear (default true)
+ *   - valueField   "id" (default) or "name" — which option field is stored
+ *                   in form state / submitted value (use "name" when the API
+ *                   column holds city text, e.g. PaitthiNivasKhor).
  */
 const SearchableSelect = ({
   name,
@@ -36,6 +38,7 @@ const SearchableSelect = ({
   disabled = false,
   multi = false,
   showClear = true,
+  valueField = "id",
 }) => {
   // Normalize the incoming option array. master-data items always have
   // { id, name } but we coerce just in case.
@@ -43,6 +46,8 @@ const SearchableSelect = ({
     id: String(o.id ?? o.value ?? ""),
     name: String(o.name ?? o.label ?? ""),
   }));
+
+  const optionValueKey = valueField === "name" ? "name" : "id";
 
   if (multi) {
     // Build the array form expected by MultiSelect from a comma-separated string.
@@ -86,10 +91,7 @@ const SearchableSelect = ({
       value={value === null || value === undefined ? "" : String(value)}
       options={normalized}
       optionLabel="name"
-      optionValue="id"
-      filter
-      filterPlaceholder="Search..."
-      showFilterClear
+      optionValue={optionValueKey}
       placeholder={placeholder}
       disabled={disabled}
       showClear={showClear}

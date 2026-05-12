@@ -1,6 +1,6 @@
 import React, { useState } from "react";
 import { Link, useNavigate } from "react-router-dom";
-import { loginUser, apiFetch } from "../api";
+import { loginUser, apiFetch, resolvePostLoginHomePath } from "../api";
 import AlertService from "../services/AlertServices";
 import usePageTitle from "../hooks/usePageTitle";
 
@@ -111,16 +111,20 @@ const Login = () => {
           .catch((err) => console.error("Failed to fetch profile photo:", err));
       }
 
-      // ADD THIS INSTEAD:
-      // Optional: If you still want the popup to show up while the page changes instantly
+      let nextPath = "/";
+      try {
+        nextPath = await resolvePostLoginHomePath(data.data?.UserID);
+      } catch {
+        nextPath = "/";
+      }
+
       if (AlertService.showSuccess) {
         AlertService.showSuccess(
           lang === "en" ? "Login successful!" : "लॉगिन सफल!",
         );
       }
 
-      // Redirect immediately without waiting
-      navigate("/");
+      navigate(nextPath);
     } catch (error) {
       AlertService.showError(error.message);
     } finally {

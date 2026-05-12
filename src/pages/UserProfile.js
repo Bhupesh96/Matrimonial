@@ -35,6 +35,13 @@ const masterTypes = [
   "relationships",
 ];
 
+/** Show sibling row only when total or married count is > 0 (hide default 0/0). */
+function hasNonZeroSiblingCount(total, married) {
+  const t = Number(total);
+  const m = Number(married);
+  return (Number.isFinite(t) && t > 0) || (Number.isFinite(m) && m > 0);
+}
+
 const UserProfile = () => {
   const [loading, setLoading] = useState(true);
   const [profile, setProfile] = useState(null);
@@ -472,14 +479,28 @@ const UserProfile = () => {
               },
               { label: "Mother Name", value: profile.MotherName },
               { label: "Mother Occupation", value: profile.MotherOccupation },
-              {
-                label: "Brothers (Total / Married)",
-                value: `${profile.NoOfBrothers ?? 0} / ${profile.NoOfBrothersMarried ?? 0}`,
-              },
-              {
-                label: "Sisters (Total / Married)",
-                value: `${profile.NoOfSisters ?? 0} / ${profile.NoOfSistersMarried ?? 0}`,
-              },
+              ...(hasNonZeroSiblingCount(
+                profile.NoOfBrothers,
+                profile.NoOfBrothersMarried,
+              )
+                ? [
+                    {
+                      label: "Brothers (Total / Married)",
+                      value: `${profile.NoOfBrothers ?? 0} / ${profile.NoOfBrothersMarried ?? 0}`,
+                    },
+                  ]
+                : []),
+              ...(hasNonZeroSiblingCount(
+                profile.NoOfSisters,
+                profile.NoOfSistersMarried,
+              )
+                ? [
+                    {
+                      label: "Sisters (Total / Married)",
+                      value: `${profile.NoOfSisters ?? 0} / ${profile.NoOfSistersMarried ?? 0}`,
+                    },
+                  ]
+                : []),
             ],
           },
           {
@@ -488,6 +509,10 @@ const UserProfile = () => {
               {
                 label: "Preferred Area",
                 value: profile.PreferredAreaOfMarriage,
+              },
+              {
+                label: "Paitrik / Niwas (city)",
+                value: profile.PaitthiNivasKhor,
               },
               { label: "Diet", value: profile.Diet },
               {

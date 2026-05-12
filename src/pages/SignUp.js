@@ -80,6 +80,9 @@ const SignUp = () => {
       fillRequired: "Please fill all required fields.",
       agreeError: "You must agree to the Terms of Service.",
       invalidMobile: "Please enter a valid 10-digit mobile number.",
+      successNextHint:
+        "Next, add education, job, family, partner expectations and photos — a full profile helps you get better matches.",
+      completeProfileBtn: "Complete my profile",
     },
 
     hi: {
@@ -117,6 +120,9 @@ const SignUp = () => {
       fillRequired: "कृपया सभी आवश्यक फ़ील्ड भरें।",
       agreeError: "कृपया शर्तों से सहमत हों।",
       invalidMobile: "कृपया सही 10 अंकों का मोबाइल नंबर दर्ज करें।",
+      successNextHint:
+        "अब शिक्षा, नौकरी, परिवार, जीवनसाथी की अपेक्षाएँ और फ़ोटो जोड़ें — पूरी प्रोफ़ाइल से बेहतर रिश्ते मिलते हैं।",
+      completeProfileBtn: "पूरी प्रोफ़ाइल भरें",
     },
   };
 
@@ -339,7 +345,7 @@ const SignUp = () => {
       // Stay on the page, just clear the form so they can register another.
       resetForm();
     } else {
-      navigate("/"); // Brand new user → take them to the dashboard
+      navigate("/user-profile-edit?from=signup");
     }
   };
 
@@ -756,6 +762,19 @@ const SignUp = () => {
                   : "आपकी प्रोफ़ाइल सफलतापूर्वक बन गई है। कृपया अपना लॉगिन विवरण नीचे सुरक्षित रखें।"}
             </p>
 
+              {isAlreadyLoggedIn ? null : (
+                <p
+                  style={{
+                    color: "#555",
+                    fontSize: "14px",
+                    marginBottom: "18px",
+                    lineHeight: "1.5",
+                  }}
+                >
+                  {t[lang].successNextHint}
+                </p>
+              )}
+
             {/* Elegant Credentials Box (Ivory/Cream tone) */}
             <div
               style={{
@@ -892,7 +911,7 @@ const SignUp = () => {
                   transition: "background-color 0.3s ease",
                 }}
               >
-                {lang === "en" ? "Continue to Dashboard" : "डैशबोर्ड पर जाएं"}
+                {t[lang].completeProfileBtn}
               </button>
             )}
           </div>
