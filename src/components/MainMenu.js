@@ -1,7 +1,8 @@
-import { useEffect, useRef, useState } from "react";
+import { useEffect, useState } from "react";
 import { Link, useNavigate } from "react-router-dom";
 import { logoutUser } from "../api";
 import AlertService from "../services/AlertServices";
+import Brand from "./Brand";
 
 const MainMenu = () => {
   const [profileName, setProfileName] = useState("");
@@ -9,7 +10,6 @@ const MainMenu = () => {
   const [profileID, setProfileID] = useState("");
 
   const navigate = useNavigate();
-  const menuRef = useRef(null);
 
   const handleLogout = async () => {
     try {
@@ -33,160 +33,48 @@ const MainMenu = () => {
   }, []);
 
   return (
-    <div className="hom-top">
+    <div className="hom-top dw-header">
       <div className="container">
         <div className="row">
           <div className="hom-nav">
-            {/* LOGO */}
+            {/* BRAND : reusable Brand component */}
             <div className="logo">
-              {/* <span className="menu desk-menu">
-                <i></i>
-                <i></i>
-                <i></i>
-              </span> */}
-              <Link to="/" className="logo-brand">
-                <img
-                  src={`${process.env.PUBLIC_URL}/images/logo-b.png`}
-                  alt=""
-                  loading="lazy"
-                  className="ic-logo"
-                />
-              </Link>
+              <Brand size="md" />
             </div>
 
-            {/* EXPLORE MENU */}
+            {/* PRIMARY NAV : Home / About / Contact / Community / Couple Stories */}
             <div className="bl">
               <ul>
-                <li className="smenu-pare">
-                  <span className="smenu">Explore</span>
-                  <div className="smenu-open smenu-box">
-                    <div className="container">
-                      <div className="row">
-                        <h4 className="tit">Explore category</h4>
-                        <ul>
-                          <li>
-                            <div className="menu-box menu-box-2">
-                              <h5>
-                                Browse profiles{" "}
-                                <span>1200+ Verified profiles</span>
-                              </h5>
-                              <span className="explor-cta">More details</span>
-                              <Link
-                                to="/all-profiles"
-                                className="fclick"
-                              ></Link>
-                            </div>
-                          </li>
-                          <li>
-                            <div className="menu-box menu-box-1">
-                              <h5>
-                                Community Page <span>See What's Going On</span>
-                              </h5>
-                              <span className="explor-cta">More details</span>
-                              <Link to="/community" className="fclick"></Link>
-                            </div>
-                          </li>
-                          <li>
-                            <div className="menu-box menu-box-3">
-                              <h5>
-                                Couple Stories<span>Beautiful Moment</span>
-                              </h5>
-                              <span className="explor-cta">More details</span>
-                              <Link
-                                to="/couple-stories"
-                                className="fclick"
-                              ></Link>
-                            </div>
-                          </li>
-                          {!profileName && (
-                            <li>
-                              <div className="menu-box menu-box-4">
-                                <h5>
-                                  Join Now <span>Register</span>
-                                </h5>
-                                <span className="explor-cta">More details</span>
-
-                                <Link to="/sign-up">Register</Link>
-                              </div>
-                            </li>
-                          )}
-                        </ul>
-                      </div>
-                    </div>
-                  </div>
+                <li>
+                  <Link to="/">Home</Link>
                 </li>
-
-                <li className="smenu-pare">
-                  <span className="smenu">Top pages</span>
-                  <div className="smenu-open smenu-single">
-                    <ul>
-                      <li>
-                        <Link to="/all-profiles">All profiles</Link>
-                      </li>
-                      <li>
-                        <Link to="/about">About</Link>
-                      </li>
-                      <li>
-                        <Link to="/contact">Contact</Link>
-                      </li>
-
-                      {/* SHOW LOGIN ONLY IF NOT LOGGED IN */}
-                      {!profileName && (
-                        <li>
-                          <Link to="/login">Login</Link>
-                        </li>
-                      )}
-
-                      {/* SHOW REGISTER ONLY IF NOT LOGGED IN */}
-                      {!profileName && (
-                        <li>
-                          <Link to="/sign-up">Register</Link>
-                        </li>
-                      )}
-                    </ul>
-                  </div>
+                <li>
+                  <Link to="/about">About</Link>
                 </li>
-
+                <li>
+                  <Link to="/contact">Contact</Link>
+                </li>
                 <li>
                   <Link to="/community">Community</Link>
                 </li>
+                <li>
+                  <Link to="/couple-stories">Couple Stories</Link>
+                </li>
 
-                {!profileName && (
-                  <li>
-                    <Link to="/sign-up">Register</Link>
-                  </li>
-                )}
-
-                {/* DASHBOARD MENU */}
-                <li className="smenu-pare">
-                  <span className="smenu">Dashboard</span>
-                  <div className="smenu-open smenu-single">
-                    <ul>
-                      {/* 1. MY PROFILE (Only if Logged In) */}
-                      {profileName && (
+                {/* DASHBOARD ONLY when logged in */}
+                {profileName && (
+                  <li className="smenu-pare">
+                    <span className="smenu">Dashboard</span>
+                    <div className="smenu-open smenu-single">
+                      <ul>
                         <li>
                           <Link to={`/user-profile/${profileID}`}>
                             My profile
                           </Link>
                         </li>
-                      )}
-
-                      {/* 2. EDIT PROFILE (Only if Logged In) */}
-                      {profileName && (
                         <li>
-                          <Link to="/user-profile-edit">Edit full profile</Link>
+                          <Link to="/user-profile-edit">Edit profile</Link>
                         </li>
-                      )}
-
-                      {/* 3. LOGIN (Only if NOT Logged In) */}
-                      {!profileName && (
-                        <li>
-                          <Link to="/login">Login</Link>
-                        </li>
-                      )}
-
-                      {/* 4. LOGOUT (Only if Logged In) */}
-                      {profileName && (
                         <li>
                           <Link
                             to="#"
@@ -198,17 +86,17 @@ const MainMenu = () => {
                             Logout
                           </Link>
                         </li>
-                      )}
-                    </ul>
-                  </div>
-                </li>
+                      </ul>
+                    </div>
+                  </li>
+                )}
               </ul>
             </div>
 
-            {/* USER PROFILE BADGE (Only if Logged In) */}
-            {profileName && (
-              <div className="al">
-                <div className="head-pro">
+            {/* RIGHT SIDE : User badge OR Login / Join CTAs */}
+            <div className="al dw-actions">
+              {profileName ? (
+                <div className="head-pro dw-userbadge">
                   <img
                     src={
                       profilePhoto
@@ -219,7 +107,7 @@ const MainMenu = () => {
                     loading="lazy"
                   />
 
-                  <b>User</b>
+                  <b>Welcome</b>
                   <br />
                   <h4
                     style={{
@@ -233,8 +121,29 @@ const MainMenu = () => {
 
                   <span className="fclick"></span>
                 </div>
-              </div>
-            )}
+              ) : (
+                <div className="dw-cta-group">
+                  <Link
+                    to="/login"
+                    className="dw-btn dw-btn-ghost"
+                    title="Login"
+                    aria-label="Login"
+                  >
+                    <i className="fa fa-sign-in" aria-hidden="true"></i>
+                    <span>Login</span>
+                  </Link>
+                  <Link
+                    to="/sign-up"
+                    className="dw-btn dw-btn-primary"
+                    title="Join Free"
+                    aria-label="Join Free"
+                  >
+                    <i className="fa fa-heart" aria-hidden="true"></i>
+                    <span>Join Free</span>
+                  </Link>
+                </div>
+              )}
+            </div>
           </div>
         </div>
       </div>

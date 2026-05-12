@@ -1,4 +1,5 @@
 import React, { useEffect, useState } from "react";
+import usePageTitle from "../hooks/usePageTitle";
 import Preloader from "../components/Preloader";
 import PoopUpSearch from "../components/PoopUpSearch";
 import TopMenu from "../components/TopMenu";
@@ -14,8 +15,14 @@ import Footer from "../components/Footer";
 import CopyRight from "../components/CopyRight";
 import CustomerReviews from "../components/CustomerReview";
 import MyAboutUS from "../components/MyAboutUS";
+import SEOSection from "../components/SEOSection";
 
 const AboutUs = () => {
+  usePageTitle("About Us", {
+    description:
+      "Learn about Dewangan Links — our mission to help the Dewangan community find trusted, verified life partners across India.",
+  });
+
   return (
     <div>
       <PoopUpSearch />
@@ -51,6 +58,7 @@ const AboutUs = () => {
       <CustomerReviews />
       <MeetOurTeam />
       <FAQSection />
+      <SEOSection />
       <Footer />
       <CopyRight />
     </div>

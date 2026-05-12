@@ -1,0 +1,431 @@
+/* ==========================================================================
+   EDIT PROFILE PAGE — WEDDING-THEMED FORM
+   --------------------------------------------------------------------------
+   Scoped under .dw-edit-page. Overrides legacy .edit-pro-parti (which has
+   a 4px black bottom border) and Bootstrap form-control / btn defaults.
+   ========================================================================== */
+
+.dw-edit-page {
+  background: linear-gradient(180deg, #fdf9ee 0%, #faf2dd 100%);
+  min-height: calc(100vh - var(--dw-header-h, 78px));
+}
+
+.dw-edit-page .container.dw-edit-container {
+  padding-top: 28px;
+  padding-bottom: 60px;
+  max-width: 1180px;
+}
+
+/* ============================================================
+   SECTION CARDS — override legacy .edit-pro-parti
+   ============================================================ */
+.dw-edit-page .edit-pro-parti {
+  background: #ffffff;
+  border: 1px solid rgba(202, 152, 67, 0.18) !important;
+  border-bottom: 1px solid rgba(202, 152, 67, 0.18) !important; /* kill the 4px black bar */
+  border-radius: 16px;
+  box-shadow: 0 12px 30px rgba(102, 69, 28, 0.08);
+  padding: 26px 28px !important;
+  margin-bottom: 22px !important;
+  transition: box-shadow 0.25s ease;
+}
+
+.dw-edit-page .edit-pro-parti:hover {
+  box-shadow: 0 16px 36px rgba(102, 69, 28, 0.12);
+}
+
+.dw-edit-page .edit-pro-parti h4 {
+  font-family: "Playfair Display", "Georgia", serif !important;
+  font-size: 22px !important;
+  font-weight: 700 !important;
+  color: #2a1c00 !important;
+  margin: 0 0 22px 0 !important;
+  padding-bottom: 12px;
+  border-bottom: 1px solid #f1e2c0;
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  position: relative;
+}
+
+.dw-edit-page .edit-pro-parti h4::before {
+  content: "";
+  display: inline-block;
+  width: 8px;
+  height: 24px;
+  background: linear-gradient(180deg, #ffd25a, #c8902a);
+  border-radius: 4px;
+  flex-shrink: 0;
+}
+
+.dw-edit-page .edit-pro-parti h5 {
+  font-size: 15px;
+  font-weight: 700;
+  color: #5a3c07;
+  letter-spacing: 0.3px;
+  margin-bottom: 12px;
+}
+
+/* ============================================================
+   FORM CONTROLS — inputs, selects, textareas
+   ============================================================ */
+.dw-edit-page .edit-pro-parti label {
+  display: block;
+  font-size: 12px !important;
+  font-weight: 600 !important;
+  color: #b28a45 !important;
+  letter-spacing: 1px;
+  text-transform: uppercase;
+  margin-bottom: 6px;
+}
+
+.dw-edit-page .edit-pro-parti label span[style*="dc3545"] {
+  color: #d04848 !important;
+}
+
+.dw-edit-page .edit-pro-parti .form-control {
+  height: 46px;
+  padding: 10px 14px;
+  font-size: 14px;
+  color: #2a1c00;
+  background: #fdfaf2;
+  border: 1.5px solid #ead7af;
+  border-radius: 10px;
+  outline: none;
+  transition: border-color 0.2s ease, box-shadow 0.2s ease, background 0.2s ease;
+  box-shadow: none;
+  width: 100%;
+}
+
+.dw-edit-page .edit-pro-parti textarea.form-control {
+  height: auto;
+  min-height: 90px;
+  resize: vertical;
+}
+
+.dw-edit-page .edit-pro-parti .form-control::placeholder {
+  color: #b39c6f;
+}
+
+.dw-edit-page .edit-pro-parti .form-control:focus {
+  border-color: #c8902a;
+  background: #ffffff;
+  box-shadow: 0 0 0 4px rgba(200, 144, 42, 0.15);
+}
+
+/* Native select chevron */
+.dw-edit-page .edit-pro-parti select.form-control {
+  appearance: none;
+  -webkit-appearance: none;
+  -moz-appearance: none;
+  background-image: url("data:image/svg+xml;utf8,<svg xmlns='http://www.w3.org/2000/svg' width='12' height='12' viewBox='0 0 24 24' fill='%23c8902a'><path d='M7 10l5 5 5-5z'/></svg>");
+  background-repeat: no-repeat;
+  background-position: right 14px center;
+  background-size: 14px;
+  padding-right: 38px;
+  cursor: pointer;
+}
+
+/* Number input arrows hidden */
+.dw-edit-page .edit-pro-parti input[type="number"]::-webkit-outer-spin-button,
+.dw-edit-page .edit-pro-parti input[type="number"]::-webkit-inner-spin-button {
+  -webkit-appearance: none;
+  margin: 0;
+}
+.dw-edit-page .edit-pro-parti input[type="number"] {
+  -moz-appearance: textfield;
+}
+
+/* ============================================================
+   PRIMEREACT SearchableSelect overrides
+   ============================================================ */
+.dw-edit-page .p-dropdown,
+.dw-edit-page .p-multiselect {
+  height: 46px !important;
+  border-radius: 10px !important;
+  border: 1.5px solid #ead7af !important;
+  background: #fdfaf2 !important;
+  box-shadow: none !important;
+  transition: border-color 0.2s ease, box-shadow 0.2s ease, background 0.2s ease;
+  width: 100%;
+  align-items: center;
+}
+
+.dw-edit-page .p-dropdown:not(.p-disabled):hover,
+.dw-edit-page .p-multiselect:not(.p-disabled):hover {
+  border-color: #c8902a !important;
+}
+
+.dw-edit-page .p-dropdown:not(.p-disabled).p-focus,
+.dw-edit-page .p-multiselect:not(.p-disabled).p-focus {
+  border-color: #c8902a !important;
+  background: #ffffff !important;
+  box-shadow: 0 0 0 4px rgba(200, 144, 42, 0.15) !important;
+}
+
+.dw-edit-page .p-dropdown .p-dropdown-label,
+.dw-edit-page .p-multiselect .p-multiselect-label {
+  font-size: 14px !important;
+  color: #2a1c00 !important;
+  font-weight: 500 !important;
+  padding: 12px 14px !important;
+  background: transparent !important;
+}
+
+.dw-edit-page .p-dropdown .p-dropdown-label.p-placeholder,
+.dw-edit-page .p-multiselect .p-multiselect-label.p-placeholder {
+  color: #b39c6f !important;
+}
+
+.dw-edit-page .p-dropdown .p-dropdown-trigger,
+.dw-edit-page .p-multiselect .p-multiselect-trigger {
+  color: #c8902a !important;
+  width: 38px;
+}
+
+/* The dropdown panel itself (popover) — also gold-themed */
+.p-dropdown-panel,
+.p-multiselect-panel {
+  border-radius: 12px !important;
+  border: 1px solid rgba(202, 152, 67, 0.3) !important;
+  box-shadow: 0 14px 36px rgba(102, 69, 28, 0.18) !important;
+  overflow: hidden;
+}
+
+.p-dropdown-panel .p-dropdown-item.p-highlight,
+.p-multiselect-panel .p-multiselect-item.p-highlight {
+  background: #fff7e6 !important;
+  color: #5a3c07 !important;
+}
+
+.p-dropdown-panel .p-dropdown-item:hover,
+.p-multiselect-panel .p-multiselect-item:hover {
+  background: #fff3d6 !important;
+}
+
+.p-dropdown-panel .p-dropdown-filter-container input,
+.p-multiselect-panel .p-multiselect-filter-container input {
+  border-radius: 8px !important;
+  border: 1.5px solid #ead7af !important;
+  background: #fdfaf2 !important;
+  padding: 8px 12px !important;
+}
+
+.p-dropdown-panel .p-dropdown-filter-container input:focus,
+.p-multiselect-panel .p-multiselect-filter-container input:focus {
+  border-color: #c8902a !important;
+  box-shadow: 0 0 0 3px rgba(200, 144, 42, 0.15) !important;
+}
+
+/* ============================================================
+   PROFILE PHOTO + GALLERY UPLOAD AREAS
+   ============================================================ */
+.dw-edit-page .dw-photo-frame {
+  width: 200px;
+  height: 240px;
+  border-radius: 14px;
+  overflow: hidden;
+  background: linear-gradient(135deg, #fff7e6 0%, #f3e2c1 100%);
+  padding: 0;
+  box-shadow: 0 12px 28px rgba(102, 69, 28, 0.18);
+  border: 3px solid #ffffff;
+  outline: 1px solid rgba(202, 152, 67, 0.25);
+  margin-bottom: 14px;
+  position: relative;
+}
+
+.dw-edit-page .dw-photo-frame img {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+}
+
+.dw-edit-page .dw-upload-btn {
+  display: inline-flex !important;
+  align-items: center;
+  gap: 8px;
+  padding: 11px 20px !important;
+  background: linear-gradient(135deg, #ffd25a 0%, #d49a2a 100%) !important;
+  color: #2a1c00 !important;
+  border-radius: 999px !important;
+  font-weight: 700;
+  font-size: 14px;
+  letter-spacing: 0.3px;
+  border: none;
+  cursor: pointer;
+  transition: transform 0.18s ease, box-shadow 0.18s ease, filter 0.18s ease;
+  box-shadow: 0 8px 18px rgba(200, 144, 42, 0.38);
+}
+
+.dw-edit-page .dw-upload-btn:hover {
+  filter: brightness(1.05);
+  transform: translateY(-1px);
+}
+
+.dw-edit-page .dw-upload-btn.dw-upload-btn-ghost {
+  background: #ffffff !important;
+  color: #5a3c07 !important;
+  border: 1.5px solid rgba(200, 144, 42, 0.5);
+  box-shadow: none;
+}
+
+.dw-edit-page .dw-upload-btn.dw-upload-btn-ghost:hover {
+  background: #fdf5e3 !important;
+  border-color: #c8902a;
+}
+
+.dw-edit-page .dw-photo-filename {
+  margin-top: 8px;
+  font-size: 12.5px;
+  color: #7a6a4b;
+  text-align: center;
+  word-break: break-all;
+  max-width: 220px;
+}
+
+/* Gallery thumbnails */
+.dw-edit-page .dw-gallery-section {
+  margin-top: 20px;
+}
+
+.dw-edit-page .dw-gallery-existing-label,
+.dw-edit-page .dw-gallery-new-label {
+  font-size: 12px;
+  font-weight: 600;
+  color: #b28a45;
+  letter-spacing: 0.8px;
+  text-transform: uppercase;
+  margin-bottom: 10px;
+}
+
+.dw-edit-page .dw-gallery-new-label {
+  color: #c8902a;
+}
+
+.dw-edit-page .dw-gallery-grid {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 10px;
+}
+
+.dw-edit-page .dw-gallery-grid img {
+  width: 96px;
+  height: 96px;
+  object-fit: cover;
+  border-radius: 12px;
+  border: 1px solid rgba(202, 152, 67, 0.3);
+  box-shadow: 0 4px 12px rgba(102, 69, 28, 0.1);
+}
+
+.dw-edit-page .dw-gallery-grid.dw-gallery-new img {
+  border: 2px dashed #c8902a;
+  box-shadow: 0 4px 12px rgba(200, 144, 42, 0.2);
+}
+
+/* ============================================================
+   UPDATE PROFILE submit button
+   ============================================================ */
+.dw-edit-page .dw-submit-row {
+  display: flex;
+  justify-content: flex-end;
+  margin-top: 8px;
+  padding: 18px 0;
+}
+
+.dw-edit-page .dw-submit-btn {
+  padding: 14px 38px !important;
+  border-radius: 999px !important;
+  background: linear-gradient(135deg, #ffd25a 0%, #d49a2a 100%) !important;
+  color: #2a1c00 !important;
+  font-size: 16px !important;
+  font-weight: 800 !important;
+  letter-spacing: 0.5px;
+  border: none !important;
+  cursor: pointer;
+  box-shadow: 0 10px 22px rgba(200, 144, 42, 0.42),
+    inset 0 -2px 0 rgba(102, 69, 28, 0.18);
+  transition: transform 0.2s ease, box-shadow 0.2s ease, filter 0.2s ease;
+}
+
+.dw-edit-page .dw-submit-btn:hover:not(:disabled) {
+  filter: brightness(1.05);
+  transform: translateY(-1px);
+  box-shadow: 0 14px 28px rgba(200, 144, 42, 0.55),
+    inset 0 -2px 0 rgba(102, 69, 28, 0.18);
+}
+
+.dw-edit-page .dw-submit-btn:disabled {
+  opacity: 0.7;
+  cursor: not-allowed;
+}
+
+/* ============================================================
+   RESPONSIVE
+   ============================================================ */
+@media (max-width: 991px) {
+  .dw-edit-page .container.dw-edit-container {
+    padding-top: 18px;
+  }
+
+  .dw-edit-page .edit-pro-parti {
+    padding: 22px 18px !important;
+  }
+
+  /* Photo column: when stacked, center it */
+  .dw-edit-page .edit-pro-parti .col-md-3.d-flex.flex-column {
+    margin-top: 18px;
+  }
+
+  /* col-md-4 becomes 2 columns on tablet */
+  .dw-edit-page .edit-pro-parti .col-md-4,
+  .dw-edit-page .edit-pro-parti .col-md-3 {
+    /* leave Bootstrap classes alone here; they natively stack */
+  }
+}
+
+@media (max-width: 575px) {
+  .dw-edit-page .container.dw-edit-container {
+    padding-left: 12px;
+    padding-right: 12px;
+  }
+
+  .dw-edit-page .edit-pro-parti {
+    padding: 20px 14px !important;
+    border-radius: 14px;
+  }
+
+  .dw-edit-page .edit-pro-parti h4 {
+    font-size: 19px !important;
+  }
+
+  .dw-edit-page .edit-pro-parti .form-control {
+    height: 44px;
+    font-size: 14px;
+  }
+
+  .dw-edit-page .p-dropdown,
+  .dw-edit-page .p-multiselect {
+    height: 44px !important;
+  }
+
+  .dw-edit-page .dw-photo-frame {
+    width: 160px;
+    height: 200px;
+  }
+
+  .dw-edit-page .dw-gallery-grid img {
+    width: 78px;
+    height: 78px;
+  }
+
+  .dw-edit-page .dw-submit-row {
+    justify-content: stretch;
+    padding: 14px 4px;
+  }
+
+  .dw-edit-page .dw-submit-btn {
+    width: 100%;
+    padding: 14px 24px !important;
+    font-size: 15px !important;
+  }
+}

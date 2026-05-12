@@ -21,3 +21,7 @@
 npm-debug.log*
 yarn-debug.log*
 yarn-error.log*
+
+# local-only mirror of the live PHP backend (pulled via FTP for review)
+/_backend_api_mirror
+/_admin_mirror

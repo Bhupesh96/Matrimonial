@@ -1,4 +1,5 @@
 import React from "react";
+import Brand from "./Brand";
 
 const MenuPopUp = () => {
   return (
@@ -8,42 +9,46 @@ const MenuPopUp = () => {
       </span>
 
       <div className="inn">
-        <img
-          src={`${process.env.PUBLIC_URL}/images/logo-b.png`}
-          alt="logo"
-          loading="lazy"
-          className="logo-brand-only"
-        />
+        <div className="menu-pop-brand">
+          <Brand size="lg" />
+        </div>
 
         <p>
-          <strong>Best Dewangan Shadi Platform</strong> lacinia viverra lectus.
-          Fusce imperdiet ullamcorper metus eu fringilla. Lorem Ipsum is simply
-          dummy text of the printing and typesetting industry.
+          <strong>Dewangan Links</strong> – India's most trusted matrimony
+          platform for the Dewangan community. Find verified profiles, connect
+          with families, and discover your perfect life partner.
         </p>
 
         <ul className="menu-pop-info">
           <li>
-            <a href="#!">
-              <i className="fa fa-phone" aria-hidden="true"></i> +92 (8800) 68 -
-              8960
+            <a href="tel:+919806863659">
+              <i className="fa fa-phone" aria-hidden="true"></i> +91 98068 63659
             </a>
           </li>
           <li>
-            <a href="#!">
-              <i className="fa fa-whatsapp" aria-hidden="true"></i> +92 (8800)
-              68 - 8960
+            <a
+              href="https://wa.me/919806863659"
+              target="_blank"
+              rel="noopener noreferrer"
+            >
+              <i className="fa fa-whatsapp" aria-hidden="true"></i> +91 98068
+              63659
             </a>
           </li>
           <li>
-            <a href="#!">
+            <a href="mailto:raipurlink@gmail.com">
               <i className="fa fa-envelope-o" aria-hidden="true"></i>{" "}
-              help@company.com
+              raipurlink@gmail.com
             </a>
           </li>
           <li>
-            <a href="#!">
-              <i className="fa fa-map-marker" aria-hidden="true"></i> 3812 Lena
-              Lane City Jackson Mississippi
+            <a
+              href="https://maps.google.com/?q=Raipur,Chhattisgarh,India"
+              target="_blank"
+              rel="noopener noreferrer"
+            >
+              <i className="fa fa-map-marker" aria-hidden="true"></i> Raipur,
+              Chhattisgarh, India
             </a>
           </li>
         </ul>

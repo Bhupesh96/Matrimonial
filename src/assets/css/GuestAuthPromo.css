@@ -1,0 +1,218 @@
+/* Guest login / registration promo — matches Header gold & brown palette */
+
+.dw-auth-promo-overlay {
+  position: fixed;
+  inset: 0;
+  z-index: 1200;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: 20px;
+  background: rgba(42, 28, 4, 0.55);
+  backdrop-filter: blur(10px);
+  -webkit-backdrop-filter: blur(10px);
+  animation: dw-auth-promo-fade-in 0.35s ease;
+}
+
+@keyframes dw-auth-promo-fade-in {
+  from {
+    opacity: 0;
+  }
+  to {
+    opacity: 1;
+  }
+}
+
+.dw-auth-promo-card {
+  position: relative;
+  width: 100%;
+  max-width: 420px;
+  background: linear-gradient(165deg, #fffdf8 0%, #fff 45%, #fdf6e8 100%);
+  border-radius: 20px;
+  box-shadow:
+    0 24px 48px rgba(42, 28, 4, 0.22),
+    0 0 0 1px rgba(200, 144, 42, 0.25);
+  padding: 28px 26px 24px;
+  animation: dw-auth-promo-pop 0.45s cubic-bezier(0.34, 1.56, 0.64, 1);
+}
+
+@keyframes dw-auth-promo-pop {
+  from {
+    opacity: 0;
+    transform: scale(0.92) translateY(16px);
+  }
+  to {
+    opacity: 1;
+    transform: scale(1) translateY(0);
+  }
+}
+
+.dw-auth-promo-close {
+  position: absolute;
+  top: 14px;
+  right: 14px;
+  width: 38px;
+  height: 38px;
+  border: none;
+  border-radius: 50%;
+  background: rgba(90, 60, 7, 0.08);
+  color: #5a3c07;
+  font-size: 18px;
+  line-height: 1;
+  cursor: pointer;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  transition:
+    background 0.2s ease,
+    transform 0.2s ease;
+}
+
+.dw-auth-promo-close:hover {
+  background: rgba(200, 144, 42, 0.2);
+  transform: rotate(90deg);
+}
+
+.dw-auth-promo-icon {
+  width: 56px;
+  height: 56px;
+  margin: 0 auto 16px;
+  border-radius: 50%;
+  background: linear-gradient(135deg, #ffd25a, #c8902a);
+  color: #2a1c00;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 24px;
+  box-shadow: 0 8px 20px rgba(200, 144, 42, 0.4);
+}
+
+.dw-auth-promo-card h2 {
+  margin: 0 0 8px;
+  font-family: "Playfair Display", Georgia, serif;
+  font-size: 24px;
+  font-weight: 700;
+  color: #5a3c07;
+  text-align: center;
+  line-height: 1.25;
+}
+
+.dw-auth-promo-card p {
+  margin: 0 0 22px;
+  font-size: 15px;
+  line-height: 1.55;
+  color: #6a4f1c;
+  text-align: center;
+}
+
+.dw-auth-promo-actions {
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+}
+
+.dw-auth-promo-actions .dw-auth-btn {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: 10px;
+  padding: 14px 20px;
+  font-size: 15px;
+  font-weight: 700;
+  border-radius: 999px;
+  text-decoration: none !important;
+  border: none;
+  cursor: pointer;
+  transition:
+    transform 0.2s ease,
+    box-shadow 0.2s ease,
+    filter 0.2s ease;
+}
+
+.dw-auth-promo-actions .dw-auth-btn:active {
+  transform: scale(0.98);
+}
+
+.dw-auth-promo-actions .dw-auth-btn-primary {
+  background: linear-gradient(135deg, #ffd25a, #d49a2a) !important;
+  color: #2a1c00 !important;
+  box-shadow: 0 8px 22px rgba(200, 144, 42, 0.45);
+}
+
+.dw-auth-promo-actions .dw-auth-btn-primary:hover {
+  filter: brightness(1.05);
+  box-shadow: 0 10px 26px rgba(200, 144, 42, 0.55);
+}
+
+.dw-auth-promo-actions .dw-auth-btn-ghost {
+  background: #fff !important;
+  color: #5a3c07 !important;
+  border: 2px solid rgba(200, 144, 42, 0.45) !important;
+}
+
+.dw-auth-promo-actions .dw-auth-btn-ghost:hover {
+  background: rgba(200, 144, 42, 0.08) !important;
+  border-color: #c8902a !important;
+}
+
+.dw-auth-promo-footer {
+  margin-top: 18px;
+  padding-top: 16px;
+  border-top: 1px solid rgba(200, 144, 42, 0.2);
+}
+
+.dw-auth-promo-muted {
+  display: block;
+  width: 100%;
+  margin-top: 10px;
+  padding: 8px;
+  background: none;
+  border: none;
+  font-size: 13px;
+  color: #8a734c;
+  cursor: pointer;
+  text-decoration: underline;
+  text-underline-offset: 3px;
+}
+
+.dw-auth-promo-muted:hover {
+  color: #5a3c07;
+}
+
+.dw-auth-promo-check {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  margin-top: 14px;
+  font-size: 13px;
+  color: #6a4f1c;
+  cursor: pointer;
+  user-select: none;
+}
+
+.dw-auth-promo-check input {
+  width: 18px;
+  height: 18px;
+  accent-color: #c8902a;
+  cursor: pointer;
+}
+
+@media (max-width: 480px) {
+  .dw-auth-promo-card {
+    padding: 24px 20px 20px;
+    border-radius: 18px;
+  }
+
+  .dw-auth-promo-card h2 {
+    font-size: 21px;
+  }
+
+  .dw-auth-promo-card p {
+    font-size: 14px;
+  }
+
+  .dw-auth-promo-actions .dw-auth-btn {
+    padding: 12px 18px;
+    font-size: 14px;
+  }
+}

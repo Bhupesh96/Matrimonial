@@ -5,11 +5,20 @@ const API_BASE_URL = process.env.REACT_APP_API_URL;
   ---------------------------------------------------- */
 export const apiFetch = async (url, options = {}) => {
   try {
-    const token = localStorage.getItem("login_token");
+    const rawToken = localStorage.getItem("login_token");
+    // Treat the literal strings "undefined" / "null" as absent — they happen
+    // when a login response didn't include `login_token` and we accidentally
+    // stored the JS undefined value (which `setItem` coerces to "undefined").
+    const token =
+      rawToken && rawToken !== "undefined" && rawToken !== "null"
+        ? rawToken
+        : null;
     let finalUrl = url;
 
     if (token && !finalUrl.includes("login_token=")) {
-      finalUrl += `&login_token=${token}&token=${token}`;
+      finalUrl += `&login_token=${encodeURIComponent(
+        token,
+      )}&token=${encodeURIComponent(token)}`;
     }
 
     const headers = {
@@ -29,13 +38,26 @@ export const apiFetch = async (url, options = {}) => {
       headers,
     });
 
-    const data = await res.json();
+    // The PHP backend always responds with JSON. Read text first so we can
+    // surface a helpful error if it isn't valid JSON (e.g. HTML 500 page).
+    const rawText = await res.text();
+    let data;
+    try {
+      data = rawText ? JSON.parse(rawText) : {};
+    } catch (parseErr) {
+      console.error(
+        "apiFetch: server returned non-JSON response",
+        res.status,
+        rawText.slice(0, 200),
+      );
+      throw new Error(
+        `Server error (${res.status}). Please try again in a moment.`,
+      );
+    }
 
-    // ==========================================
-    // THE FIX IS HERE
-    // ==========================================
-    if (data.status === 401) {
-      // Do not auto-refresh if the user is currently trying to log in!
+    // 401 = session expired / not logged in.
+    // Don't auto-redirect during the explicit login attempt itself.
+    if (data && data.status === 401) {
       if (
         !finalUrl.includes("api=user_login") &&
         !finalUrl.includes("api=admin_login")
@@ -47,14 +69,17 @@ export const apiFetch = async (url, options = {}) => {
             : process.env.REACT_APP_BASENAME || "";
         window.location.href = `${basename}/login`;
       }
-
-      // Return the data so Login.js can throw the error and show the alert
       return data;
     }
 
     return data;
   } catch (err) {
-    throw new Error("Network error: " + err.message);
+    if (err instanceof TypeError) {
+      throw new Error(
+        "Cannot reach the server. Please check your internet connection.",
+      );
+    }
+    throw err;
   }
 };
 /* ----------------------------------------------------
@@ -121,11 +146,14 @@ export const getProfileDetails = async () => {
   const profileID = localStorage.getItem("profileID");
   if (!profileID) throw new Error("No ProfileID saved");
 
-  const url = `${API_BASE_URL}?api=get_profile&ProfileID=${profileID}`;
+  // Pass ViewerID = own ProfileID so the backend's privacy mask treats us
+  // as the owner and returns ALL fields (mobile, email, address, DOB,
+  // birth time/place, etc.) instead of stripping them.
+  const url =
+    `${API_BASE_URL}?api=get_profile&ProfileID=${encodeURIComponent(profileID)}` +
+    `&ViewerID=${encodeURIComponent(profileID)}`;
 
-  const data = await apiFetch(url, {
-    method: "GET",
-  });
+  const data = await apiFetch(url, { method: "GET" });
 
   if (!data || data.status !== 200) throw new Error(data.message);
   return data.data?.[0];
@@ -239,17 +267,52 @@ export const fetchAllProfiles = async () => {
     LIST APPROVED PROFILES
   ---------------------------------------------------- */
 export const fetchApprovedProfiles = async () => {
+  // ViewerID is OPTIONAL now. When the visitor isn't logged in we still call
+  // the public endpoint and the backend returns approved profiles with
+  // sensitive fields stripped.
   const viewerID = localStorage.getItem("profileID");
-  if (!viewerID) throw new Error("No profile ID found");
 
-  const url = `${API_BASE_URL}?api=ver_pproved_list&ViewerID=${viewerID}`;
+  let url = `${API_BASE_URL}?api=ver_pproved_list`;
+  if (viewerID && viewerID !== "undefined" && viewerID !== "null") {
+    url += `&ViewerID=${encodeURIComponent(viewerID)}`;
+  }
 
-  const data = await apiFetch(url, {
-    method: "GET",
-  });
+  const data = await apiFetch(url, { method: "GET" });
 
-  if (!data || data.status !== 200) throw new Error(data.message);
-  return data.data || [];
+  if (!data || data.status !== 200) {
+    const err = new Error(data?.message || "Failed to load profiles");
+    err.status = data?.status;
+    err.profileIncomplete = !!data?.profile_incomplete;
+    throw err;
+  }
+
+  return {
+    data: data.data || [],
+    count: data.count || 0,
+    hint: data.hint || null,
+    profileIncomplete: !!data.profile_incomplete,
+    genderFilterApplied: data.gender_filter_applied !== false,
+    isAuthenticated: !!data.is_authenticated,
+  };
+};
+
+/* ----------------------------------------------------
+    GET ONE PROFILE (public, with optional viewer)
+  ---------------------------------------------------- */
+export const fetchProfileById = async (profileID) => {
+  if (!profileID) throw new Error("ProfileID is required");
+  const viewerID = localStorage.getItem("profileID");
+  let url = `${API_BASE_URL}?api=get_profile&ProfileID=${encodeURIComponent(
+    profileID,
+  )}`;
+  if (viewerID && viewerID !== "undefined" && viewerID !== "null") {
+    url += `&ViewerID=${encodeURIComponent(viewerID)}`;
+  }
+  const data = await apiFetch(url);
+  if (!data || data.status !== 200) {
+    throw new Error(data?.message || "Failed to load profile");
+  }
+  return data;
 };
 
 /* ----------------------------------------------------
@@ -283,6 +346,8 @@ export const updateProfilePicture = async (profilePhoto, galleryFiles = []) => {
 
 /* ----------------------------------------------------
     SEND CONNECTION REQUEST
+    NB: backend (send_request.php) returns HTTP 201 on success,
+    so we accept BOTH 200 and 201 as success.
   ---------------------------------------------------- */
 export const sendConnectionRequest = async (receiverID) => {
   const requesterID = localStorage.getItem("profileID");
@@ -299,7 +364,9 @@ export const sendConnectionRequest = async (receiverID) => {
     }),
   });
 
-  if (!data || data.status !== 200) throw new Error(data.message);
+  if (!data || (data.status !== 200 && data.status !== 201)) {
+    throw new Error(data?.message || "Failed to send request");
+  }
   return data;
 };
 
@@ -420,13 +487,29 @@ export const fetchCoupleStories = async () => {
   const data = await apiFetch(url);
 
   if (!data || data.status !== true) throw new Error(data.message);
-  return data.data || [];
+  const rows = Array.isArray(data.data) ? data.data : [];
+  /* Backend sometimes still returns IsActive "0"; only expose active rows in UI. */
+  return rows.filter((s) => Number(s?.IsActive) === 1);
 };
 export const fetchTestimonials = async () => {
   const url = `${API_BASE_URL}?api=testimonial_list`;
   const data = await apiFetch(url);
 
   if (!data || data.status !== true) throw new Error(data.message);
+  return data.data || [];
+};
+
+/* ----------------------------------------------------
+    FETCH ACTIVE (APPROVED) TESTIMONIALS — public endpoint
+    Lighter response than testimonial_list and only approved rows.
+  ---------------------------------------------------- */
+export const fetchActiveTestimonials = async () => {
+  const url = `${API_BASE_URL}?api=testimonial_active`;
+  const data = await apiFetch(url);
+
+  if (!data || data.status !== true) {
+    throw new Error(data?.message || "Failed to load testimonials");
+  }
   return data.data || [];
 };
 export const addTestimonial = async (formData) => {

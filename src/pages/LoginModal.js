@@ -1,6 +1,6 @@
 // src/pages/LoginModal.js
 import React, { useState } from "react";
-import { loginUser } from "../api";
+import { getProfileDetails, loginUser } from "../api";
 import AlertService from "../services/AlertServices";
 import { useNavigate } from "react-router-dom";
 
@@ -66,7 +66,18 @@ const LoginModal = ({ show, onClose, onSuccess }) => {
         localStorage.setItem("profileID", data.data.ProfileID);
         localStorage.setItem("userID", data.data.UserID);
         localStorage.setItem("profileName", data.data.ProfileName);
-        localStorage.setItem("login_token", data.login_token);
+        if (data.login_token) {
+          localStorage.setItem("login_token", data.login_token);
+        } else {
+          localStorage.removeItem("login_token");
+        }
+        getProfileDetails()
+          .then((me) => {
+            if (me?.GenderID != null && me.GenderID !== "") {
+              localStorage.setItem("viewerGenderID", String(me.GenderID));
+            }
+          })
+          .catch(() => {});
       }
 
       AlertService.showSuccessAndRedirect(

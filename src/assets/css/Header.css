@@ -1,0 +1,1060 @@
+/* ==========================================================================
+   Dewangan Links - HEADER & BRAND
+   --------------------------------------------------------------------------
+   Polished header for both desktop and mobile.
+   Imported globally via App.js BEFORE MobileResponsive.css so the
+   mobile rules can still override anything here at small breakpoints.
+   ========================================================================== */
+
+/* ==========================================================================
+   MAIN HEADER WRAPPER (.hom-top has legacy float-based layout — flatten it)
+   --------------------------------------------------------------------------
+   The header is FIXED to the top on every page & every screen size so it
+   stays visible while the user scrolls.
+   ========================================================================== */
+.dw-header {
+  position: fixed !important;
+  top: 0 !important;
+  left: 0 !important;
+  right: 0 !important;
+  width: 100% !important;
+  z-index: 1000 !important;
+  background: rgba(255, 255, 255, 0.97) !important;
+  backdrop-filter: saturate(150%) blur(10px);
+  -webkit-backdrop-filter: saturate(150%) blur(10px);
+  box-shadow: 0 4px 20px rgba(102, 69, 28, 0.08) !important;
+  padding: 10px 0 !important;
+  border-bottom: 1px solid rgba(202, 152, 67, 0.12);
+}
+
+/* Disable the legacy template's scroll-show animation - we're always fixed */
+.dw-header.act,
+.dw-header.head-trans {
+  position: fixed !important;
+  top: 0 !important;
+  background: rgba(255, 255, 255, 0.97) !important;
+  box-shadow: 0 4px 20px rgba(102, 69, 28, 0.08) !important;
+  animation: none !important;
+}
+
+/* Reserve space below the fixed header so page content isn't hidden under it */
+body {
+  --dw-header-h: 78px;
+  padding-top: var(--dw-header-h);
+}
+
+@media (max-width: 992px) {
+  body {
+    --dw-header-h: 66px;
+  }
+}
+
+@media (max-width: 768px) {
+  body {
+    --dw-header-h: 60px;
+  }
+}
+
+@media (max-width: 480px) {
+  body {
+    --dw-header-h: 56px;
+  }
+}
+
+/* Pages already add their own margin-top to .hero-container / .inn-ban /
+   .mhero that was sized for the OLD absolute header (75-80px). With the
+   global body padding-top above this would create a double gap, so we
+   neutralise those legacy margins here. */
+.hero-container,
+.inn-ban,
+.mhero {
+  margin-top: 0 !important;
+}
+
+.dw-header .hom-nav {
+  display: flex !important;
+  align-items: center;
+  justify-content: space-between;
+  gap: 24px;
+  width: 100%;
+}
+
+/* Reset legacy .logo float that constrained width */
+.dw-header .logo {
+  float: none !important;
+  width: auto !important;
+  display: flex;
+  align-items: center;
+}
+
+/* ==========================================================================
+   BRAND : SVG rings + Dewangan Links text
+   --------------------------------------------------------------------------
+   Sizes:    .dw-brand-sm   .dw-brand-md (default)   .dw-brand-lg
+   Variants: .dw-brand-dark (default, on light bg)
+             .dw-brand-light (on dark bg, e.g. Footer)
+   ========================================================================== */
+.dw-brand {
+  display: inline-flex !important;
+  align-items: center;
+  gap: 12px;
+  padding: 4px 6px;
+  border-radius: 12px;
+  text-decoration: none !important;
+  transition: transform 0.25s ease;
+  line-height: 1;
+}
+
+.dw-brand:hover {
+  transform: translateY(-1px);
+}
+
+.dw-brand-icon {
+  display: block;
+  filter: drop-shadow(0 2px 6px rgba(200, 144, 42, 0.35));
+  flex-shrink: 0;
+}
+
+.dw-brand-text {
+  display: flex;
+  flex-direction: column;
+  line-height: 1.05;
+}
+
+.dw-brand-name {
+  font-family: "Playfair Display", "Georgia", serif;
+  font-weight: 600;
+  letter-spacing: 0.4px;
+  color: #5a3c07;
+  white-space: nowrap;
+  display: block;
+}
+
+.dw-brand-name b {
+  background: linear-gradient(90deg, #c8902a, #e8c46a, #c8902a);
+  -webkit-background-clip: text;
+  background-clip: text;
+  -webkit-text-fill-color: transparent;
+  color: transparent;
+  font-weight: 800;
+  margin-left: 4px;
+  display: inline;
+  font-family: "Playfair Display", "Georgia", serif;
+}
+
+.dw-brand-tag {
+  font-weight: 600;
+  letter-spacing: 1.8px;
+  color: #b28a45;
+  text-transform: uppercase;
+  margin-top: 3px;
+  white-space: nowrap;
+  display: block;
+}
+
+/* ----- SIZE VARIANTS ----- */
+.dw-brand-sm .dw-brand-icon {
+  width: 38px;
+  height: 25px;
+}
+
+.dw-brand-sm .dw-brand-name {
+  font-size: 17px;
+}
+
+.dw-brand-sm .dw-brand-tag {
+  font-size: 9.5px;
+  letter-spacing: 1.6px;
+}
+
+.dw-brand-md .dw-brand-icon {
+  width: 46px;
+  height: 30px;
+}
+
+.dw-brand-md .dw-brand-name {
+  font-size: 22px;
+}
+
+.dw-brand-md .dw-brand-tag {
+  font-size: 10.5px;
+}
+
+.dw-brand-lg .dw-brand-icon {
+  width: 60px;
+  height: 38px;
+}
+
+.dw-brand-lg .dw-brand-name {
+  font-size: 28px;
+}
+
+.dw-brand-lg .dw-brand-tag {
+  font-size: 11.5px;
+  letter-spacing: 2px;
+  margin-top: 4px;
+}
+
+/* ----- VARIANT: LIGHT (on dark backgrounds, e.g. footer) ----- */
+.dw-brand-light .dw-brand-name {
+  color: #fdf6e3;
+}
+
+.dw-brand-light .dw-brand-name b {
+  background: linear-gradient(90deg, #ffd25a, #ffe9a3, #ffd25a);
+  -webkit-background-clip: text;
+  background-clip: text;
+  -webkit-text-fill-color: transparent;
+  color: transparent;
+}
+
+.dw-brand-light .dw-brand-tag {
+  color: #ffd89c;
+}
+
+.dw-brand-light .dw-brand-icon {
+  filter: drop-shadow(0 2px 6px rgba(255, 220, 130, 0.45));
+}
+
+/* ==========================================================================
+   DESKTOP MENU LINKS (.bl) - polish spacing & typography
+   ========================================================================== */
+.dw-header .bl {
+  flex: 1;
+  display: flex;
+  justify-content: center;
+}
+
+.dw-header .bl>ul {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  margin: 0;
+  padding: 0;
+}
+
+.dw-header .bl>ul>li {
+  position: relative;
+  list-style: none;
+  float: none !important;
+}
+
+.dw-header .bl>ul>li>a,
+.dw-header .bl>ul>li>.smenu {
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  padding: 10px 14px !important;
+  font-size: 14px !important;
+  font-weight: 600;
+  color: #5a3c07 !important;
+  border-radius: 10px;
+  cursor: pointer;
+  transition: background 0.2s ease, color 0.2s ease;
+  text-transform: none !important;
+  letter-spacing: 0.2px;
+}
+
+.dw-header .bl>ul>li>a:hover,
+.dw-header .bl>ul>li>.smenu:hover {
+  background: rgba(200, 144, 42, 0.1) !important;
+  color: #8a5e1c !important;
+}
+
+.dw-header .bl .smenu::after {
+  content: "▾";
+  font-size: 10px;
+  margin-left: 2px;
+  opacity: 0.7;
+}
+
+/* ==========================================================================
+   RIGHT SIDE : CTAs / User badge
+   ========================================================================== */
+.dw-actions {
+  float: none !important;
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  flex-shrink: 0;
+}
+
+.dw-cta-group {
+  display: flex;
+  gap: 8px;
+  align-items: center;
+}
+
+.dw-btn {
+  display: inline-flex !important;
+  align-items: center;
+  gap: 8px;
+  padding: 10px 18px !important;
+  font-size: 14px !important;
+  font-weight: 600;
+  border-radius: 10px;
+  text-decoration: none !important;
+  border: 1px solid transparent;
+  cursor: pointer;
+  transition: all 0.25s ease;
+  white-space: nowrap;
+  line-height: 1;
+}
+
+.dw-btn i {
+  font-size: 14px;
+}
+
+.dw-btn-ghost {
+  color: #5a3c07 !important;
+  border-color: rgba(200, 144, 42, 0.4);
+  background: transparent;
+}
+
+.dw-btn-ghost:hover {
+  background: rgba(200, 144, 42, 0.1);
+  border-color: #c8902a;
+}
+
+.dw-btn-primary {
+  color: #2a1c00 !important;
+  background: linear-gradient(135deg, #ffd25a, #d49a2a) !important;
+  box-shadow: 0 6px 16px rgba(200, 144, 42, 0.35);
+}
+
+.dw-btn-primary:hover {
+  filter: brightness(1.05);
+  transform: translateY(-1px);
+  box-shadow: 0 8px 20px rgba(200, 144, 42, 0.5);
+}
+
+/* User badge polish */
+.dw-userbadge {
+  display: flex !important;
+  align-items: center;
+  gap: 12px;
+  padding: 6px 14px 6px 6px !important;
+  background: linear-gradient(135deg, #fffaf0, #f3e6c8);
+  border-radius: 50px;
+  border: 1px solid rgba(200, 144, 42, 0.25);
+  cursor: pointer;
+  transition: all 0.25s ease;
+}
+
+.dw-userbadge:hover {
+  box-shadow: 0 6px 18px rgba(200, 144, 42, 0.25);
+  transform: translateY(-1px);
+}
+
+.dw-userbadge img {
+  width: 38px !important;
+  height: 38px !important;
+  border-radius: 50%;
+  object-fit: cover;
+  border: 2px solid #ffd25a;
+}
+
+.dw-userbadge b {
+  font-size: 10px !important;
+  font-weight: 600 !important;
+  color: #b28a45 !important;
+  text-transform: uppercase;
+  letter-spacing: 1px;
+  display: block;
+  line-height: 1;
+}
+
+.dw-userbadge h4 {
+  font-size: 14px !important;
+  margin: 2px 0 0 !important;
+  color: #5a3c07 !important;
+  font-weight: 700 !important;
+  line-height: 1;
+}
+
+/* ==========================================================================
+   MENU POPUP slide panel - brand at top
+   ========================================================================== */
+.menu-pop-brand {
+  display: flex;
+  justify-content: flex-start;
+  margin-bottom: 22px;
+  padding-bottom: 16px;
+  border-bottom: 1px solid rgba(200, 144, 42, 0.18);
+}
+
+/* hide the legacy <img class="logo-brand-only"> if any are still around */
+.logo-brand-only {
+  display: none;
+}
+
+/* ==========================================================================
+   FOOTER - rich nav footer
+   ========================================================================== */
+.dw-footer {
+  background: linear-gradient(180deg, #2a1a04 0%, #160e02 100%) !important;
+  color: #fdf6e3;
+  padding: 0 0 30px !important;
+  margin-top: 60px;
+}
+
+.dw-footer h4 {
+  color: #ffd25a !important;
+  font-size: 14px !important;
+  font-weight: 700 !important;
+  letter-spacing: 1.4px;
+  text-transform: uppercase;
+  margin-bottom: 18px !important;
+  padding-bottom: 10px !important;
+  border-bottom: 1px solid rgba(255, 210, 90, 0.18);
+}
+
+.dw-footer p,
+.dw-footer li,
+.dw-footer span,
+.dw-footer a {
+  color: #f3e6c8 !important;
+  font-size: 14px;
+  line-height: 1.7;
+}
+
+.dw-footer a {
+  text-decoration: none !important;
+  transition: color 0.2s ease, transform 0.2s ease;
+}
+
+.dw-footer a:hover {
+  color: #ffd25a !important;
+  transform: translateX(2px);
+}
+
+/* Brand row */
+.foot-brand-row {
+  text-align: center;
+  padding: 40px 0 6px;
+  display: flex !important;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  width: 100%;
+  border-bottom: 1px solid rgba(255, 220, 130, 0.18);
+  margin-bottom: 24px;
+}
+
+.foot-tag {
+  margin: 12px 0 0 !important;
+  font-size: 14px !important;
+  color: #f0d99e !important;
+  max-width: 540px;
+  text-align: center;
+}
+
+/* Free support bar */
+.dw-footer .foot-supp {
+  background: linear-gradient(135deg, #c8902a, #7a4f0c) !important;
+  border-radius: 14px;
+  padding: 14px 24px !important;
+  margin: 0 auto 36px !important;
+  max-width: 920px;
+  text-align: center;
+}
+
+.dw-footer .foot-supp h2 {
+  color: #fff !important;
+  font-size: 15px !important;
+  font-weight: 600 !important;
+  margin: 0;
+  line-height: 1.5;
+}
+
+.dw-footer .foot-supp h2 a,
+.dw-footer .foot-supp h2 span {
+  color: #fff !important;
+}
+
+/* Grid columns */
+.dw-foot-grid {
+  display: flex !important;
+  flex-wrap: wrap;
+  gap: 30px 24px;
+  margin: 0 auto 30px !important;
+  padding: 0 !important;
+}
+
+.dw-foot-col {
+  flex: 1 1 200px;
+  min-width: 200px;
+}
+
+.dw-foot-col ul {
+  list-style: none;
+  padding: 0;
+  margin: 0;
+}
+
+.dw-foot-col ul li {
+  margin-bottom: 10px;
+}
+
+.dw-foot-col ul li a {
+  display: inline-flex !important;
+  align-items: center;
+  gap: 10px;
+  font-weight: 500;
+}
+
+.dw-foot-col ul li a i {
+  width: 18px;
+  text-align: center;
+  color: #d6a93a;
+  font-size: 14px;
+}
+
+.dw-foot-cta-link {
+  color: #ffd25a !important;
+  font-weight: 700 !important;
+}
+
+/* Contact list */
+.dw-foot-contact li {
+  display: flex !important;
+  align-items: flex-start;
+  gap: 10px;
+  margin-bottom: 12px !important;
+}
+
+.dw-foot-contact li i {
+  width: 20px;
+  text-align: center;
+  color: #d6a93a;
+  font-size: 15px;
+  margin-top: 3px;
+}
+
+/* Social pills */
+.dw-foot-social {
+  display: flex;
+  gap: 10px;
+  margin-top: 18px;
+  flex-wrap: wrap;
+}
+
+.dw-foot-social a {
+  width: 38px;
+  height: 38px;
+  border-radius: 50%;
+  display: inline-flex !important;
+  align-items: center;
+  justify-content: center;
+  background: rgba(255, 210, 90, 0.1);
+  border: 1px solid rgba(255, 210, 90, 0.3);
+  color: #ffd25a !important;
+  transition: all 0.25s ease;
+}
+
+.dw-foot-social a:hover {
+  background: linear-gradient(135deg, #ffd25a, #c8902a);
+  color: #2a1a04 !important;
+  transform: translateY(-2px);
+  box-shadow: 0 6px 14px rgba(200, 144, 42, 0.4);
+}
+
+.dw-foot-social a i {
+  font-size: 16px;
+}
+
+/* Bottom CTA strip */
+.dw-footer .foot-count {
+  border-top: 1px solid rgba(255, 210, 90, 0.18);
+  padding: 22px 0 0 !important;
+  text-align: center;
+}
+
+.dw-footer .foot-count p {
+  margin: 0;
+  font-size: 14px !important;
+}
+
+.dw-footer .foot-count .btn-primary {
+  background: linear-gradient(135deg, #ffd25a, #c8902a) !important;
+  color: #2a1a04 !important;
+  border: none !important;
+  font-weight: 700 !important;
+  padding: 8px 18px !important;
+  margin-left: 8px;
+  border-radius: 8px;
+  display: inline-block;
+}
+
+/* Mobile footer stack */
+@media (max-width: 768px) {
+  .dw-footer {
+    padding: 0 0 20px !important;
+  }
+
+  .dw-foot-grid {
+    flex-direction: column;
+    gap: 24px;
+  }
+
+  .dw-foot-col {
+    flex: 1 1 100%;
+    text-align: center;
+  }
+
+  .dw-foot-col ul li a {
+    justify-content: center;
+  }
+
+  .dw-foot-contact li {
+    justify-content: center;
+  }
+
+  .dw-foot-social {
+    justify-content: center;
+  }
+
+  .dw-footer .foot-supp {
+    margin: 0 12px 24px !important;
+    padding: 12px 16px !important;
+  }
+
+  .dw-footer .foot-supp h2 {
+    font-size: 13px !important;
+  }
+}
+
+/* ==========================================================================
+   COPYRIGHT bar
+   ========================================================================== */
+.cr {
+  background: rgba(0, 0, 0, 0.35);
+  padding: 16px 0 18px;
+  text-align: center;
+}
+
+.cr p {
+  margin: 0 !important;
+  font-size: 13px;
+  color: #f3e6c8 !important;
+}
+
+.cr a {
+  color: #ffd25a !important;
+  font-weight: 600;
+  text-decoration: none !important;
+}
+
+.cr a:hover {
+  text-decoration: underline !important;
+}
+
+/* Two-column copyright row: brand line on the left, credit on the right */
+.cr .dw-cr-row {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  justify-content: space-between;
+  gap: 6px 18px;
+}
+
+.cr .dw-cr-left {
+  margin: 0 !important;
+}
+
+/* Developer credit — compact “partner” strip */
+.cr .dw-cr-credit {
+  display: flex;
+  flex-direction: column;
+  align-items: flex-end;
+  gap: 8px;
+  max-width: 100%;
+}
+
+.cr .dw-cr-credit__pre {
+  display: block;
+  font-size: 11px;
+  font-weight: 600;
+  letter-spacing: 0.12em;
+  text-transform: uppercase;
+  color: rgba(243, 230, 200, 0.72) !important;
+  line-height: 1.3;
+}
+
+.cr .dw-credit-pill {
+  position: relative;
+  display: inline-flex;
+  align-items: center;
+  gap: 12px;
+  padding: 10px 14px 10px 12px;
+  border-radius: 14px;
+  text-decoration: none !important;
+  overflow: hidden;
+  border: 1px solid rgba(200, 144, 42, 0.45);
+  background: linear-gradient(
+    145deg,
+    rgba(42, 28, 0, 0.55) 0%,
+    rgba(28, 20, 8, 0.75) 100%
+  );
+  box-shadow: 0 4px 18px rgba(0, 0, 0, 0.35),
+    inset 0 1px 0 rgba(255, 255, 255, 0.06);
+  transition: transform 0.22s ease, border-color 0.22s ease,
+    box-shadow 0.22s ease;
+}
+
+.cr .dw-credit-pill__glow {
+  position: absolute;
+  inset: -40%;
+  background: radial-gradient(
+    circle at 20% 50%,
+    rgba(255, 210, 90, 0.18) 0%,
+    transparent 55%
+  );
+  pointer-events: none;
+}
+
+.cr .dw-credit-pill__icon {
+  position: relative;
+  z-index: 1;
+  width: 40px;
+  height: 40px;
+  border-radius: 12px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  flex-shrink: 0;
+  font-size: 1.05rem;
+  color: #2a1c00;
+  background: linear-gradient(145deg, #ffe8a8, #d6a93a);
+  box-shadow: 0 2px 10px rgba(0, 0, 0, 0.2);
+}
+
+.cr .dw-credit-pill__text {
+  position: relative;
+  z-index: 1;
+  display: flex;
+  flex-direction: column;
+  align-items: flex-start;
+  gap: 2px;
+  text-align: left;
+  min-width: 0;
+}
+
+.cr .dw-credit-pill__name {
+  font-size: 15px;
+  font-weight: 800;
+  letter-spacing: 0.02em;
+  color: #fff8e8 !important;
+  line-height: 1.15;
+}
+
+.cr .dw-credit-pill__sub {
+  font-size: 11px;
+  font-weight: 600;
+  letter-spacing: 0.04em;
+  color: rgba(230, 210, 170, 0.88) !important;
+  line-height: 1.25;
+}
+
+.cr .dw-credit-pill__ext {
+  position: relative;
+  z-index: 1;
+  margin-left: 4px;
+  font-size: 12px;
+  color: rgba(255, 210, 120, 0.75) !important;
+  flex-shrink: 0;
+  transition: color 0.2s ease, transform 0.2s ease;
+}
+
+.cr .dw-credit-pill:hover {
+  transform: translateY(-2px);
+  border-color: rgba(255, 210, 120, 0.55);
+  box-shadow: 0 8px 26px rgba(0, 0, 0, 0.4),
+    0 0 0 1px rgba(200, 144, 42, 0.25);
+  text-decoration: none !important;
+}
+
+.cr .dw-credit-pill:hover .dw-credit-pill__ext {
+  color: #ffd25a !important;
+  transform: translate(1px, -1px);
+}
+
+@media (max-width: 768px) {
+  .cr .dw-cr-row {
+    flex-direction: column;
+    text-align: center;
+    gap: 10px;
+  }
+
+  .cr .dw-cr-credit {
+    align-items: center;
+  }
+
+  .cr .dw-cr-credit__pre {
+    letter-spacing: 0.08em;
+  }
+
+  .cr .dw-credit-pill__text {
+    align-items: center;
+    text-align: center;
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .cr .dw-credit-pill:hover {
+    transform: none;
+  }
+
+  .cr .dw-credit-pill:hover .dw-credit-pill__ext {
+    transform: none;
+  }
+}
+
+/* ==========================================================================
+   RESPONSIVE TRIM
+   ========================================================================== */
+
+/* Medium desktop - shrink brand text slightly so menu fits */
+@media (max-width: 1100px) {
+  .dw-brand-name {
+    font-size: 19px;
+  }
+
+  .dw-brand-tag {
+    font-size: 9.5px;
+    letter-spacing: 1.5px;
+  }
+
+  .dw-header .bl>ul>li>a,
+  .dw-header .bl>ul>li>.smenu {
+    padding: 9px 10px !important;
+    font-size: 13px !important;
+  }
+
+  .dw-btn {
+    padding: 9px 14px !important;
+    font-size: 13px !important;
+  }
+}
+
+/* Tablet-landscape (~1024px): compact the CTA group so "Join Free" doesn't
+   collapse into a circle. We hide the button label and show only icons.
+   Tooltips (title attr) and the obvious icon meaning keep affordance. */
+@media (min-width: 993px) and (max-width: 1199px) {
+  .dw-header .bl>ul>li>a,
+  .dw-header .bl>ul>li>.smenu {
+    padding: 9px 8px !important;
+    font-size: 12.5px !important;
+  }
+
+  .dw-cta-group {
+    gap: 6px;
+  }
+
+  .dw-btn {
+    padding: 9px 12px !important;
+    font-size: 13px !important;
+    gap: 0 !important;
+  }
+
+  .dw-btn span {
+    display: none !important;
+  }
+
+  .dw-btn i {
+    font-size: 16px !important;
+  }
+
+  /* Make sure the brand area doesn't steal extra space here */
+  .dw-brand-md .dw-brand-name {
+    font-size: 18px;
+  }
+}
+
+/* Tablet - keep brand visible & readable, with tagline */
+@media (max-width: 992px) {
+  .dw-brand-md .dw-brand-icon {
+    width: 42px;
+    height: 28px;
+  }
+
+  .dw-brand-md .dw-brand-name {
+    font-size: 19px;
+  }
+
+  .dw-brand-md .dw-brand-tag {
+    font-size: 9.5px;
+    letter-spacing: 1.5px;
+  }
+}
+
+/* Phone — brand left, ICON-ONLY Login / Join Free before fixed burger */
+@media (max-width: 768px) {
+  .dw-header {
+    padding: 10px 0 !important;
+    background: #ffffff !important;
+    border-bottom: 1px solid rgba(202, 152, 67, 0.18);
+  }
+
+  .dw-header .container {
+    padding: 0 !important;
+  }
+
+  .dw-header .row {
+    margin: 0 !important;
+  }
+
+  .dw-header .hom-nav {
+    justify-content: space-between !important;
+    align-items: center !important;
+    padding: 0 72px 0 12px !important;
+    /* room for fixed .mob-menu-btn (~48px + margins) on the right */
+    width: 100%;
+    gap: 8px;
+  }
+
+  .dw-header .logo {
+    width: auto !important;
+    max-width: min(58vw, 240px);
+    min-width: 0;
+    flex: 0 1 auto;
+  }
+
+  .dw-header .dw-actions {
+    flex-shrink: 0;
+  }
+
+  .dw-header .dw-cta-group {
+    gap: 8px;
+  }
+
+  /* Force ICON-ONLY pill buttons on mobile */
+  .dw-header .dw-cta-group .dw-btn {
+    width: 40px !important;
+    height: 40px !important;
+    padding: 0 !important;
+    gap: 0 !important;
+    border-radius: 50% !important;
+    justify-content: center !important;
+    font-size: 0 !important; /* nukes any stray text leakage */
+  }
+
+  .dw-header .dw-cta-group .dw-btn span {
+    display: none !important;
+  }
+
+  .dw-header .dw-cta-group .dw-btn i {
+    font-size: 15px !important;
+    margin: 0 !important;
+  }
+
+  .dw-header .dw-userbadge {
+    max-width: calc(100vw - 72px - 52vw - 24px);
+    padding: 4px 8px 4px 4px !important;
+    gap: 8px !important;
+  }
+
+  .dw-header .dw-userbadge h4 {
+    max-width: 88px;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    white-space: nowrap !important;
+  }
+
+  .dw-header .dw-brand {
+    padding: 2px 0 !important;
+    gap: 10px;
+  }
+
+  .dw-brand-md .dw-brand-icon {
+    width: 38px;
+    height: 25px;
+  }
+
+  .dw-brand-md .dw-brand-name {
+    font-size: 18px;
+    line-height: 1;
+  }
+
+  .dw-brand-md .dw-brand-tag {
+    font-size: 9px;
+    letter-spacing: 1.4px;
+    margin-top: 4px;
+  }
+
+  .dw-brand-name b {
+    margin-left: 4px;
+  }
+}
+
+@media (max-width: 480px) {
+  .dw-header {
+    padding: 8px 0 !important;
+  }
+
+  .dw-header .hom-nav {
+    padding: 0 62px 0 10px !important;
+    gap: 6px;
+  }
+
+  .dw-header .logo {
+    max-width: min(52vw, 210px);
+  }
+
+  /* Slightly smaller icon-only pills on phones */
+  .dw-header .dw-cta-group {
+    gap: 6px;
+  }
+
+  .dw-header .dw-cta-group .dw-btn {
+    width: 36px !important;
+    height: 36px !important;
+  }
+
+  .dw-header .dw-cta-group .dw-btn i {
+    font-size: 14px !important;
+  }
+
+  /* Hide the brand tagline so the name + icon don't overflow into buttons */
+  .dw-brand-md .dw-brand-tag {
+    display: none !important;
+  }
+
+  .dw-brand-md .dw-brand-icon {
+    width: 34px;
+    height: 22px;
+  }
+
+  .dw-brand-md .dw-brand-name {
+    font-size: 16px;
+    letter-spacing: 0.2px;
+  }
+}
+
+@media (max-width: 360px) {
+  .dw-brand-md .dw-brand-icon {
+    width: 30px;
+    height: 20px;
+  }
+
+  .dw-brand-md .dw-brand-name {
+    font-size: 14px;
+  }
+
+  .dw-header .hom-nav {
+    padding: 0 58px 0 8px !important;
+  }
+
+  .dw-header .dw-cta-group {
+    gap: 4px;
+  }
+
+  .dw-header .dw-cta-group .dw-btn {
+    width: 34px !important;
+    height: 34px !important;
+  }
+
+  .dw-header .dw-cta-group .dw-btn i {
+    font-size: 13px !important;
+  }
+}

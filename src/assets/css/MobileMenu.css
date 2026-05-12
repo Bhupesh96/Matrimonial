@@ -126,6 +126,64 @@
   padding: 20px 24px 40px;
 }
 
+/* =====================================================================
+   GUEST CTA ROW — Login + Join Free buttons at top of side menu
+   (mirrors the icon-only buttons in the mobile header but with labels)
+   ===================================================================== */
+.mm-cta-group {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 10px;
+  margin: 4px 0 22px;
+}
+
+.mm-cta-btn {
+  display: inline-flex !important;
+  align-items: center;
+  justify-content: center;
+  gap: 8px;
+  height: 44px;
+  padding: 0 14px;
+  border-radius: 10px;
+  font-size: 14px;
+  font-weight: 700;
+  letter-spacing: 0.3px;
+  text-decoration: none !important;
+  border: 1.5px solid transparent;
+  cursor: pointer;
+  transition: transform 0.18s ease, box-shadow 0.18s ease, filter 0.18s ease,
+    background 0.18s ease;
+  white-space: nowrap;
+}
+
+.mm-cta-btn i {
+  font-size: 14px;
+}
+
+.mm-cta-ghost {
+  color: #5a3c07 !important;
+  background: #ffffff;
+  border-color: rgba(200, 144, 42, 0.45);
+}
+
+.mm-cta-ghost:hover {
+  background: #fdf5e3;
+  border-color: #c8902a;
+}
+
+.mm-cta-primary {
+  color: #2a1c00 !important;
+  background: linear-gradient(135deg, #ffd25a 0%, #d49a2a 100%);
+  border-color: transparent;
+  box-shadow: 0 8px 18px rgba(200, 144, 42, 0.38);
+}
+
+.mm-cta-primary:hover {
+  filter: brightness(1.05);
+  transform: translateY(-1px);
+  box-shadow: 0 10px 22px rgba(200, 144, 42, 0.5);
+}
+
 /* Premium User Card */
 .mm-user-card {
   display: flex;

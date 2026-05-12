@@ -1,4 +1,5 @@
 import React from "react";
+import usePageTitle from "../hooks/usePageTitle";
 import Preloader from "../components/Preloader";
 import PoopUpSearch from "../components/PoopUpSearch";
 import TopMenu from "../components/TopMenu";
@@ -14,6 +15,10 @@ import { Link } from "react-router-dom";
 import DashboardMenu from "../components/DashBoardMenu";
 
 const AllProfiles = () => {
+  usePageTitle("Browse Profiles", {
+    description:
+      "Browse verified matrimonial profiles from the Dewangan community. Filter by age, location, gotra, and more.",
+  });
   return (
     <div>
       <PoopUpSearch />

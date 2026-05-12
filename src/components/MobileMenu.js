@@ -3,6 +3,7 @@ import { Link, useNavigate } from "react-router-dom";
 import { logoutUser } from "../api";
 import "../assets/css/MobileMenu.css";
 import AlertService from "../services/AlertServices";
+import Brand from "./Brand";
 
 const MobileMenu = () => {
   const [open, setOpen] = useState(false);
@@ -64,8 +65,12 @@ const MobileMenu = () => {
       <div className={`mm-panel ${open ? "mm-open" : ""}`}>
         {/* Header with Close Button */}
         <div className="mm-header">
-          <h3 className="mm-brand">Menu</h3>
-          <button className="mm-close-btn" onClick={() => setOpen(false)}>
+          <Brand size="sm" />
+          <button
+            className="mm-close-btn"
+            onClick={() => setOpen(false)}
+            aria-label="Close menu"
+          >
             <i className="fa fa-times"></i>
           </button>
         </div>
@@ -92,6 +97,28 @@ const MobileMenu = () => {
                 <span className="mm-greeting">Welcome back,</span>
                 <h4>{profileName}</h4>
               </div>
+            </div>
+          )}
+
+          {/* GUEST CTA — mirrors the header's icon buttons but with text */}
+          {!profileName && (
+            <div className="mm-cta-group">
+              <Link
+                to="/login"
+                className="mm-cta-btn mm-cta-ghost"
+                onClick={() => setOpen(false)}
+              >
+                <i className="fa fa-sign-in" aria-hidden="true"></i>
+                <span>Login</span>
+              </Link>
+              <Link
+                to="/sign-up"
+                className="mm-cta-btn mm-cta-primary"
+                onClick={() => setOpen(false)}
+              >
+                <i className="fa fa-heart" aria-hidden="true"></i>
+                <span>Join Free</span>
+              </Link>
             </div>
           )}
 
@@ -148,22 +175,12 @@ const MobileMenu = () => {
                   <i className="fa fa-angle-right"></i>
                 </Link>
               </li>
-              {!profileName && (
-                <>
-                  <li>
-                    <Link to="/login" onClick={() => setOpen(false)}>
-                      <span>Login</span>
-                      <i className="fa fa-angle-right"></i>
-                    </Link>
-                  </li>
-                  <li>
-                    <Link to="/sign-up" onClick={() => setOpen(false)}>
-                      <span>Register</span>
-                      <i className="fa fa-angle-right"></i>
-                    </Link>
-                  </li>
-                </>
-              )}
+              <li>
+                <Link to="/community" onClick={() => setOpen(false)}>
+                  <span>Community</span>
+                  <i className="fa fa-angle-right"></i>
+                </Link>
+              </li>
             </ul>
           </div>
 

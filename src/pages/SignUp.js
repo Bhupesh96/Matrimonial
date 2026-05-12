@@ -10,6 +10,7 @@ import {
   apiFetch,
 } from "../api";
 import AlertService from "../services/AlertServices";
+import usePageTitle from "../hooks/usePageTitle";
 
 import Preloader from "../components/Preloader";
 import PoopUpSearch from "../components/PoopUpSearch";
@@ -22,6 +23,8 @@ import DashboardMenu from "../components/DashBoardMenu";
 import Footer from "../components/Footer";
 import CopyRight from "../components/CopyRight";
 
+import "../assets/css/Login.css";
+
 const API_BASE_URL = process.env.REACT_APP_API_URL;
 
 const renderOptions = (data) =>
@@ -32,6 +35,10 @@ const renderOptions = (data) =>
   ));
 
 const SignUp = () => {
+  usePageTitle("Register Free", {
+    description:
+      "Create your free Dewangan Links profile in minutes and start meeting verified matches from the Dewangan community.",
+  });
   const navigate = useNavigate();
 
   /* 🌐 BILINGUAL LANGUAGE STATE */
@@ -143,6 +150,22 @@ const SignUp = () => {
   // NEW STATE: Controls the visibility of the success modal
   const [showSuccessModal, setShowSuccessModal] = useState(false);
 
+  // Detect if the visitor is ALREADY logged in. When that's true we treat
+  // this page as "register another profile" (e.g. for a sibling / relative)
+  // and we DO NOT auto-login as the new user — that would silently sign the
+  // current user out.
+  const [existingProfile] = useState(() => {
+    if (typeof window === "undefined") return null;
+    const profileID = localStorage.getItem("profileID");
+    if (!profileID) return null;
+    return {
+      profileID,
+      userID: localStorage.getItem("userID") || "",
+      profileName: localStorage.getItem("profileName") || "",
+    };
+  });
+  const isAlreadyLoggedIn = !!existingProfile;
+
   const handleMobileChange = (e) => {
     const numeric = e.target.value.replace(/[^0-9]/g, "").slice(0, 10);
     setPhone(numeric);
@@ -197,11 +220,16 @@ const SignUp = () => {
 
     setLoading(true);
 
+    // NB: backend (add_basic_profile.php) reads `FirstName` and `Gender`,
+    // while the DB column is `firstname` and `GenderID`. We send BOTH spellings
+    // so the API works whether the backend is fixed or not.
     const payload = {
       UserID: userID,
+      Gender: parseInt(genderID),
       GenderID: parseInt(genderID),
       MaritalStatusID: parseInt(maritalStatusID),
       LocationCityID: parseInt(cityID),
+      FirstName: firstName,
       firstname: firstName,
       lastname: surname,
       GotraID: parseInt(gotraID),
@@ -218,7 +246,15 @@ const SignUp = () => {
       // 1. Create Profile
       await createProfile(payload);
 
-      // 2. Auto-Login right after creation
+      // 2a. If someone is ALREADY logged in, this is a "register another
+      //     profile" flow (e.g. a parent registering a child). DON'T touch
+      //     the current session — just confirm the new user was created.
+      if (isAlreadyLoggedIn) {
+        setShowSuccessModal(true);
+        return;
+      }
+
+      // 2b. Otherwise, auto-login the brand new user.
       try {
         // The mobile number acts as the password
         const loginData = await loginUser({
@@ -230,16 +266,24 @@ const SignUp = () => {
           localStorage.setItem("profileID", loginData.data.ProfileID);
           localStorage.setItem("userID", loginData.data.UserID);
           localStorage.setItem("profileName", loginData.data.ProfileName);
-          localStorage.setItem("login_token", loginData.login_token);
+          if (loginData.login_token) {
+            localStorage.setItem("login_token", loginData.login_token);
+          } else {
+            localStorage.removeItem("login_token");
+          }
 
           // Fetch profile photo
           apiFetch(
             `${API_BASE_URL}?api=get_profile&ProfileID=${loginData.data.ProfileID}`,
           )
             .then((profileRes) => {
-              const photo = profileRes?.data?.[0]?.ProfilePhoto;
+              const row = profileRes?.data?.[0];
+              const photo = row?.ProfilePhoto;
               if (photo) {
                 localStorage.setItem("profilePhoto", photo);
+              }
+              if (row?.GenderID != null && row.GenderID !== "") {
+                localStorage.setItem("viewerGenderID", String(row.GenderID));
               }
             })
             .catch((err) =>
@@ -266,16 +310,49 @@ const SignUp = () => {
     }
   };
 
+  // Reset the entire form so the same logged-in user can register another
+  // profile right away without leaving the page.
+  const resetForm = () => {
+    setFirstName("");
+    setSurname("");
+    setGenderID("");
+    setMaritalStatusID("");
+    setCityID("");
+    setGotraID("");
+    setNanaGotraID("");
+    setFatherName("");
+    setMotherName("");
+    setHeightID("");
+    setWeight("");
+    setComplexion("");
+    setPhone("");
+    setAgree(false);
+    setPhoneError("");
+    // Pull a fresh next UserID for the next registration
+    fetchNextUserID().then(setUserID).catch(() => {});
+  };
+
   // Close Modal and Redirect Handler
   const handleCloseModalAndRedirect = () => {
     setShowSuccessModal(false);
-    navigate("/"); // Redirect to home page
+    if (isAlreadyLoggedIn) {
+      // Stay on the page, just clear the form so they can register another.
+      resetForm();
+    } else {
+      navigate("/"); // Brand new user → take them to the dashboard
+    }
+  };
+
+  // Allow the logged-in user to register yet ANOTHER profile after the modal.
+  const handleRegisterAnother = () => {
+    setShowSuccessModal(false);
+    resetForm();
   };
 
   if (loading) return <Preloader />;
 
   return (
-    <div>
+    <div className="dw-login-page dw-signup-page">
       <PoopUpSearch />
       <TopMenu />
       <MenuPopUp />
@@ -333,11 +410,59 @@ const SignUp = () => {
                   <div className="form-tit">
                     <h4>{t[lang].startFree}</h4>
                     <h1>{t[lang].createTitle}</h1>
-                    <p>
-                      {t[lang].alreadyMember}{" "}
-                      <Link to="/login">{t[lang].login}</Link>
-                    </p>
+                    {!isAlreadyLoggedIn && (
+                      <p>
+                        {t[lang].alreadyMember}{" "}
+                        <Link to="/login">{t[lang].login}</Link>
+                      </p>
+                    )}
                   </div>
+
+                  {isAlreadyLoggedIn && (
+                    <div
+                      role="status"
+                      style={{
+                        background: "#fbf6ee",
+                        border: "1px solid #e6d4b1",
+                        borderLeft: "4px solid #c8902a",
+                        padding: "12px 16px",
+                        borderRadius: "6px",
+                        marginBottom: "18px",
+                        fontSize: "14px",
+                        color: "#5a4220",
+                        lineHeight: 1.5,
+                      }}
+                    >
+                      <strong style={{ display: "block", marginBottom: 4 }}>
+                        {lang === "en"
+                          ? "Registering a profile for someone else"
+                          : "किसी और के लिए प्रोफ़ाइल बनाई जा रही है"}
+                      </strong>
+                      {lang === "en" ? (
+                        <>
+                          You are signed in as{" "}
+                          <b>
+                            {existingProfile.profileName ||
+                              existingProfile.userID}
+                          </b>
+                          . This form will create a new profile (e.g. for a
+                          sibling or relative). You will stay signed in to your
+                          own account.
+                        </>
+                      ) : (
+                        <>
+                          आप{" "}
+                          <b>
+                            {existingProfile.profileName ||
+                              existingProfile.userID}
+                          </b>{" "}
+                          के रूप में लॉग इन हैं। यह फ़ॉर्म एक नई प्रोफ़ाइल बनाएगा
+                          (जैसे भाई-बहन या रिश्तेदार के लिए)। आप अपने खाते में
+                          लॉग इन रहेंगे।
+                        </>
+                      )}
+                    </div>
+                  )}
 
                   <div className="form-login">
                     <form onSubmit={handleSubmit}>
@@ -347,10 +472,9 @@ const SignUp = () => {
                           <div className="form-group">
                             <label>{t[lang].newUserId}</label>
                             <input
-                              className="form-control"
+                              className="form-control dw-readonly-id"
                               readOnly
                               value={userID}
-                              style={{ background: "#eee", fontWeight: "bold" }}
                             />
                           </div>
 
@@ -623,9 +747,13 @@ const SignUp = () => {
                 lineHeight: "1.5",
               }}
             >
-              {lang === "en"
-                ? "Your profile has been successfully created. Please save your login credentials below."
-                : "आपकी प्रोफ़ाइल सफलतापूर्वक बन गई है। कृपया अपना लॉगिन विवरण नीचे सुरक्षित रखें।"}
+              {isAlreadyLoggedIn
+                ? lang === "en"
+                  ? "The new profile has been created. Share these login credentials with the user — they can sign in with their User ID and mobile number as the password."
+                  : "नई प्रोफ़ाइल बन गई है। नीचे दिए गए लॉगिन विवरण उस यूज़र के साथ साझा करें — वे अपने यूज़र आईडी और मोबाइल नंबर से लॉगिन कर सकते हैं।"
+                : lang === "en"
+                  ? "Your profile has been successfully created. Please save your login credentials below."
+                  : "आपकी प्रोफ़ाइल सफलतापूर्वक बन गई है। कृपया अपना लॉगिन विवरण नीचे सुरक्षित रखें।"}
             </p>
 
             {/* Elegant Credentials Box (Ivory/Cream tone) */}
@@ -705,45 +833,74 @@ const SignUp = () => {
               </div>
             </div>
 
-            <button
-              className="wedding-btn"
-              onClick={handleCloseModalAndRedirect}
-              style={{
-                width: "100%",
-                padding: "14px",
-                background: "#8C5A3C",
-                color: "#fff",
-                border: "none",
-                borderRadius: "6px", // Structured button instead of pill
-                fontSize: "16px",
-                fontWeight: "600",
-                cursor: "pointer",
-                transition: "background-color 0.3s ease",
-              }}
-            >
-              {lang === "en" ? "Continue to Dashboard" : "डैशबोर्ड पर जाएं"}
-            </button>
+            {isAlreadyLoggedIn ? (
+              <div style={{ display: "flex", gap: "10px" }}>
+                <button
+                  type="button"
+                  onClick={handleRegisterAnother}
+                  style={{
+                    flex: 1,
+                    padding: "14px",
+                    background: "#fff",
+                    color: "#8C5A3C",
+                    border: "1.5px solid #8C5A3C",
+                    borderRadius: "6px",
+                    fontSize: "15px",
+                    fontWeight: "600",
+                    cursor: "pointer",
+                  }}
+                >
+                  {lang === "en"
+                    ? "Register another"
+                    : "एक और रजिस्टर करें"}
+                </button>
+                <button
+                  type="button"
+                  onClick={() => {
+                    setShowSuccessModal(false);
+                    navigate("/all-profiles");
+                  }}
+                  style={{
+                    flex: 1,
+                    padding: "14px",
+                    background: "#8C5A3C",
+                    color: "#fff",
+                    border: "none",
+                    borderRadius: "6px",
+                    fontSize: "15px",
+                    fontWeight: "600",
+                    cursor: "pointer",
+                  }}
+                >
+                  {lang === "en" ? "Done" : "पूर्ण"}
+                </button>
+              </div>
+            ) : (
+              <button
+                className="wedding-btn"
+                onClick={handleCloseModalAndRedirect}
+                style={{
+                  width: "100%",
+                  padding: "14px",
+                  background: "#8C5A3C",
+                  color: "#fff",
+                  border: "none",
+                  borderRadius: "6px",
+                  fontSize: "16px",
+                  fontWeight: "600",
+                  cursor: "pointer",
+                  transition: "background-color 0.3s ease",
+                }}
+              >
+                {lang === "en" ? "Continue to Dashboard" : "डैशबोर्ड पर जाएं"}
+              </button>
+            )}
           </div>
         </div>
       )}
 
-      {/* LANGUAGE SWITCH & WEDDING ANIMATION CSS */}
+      {/* Modal Animation only (language switcher styling now in Login.css) */}
       <style>{`
-        .lang-btn {
-          background: transparent;
-          border: none;
-          color: #777;
-          font-size: 15px;
-          cursor: pointer;
-          transition: 0.3s;
-        }
-        .active-lang-btn {
-          font-weight: bold;
-          color: #d32163;
-          border-bottom: 2px solid #d32163;
-        }
-        
-        /* Modal Appearance Animation */
         .wedding-modal {
           animation: modalFadeIn 0.3s ease-out forwards;
         }
@@ -752,7 +909,6 @@ const SignUp = () => {
           to { opacity: 1; transform: translateY(0); }
         }
 
-        /* Button Hover */
         .wedding-btn:hover {
           background-color: #704931 !important;
         }

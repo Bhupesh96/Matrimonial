@@ -1,6 +1,8 @@
-import { useEffect, useRef, useState } from "react";
+import { useEffect, useState } from "react";
 import { useNavigate } from "react-router-dom";
 
+import usePageTitle from "../hooks/usePageTitle";
+import { resolveImageUrl } from "../utils/imageUrl";
 import ContactExpert from "../components/ContactExpert";
 import CopyRight from "../components/CopyRight";
 import DashboardMenu from "../components/DashBoardMenu";
@@ -19,15 +21,23 @@ import {
   updateProfilePicture,
 } from "../api";
 import AlertService from "../services/AlertServices";
+import SearchableSelect from "../components/SearchableSelect";
 
-const renderOptions = (list) =>
-  list?.map((item) => (
-    <option key={item.id} value={item.id}>
-      {item.name}
-    </option>
-  ));
+import "../assets/css/UserProfileEdit.css";
+
+// Hard-coded option set for the Title dropdown (not stored in master tables).
+const TITLE_OPTIONS = [
+  { id: "Mr.", name: "Mr." },
+  { id: "Mrs.", name: "Mrs." },
+  { id: "Ms.", name: "Ms." },
+  { id: "Dr.", name: "Dr." },
+];
 
 const UserProfileEdit = () => {
+  usePageTitle("Edit My Profile", {
+    description:
+      "Update your matrimonial details, photos, education, family, and partner expectations on Dewangan Links.",
+  });
   const navigate = useNavigate();
 
   const [loading, setLoading] = useState(true);
@@ -38,7 +48,6 @@ const UserProfileEdit = () => {
   const [profilePhotoName, setProfilePhotoName] = useState("");
   const [galleryFiles, setGalleryFiles] = useState([]);
   const [galleryPreview, setGalleryPreview] = useState([]);
-  const [isEduDropdownOpen, setIsEduDropdownOpen] = useState(false);
   const [dropdowns, setDropdowns] = useState({
     cities: [],
     heights: [],
@@ -54,46 +63,23 @@ const UserProfileEdit = () => {
     motherTongues: [],
     bloodGroups: [],
     relationships: [],
+    genders: [],
   });
-  const eduDropdownRef = useRef(null);
-  useEffect(() => {
-    function handleClickOutside(event) {
-      if (
-        eduDropdownRef.current &&
-        !eduDropdownRef.current.contains(event.target)
-      ) {
-        setIsEduDropdownOpen(false);
-      }
-    }
-
-    // Bind the event listener
-    document.addEventListener("mousedown", handleClickOutside);
-    return () => {
-      // Unbind the event listener on clean up
-      document.removeEventListener("mousedown", handleClickOutside);
-    };
-  }, []);
-  const IMG_BASE =
-    process.env.REACT_APP_IMG_BASE_URL ||
-    "https://techwithus.in/matro/admin/plug/";
-
-  // NEW HELPER FUNCTION
   const getFullImageUrl = (imagePath) => {
     if (!imagePath) return "/images/default.png";
-    // If it's already a full URL or a local blob (newly uploaded photo), return it directly
-    if (imagePath.startsWith("http") || imagePath.startsWith("blob:"))
-      return imagePath;
-
-    // Otherwise, attach the base URL from your PHP server
-    const cleanPath = imagePath.startsWith("/")
-      ? imagePath.substring(1)
-      : imagePath;
-    return `${IMG_BASE}${cleanPath}`;
+    // Local blob preview from a freshly chosen file
+    if (imagePath.startsWith("blob:")) return imagePath;
+    return resolveImageUrl(imagePath) || "/images/default.png";
   };
   useEffect(() => {
     const loadAll = async () => {
       const profileID = localStorage.getItem("profileID");
-      if (!profileID) {
+      if (
+        !profileID ||
+        profileID === "undefined" ||
+        profileID === "null"
+      ) {
+        setLoading(false);
         AlertService.showError("You are not logged in.");
         navigate("/login");
         return;
@@ -115,6 +101,7 @@ const UserProfileEdit = () => {
           "mothertongues",
           "bloodgroups",
           "relationships",
+          "genders",
         ];
 
         const masterResults = await Promise.all(
@@ -159,6 +146,7 @@ const UserProfileEdit = () => {
           motherTongues: masterResults[11],
           bloodGroups: masterResults[12],
           relationships: masterResults[13],
+          genders: masterResults[14],
         });
 
         setProfileData(profile);
@@ -192,17 +180,7 @@ const UserProfileEdit = () => {
     const { name, value } = e.target;
     setProfileData((prev) => ({ ...prev, [name]: value }));
   };
-  const handleMultiSelectChange = (e) => {
-    const { name, options } = e.target;
-    const values = [];
-    for (let i = 0; i < options.length; i++) {
-      if (options[i].selected && options[i].value !== "") {
-        values.push(options[i].value);
-      }
-    }
-    // Save as a comma-separated string (e.g., "1,3,5")
-    setProfileData((prev) => ({ ...prev, [name]: values.join(",") }));
-  };
+
   const onPhotoChange = (e) => {
     if (!e.target.files?.[0]) return;
 
@@ -291,6 +269,11 @@ const UserProfileEdit = () => {
         await updateProfilePicture(profilePhoto, galleryFiles);
       }
 
+      const gid = payload.GenderID ?? profileData.GenderID;
+      if (gid != null && gid !== "") {
+        localStorage.setItem("viewerGenderID", String(gid));
+      }
+
       AlertService.showSuccessAndRedirect(
         "Profile updated successfully!",
         navigate,
@@ -320,32 +303,11 @@ const UserProfileEdit = () => {
     motherTongues,
     bloodGroups,
     relationships,
+    genders,
   } = dropdowns;
-  // --- NEW HANDLER FOR CHECKBOX DROPDOWN ---
-  const handleEduCheckboxChange = (id) => {
-    const currentSelected = profileData.EducationDegreeID
-      ? String(profileData.EducationDegreeID).split(",").filter(Boolean)
-      : [];
 
-    const idStr = String(id);
-    let newSelected;
-
-    if (currentSelected.includes(idStr)) {
-      // Uncheck: remove ID from array
-      newSelected = currentSelected.filter((item) => item !== idStr);
-    } else {
-      // Check: add ID to array
-      newSelected = [...currentSelected, idStr];
-    }
-
-    // Save back as comma-separated string
-    setProfileData((prev) => ({
-      ...prev,
-      EducationDegreeID: newSelected.join(","),
-    }));
-  };
   return (
-    <div>
+    <div className="dw-edit-page">
       <PoopUpSearch />
       <TopMenu />
       <MenuPopUp />
@@ -354,10 +316,7 @@ const UserProfileEdit = () => {
       <MobileMenu />
       <DashboardMenu />
 
-      <div
-        className="container"
-        style={{ marginTop: "7rem", marginBottom: "6rem" }}
-      >
+      <div className="container dw-edit-container">
         <form onSubmit={handleSubmit}>
           {/* -------------------------------------- */}
           {/* BASIC DETAILS */}
@@ -370,18 +329,13 @@ const UserProfileEdit = () => {
                 <div className="row">
                   <div className="col-md-3 mb-3">
                     <label>Title</label>
-                    <select
-                      className="form-select"
+                    <SearchableSelect
                       name="Title"
                       value={profileData.Title || ""}
+                      options={TITLE_OPTIONS}
                       onChange={handleChange}
-                    >
-                      <option value="">Select Title</option>
-                      <option value="Mr.">Mr.</option>
-                      <option value="Mrs.">Mrs.</option>
-                      <option value="Ms.">Ms.</option>
-                      <option value="Dr.">Dr.</option>
-                    </select>
+                      placeholder="Select Title"
+                    />
                   </div>
 
                   <div className="col-md-3 mb-3">
@@ -419,6 +373,20 @@ const UserProfileEdit = () => {
 
                 <div className="row">
                   <div className="col-md-4 mb-3">
+                    <label>
+                      Gender <span style={{ color: "#dc3545" }}>*</span>
+                    </label>
+                    <SearchableSelect
+                      name="GenderID"
+                      value={profileData.GenderID || ""}
+                      options={genders}
+                      onChange={handleChange}
+                      placeholder="Select Gender"
+                      showClear={false}
+                    />
+                  </div>
+
+                  <div className="col-md-4 mb-3">
                     <label>Date of Birth</label>
                     <input
                       type="date"
@@ -438,7 +406,9 @@ const UserProfileEdit = () => {
                       onChange={handleChange}
                     />
                   </div>
+                </div>
 
+                <div className="row">
                   <div className="col-md-4 mb-3">
                     <label>Birth Time</label>
                     <input
@@ -449,9 +419,7 @@ const UserProfileEdit = () => {
                       onChange={handleChange}
                     />
                   </div>
-                </div>
 
-                <div className="row">
                   <div className="col-md-4 mb-3">
                     <label>Birth Name</label>
                     <input
@@ -464,114 +432,81 @@ const UserProfileEdit = () => {
 
                   <div className="col-md-4 mb-3">
                     <label>Mother Tongue</label>
-                    <select
-                      className="form-select"
+                    <SearchableSelect
                       name="MotherTongueID"
                       value={profileData.MotherTongueID || ""}
+                      options={motherTongues}
                       onChange={handleChange}
-                    >
-                      <option value="">Select Tongue</option>
-                      {renderOptions(motherTongues)}
-                    </select>
-                  </div>
-
-                  <div className="col-md-4 mb-3">
-                    <label>Religion</label>
-                    <select
-                      className="form-select"
-                      name="ReligionID"
-                      value={profileData.ReligionID || ""}
-                      onChange={handleChange}
-                    >
-                      <option value="">Select Religion</option>
-                      {renderOptions(religions)}
-                    </select>
+                      placeholder="Search Mother Tongue"
+                    />
                   </div>
                 </div>
 
                 <div className="row">
                   <div className="col-md-4 mb-3">
+                    <label>Religion</label>
+                    <SearchableSelect
+                      name="ReligionID"
+                      value={profileData.ReligionID || ""}
+                      options={religions}
+                      onChange={handleChange}
+                      placeholder="Search Religion"
+                    />
+                  </div>
+
+                  <div className="col-md-4 mb-3">
                     <label>Marital Status</label>
-                    <select
-                      className="form-select"
+                    <SearchableSelect
                       name="MaritalStatusID"
                       value={profileData.MaritalStatusID || ""}
+                      options={maritalStatuses}
                       onChange={handleChange}
-                    >
-                      <option value="">Select Status</option>
-                      {renderOptions(maritalStatuses)}
-                    </select>
+                      placeholder="Search Marital Status"
+                    />
                   </div>
 
                   <div className="col-md-4 mb-3">
                     <label>Gotra</label>
-                    <select
-                      className="form-select"
+                    <SearchableSelect
                       name="GotraID"
                       value={profileData.GotraID || ""}
+                      options={gotras}
                       onChange={handleChange}
-                    >
-                      <option value="">Select Gotra</option>
-                      {renderOptions(gotras)}
-                    </select>
+                      placeholder="Search Gotra"
+                    />
                   </div>
+                </div>
 
+                <div className="row">
                   <div className="col-md-4 mb-3">
                     <label>Rashi</label>
-                    <select
-                      className="form-select"
+                    <SearchableSelect
                       name="Rashi"
                       value={profileData.Rashi || ""}
+                      options={rashis}
                       onChange={handleChange}
-                    >
-                      <option value="">Select Rashi</option>
-                      {renderOptions(rashis)}
-                    </select>
+                      placeholder="Search Rashi"
+                    />
                   </div>
                 </div>
               </div>
 
               {/* PROFILE PHOTO */}
               <div className="col-md-3 d-flex flex-column align-items-center">
-                <div
-                  style={{
-                    width: "180px",
-                    height: "230px",
-                    background: "#fff",
-                    padding: 6,
-                    boxShadow: "0 3px 8px rgba(0,0,0,0.15)",
-                    border: "1px solid #ddd",
-                    overflow: "hidden",
-                    marginBottom: 12,
-                  }}
-                >
+                <div className="dw-photo-frame">
                   <img
                     src={getFullImageUrl(
                       profileData.ProfilePhoto || profileData.ProfileImageURL,
                     )}
                     alt="Profile"
-                    style={{
-                      width: "100%",
-                      height: "100%",
-                      objectFit: "cover",
-                    }}
                   />
                 </div>
 
-                <label
-                  htmlFor="passportPhotoInput"
-                  style={{ cursor: "pointer" }}
-                >
-                  <div
-                    style={{
-                      padding: "10px 18px",
-                      borderRadius: 30,
-                      backgroundColor: "#007bff",
-                      color: "#fff",
-                    }}
-                  >
+                <label htmlFor="passportPhotoInput" style={{ cursor: "pointer" }}>
+                  <span className="dw-upload-btn">
+                    <i className="fa fa-camera" aria-hidden="true"></i>
                     Choose Photo
-                  </div>
+                  </span>
                 </label>
 
                 <input
@@ -582,43 +517,28 @@ const UserProfileEdit = () => {
                   onChange={onPhotoChange}
                 />
 
-                <div style={{ marginTop: 8, fontSize: 13 }}>
+                <div className="dw-photo-filename">
                   {profilePhotoName || "No file chosen"}
                 </div>
               </div>
+
               {/* ---------------- GALLERY UPLOAD ---------------- */}
-              <div className="mt-4">
-                <h5 style={{ fontWeight: 600 }}>Photo Gallery</h5>
+              <div className="dw-gallery-section">
+                <h5>Photo Gallery</h5>
 
                 {/* 1. SHOW EXISTING GALLERY IMAGES FROM SERVER */}
                 {profileData.gallery_images &&
                   profileData.gallery_images.length > 0 && (
-                    <div style={{ marginBottom: "15px" }}>
-                      <div
-                        style={{
-                          fontSize: "13px",
-                          color: "#666",
-                          marginBottom: "8px",
-                        }}
-                      >
-                        Existing Photos:
+                    <div style={{ marginBottom: "16px" }}>
+                      <div className="dw-gallery-existing-label">
+                        Existing Photos
                       </div>
-                      <div
-                        style={{ display: "flex", gap: 10, flexWrap: "wrap" }}
-                      >
+                      <div className="dw-gallery-grid">
                         {profileData.gallery_images.map((img, i) => (
                           <img
                             key={i}
-                            src={getFullImageUrl(img)} // <-- Wrap img in the helper here
+                            src={getFullImageUrl(img)}
                             alt="gallery"
-                            style={{
-                              width: 90,
-                              height: 90,
-                              objectFit: "cover",
-                              borderRadius: 10,
-                              border: "1px solid #ddd",
-                              boxShadow: "0 2px 5px rgba(0,0,0,0.1)",
-                            }}
                           />
                         ))}
                       </div>
@@ -628,24 +548,12 @@ const UserProfileEdit = () => {
                 {/* 2. UPLOAD BUTTON */}
                 <label
                   htmlFor="galleryInput"
-                  style={{ cursor: "pointer", marginTop: "10px" }}
+                  style={{ cursor: "pointer", display: "inline-block", marginBottom: 12 }}
                 >
-                  <div
-                    style={{
-                      padding: "10px 18px",
-                      borderRadius: 30,
-                      backgroundColor: "#6c757d",
-                      color: "#fff",
-                      display: "inline-block",
-                      marginBottom: 12,
-                    }}
-                  >
-                    <i
-                      className="fa fa-camera"
-                      style={{ marginRight: "6px" }}
-                    ></i>
+                  <span className="dw-upload-btn dw-upload-btn-ghost">
+                    <i className="fa fa-camera" aria-hidden="true"></i>
                     Upload New Gallery Photos
-                  </div>
+                  </span>
                 </label>
 
                 <input
@@ -659,38 +567,13 @@ const UserProfileEdit = () => {
 
                 {/* 3. PREVIEW NEWLY SELECTED IMAGES */}
                 {galleryPreview.length > 0 && (
-                  <div style={{ marginTop: "10px" }}>
-                    <div
-                      style={{
-                        fontSize: "13px",
-                        color: "#007bff",
-                        marginBottom: "8px",
-                        fontWeight: "bold",
-                      }}
-                    >
-                      New Photos to Upload (Will be saved on Update):
+                  <div>
+                    <div className="dw-gallery-new-label">
+                      New Photos to Upload (Will be saved on Update)
                     </div>
-                    <div
-                      style={{
-                        display: "flex",
-                        gap: 10,
-                        flexWrap: "wrap",
-                      }}
-                    >
+                    <div className="dw-gallery-grid dw-gallery-new">
                       {galleryPreview.map((img, i) => (
-                        <img
-                          key={i}
-                          src={img}
-                          alt="preview"
-                          style={{
-                            width: 90,
-                            height: 90,
-                            objectFit: "cover",
-                            borderRadius: 10,
-                            border: "2px dashed #007bff",
-                            boxShadow: "0 3px 8px rgba(0,123,255,0.2)",
-                          }}
-                        />
+                        <img key={i} src={img} alt="preview" />
                       ))}
                     </div>
                   </div>
@@ -708,15 +591,13 @@ const UserProfileEdit = () => {
             <div className="row mt-3">
               <div className="col-md-4 mb-3">
                 <label>Height</label>
-                <select
-                  className="form-select"
+                <SearchableSelect
                   name="HeightID"
                   value={profileData.HeightID || ""}
+                  options={heights}
                   onChange={handleChange}
-                >
-                  <option value="">Select Height</option>
-                  {renderOptions(dropdowns.heights)}
-                </select>
+                  placeholder="Search Height"
+                />
               </div>
 
               <div className="col-md-4 mb-3">
@@ -742,15 +623,13 @@ const UserProfileEdit = () => {
 
               <div className="col-md-4 mb-3">
                 <label>Blood Group</label>
-                <select
-                  className="form-select"
+                <SearchableSelect
                   name="BloodGroupID"
                   value={profileData.BloodGroupID || ""}
+                  options={bloodGroups}
                   onChange={handleChange}
-                >
-                  <option value="">Select Blood Group</option>
-                  {renderOptions(bloodGroups)}
-                </select>
+                  placeholder="Search Blood Group"
+                />
               </div>
             </div>
           </div>
@@ -785,13 +664,18 @@ const UserProfileEdit = () => {
 
             <div className="row">
               <div className="col-md-6 mb-3">
-                <label>Father Status</label>
-                <input
-                  className="form-control"
-                  name="FatherStatus"
-                  value={profileData.FatherStatus || ""}
+                <label>Father Occupation</label>
+                <SearchableSelect
+                  name="FatherOccupationID"
+                  value={profileData.FatherOccupationID || ""}
+                  options={occupations}
                   onChange={handleChange}
+                  placeholder="Search father's occupation"
                 />
+                <small className="text-muted">
+                  Shown on your profile as &quot;Father Occupation&quot;. This is
+                  separate from Father Status below.
+                </small>
               </div>
 
               <div className="col-md-6 mb-3">
@@ -801,7 +685,25 @@ const UserProfileEdit = () => {
                   name="MotherOccupation"
                   value={profileData.MotherOccupation || ""}
                   onChange={handleChange}
+                  placeholder="e.g. Homemaker, Teacher"
                 />
+              </div>
+            </div>
+
+            <div className="row">
+              <div className="col-md-6 mb-3">
+                <label>Father Status</label>
+                <input
+                  className="form-control"
+                  name="FatherStatus"
+                  value={profileData.FatherStatus || ""}
+                  onChange={handleChange}
+                  placeholder="e.g. Alive, Retired, Employed"
+                />
+                <small className="text-muted">
+                  Use this for living or employment status — not the same as
+                  occupation (choose occupation above).
+                </small>
               </div>
             </div>
           </div>
@@ -813,107 +715,15 @@ const UserProfileEdit = () => {
             <h4>Education & Job</h4>
             <label>Degree</label>
             <div className="mt-3">
-              <div
-                ref={eduDropdownRef} /* <--- Add the ref right here */
-                style={{ position: "relative", marginBottom: "16px" }}
-              >
-                {/* The clickable dropdown box */}
-                <div
-                  className="form-control d-flex justify-content-between align-items-center"
-                  style={{
-                    cursor: "pointer",
-                    backgroundColor: "#fff",
-                    minHeight: "40px",
-                  }}
-                  onClick={() => setIsEduDropdownOpen(!isEduDropdownOpen)}
-                >
-                  <span
-                    style={{
-                      overflow: "hidden",
-                      textOverflow: "ellipsis",
-                      whiteSpace: "nowrap",
-                    }}
-                  >
-                    {profileData.EducationDegreeID
-                      ? String(profileData.EducationDegreeID)
-                          .split(",")
-                          .map((id) => {
-                            const found = educationDegrees.find(
-                              (d) => String(d.id) === String(id),
-                            );
-                            return found ? found.name : "";
-                          })
-                          .filter(Boolean)
-                          .join(", ") || "Select Degrees"
-                      : "Select Degrees"}
-                  </span>
-                  <i
-                    className={`fa fa-chevron-${isEduDropdownOpen ? "up" : "down"}`}
-                  ></i>
-                </div>
-
-                {/* The dropdown list with checkboxes */}
-                {isEduDropdownOpen && (
-                  <div
-                    style={{
-                      position: "absolute",
-                      top: "100%",
-                      left: 0,
-                      right: 0,
-                      backgroundColor: "#fff",
-                      border: "1px solid #ccc",
-                      borderRadius: "6px",
-                      maxHeight: "220px",
-                      overflowY: "auto",
-                      zIndex: 1000,
-                      boxShadow: "0 8px 16px rgba(0,0,0,0.15)",
-                      marginTop: "4px",
-                    }}
-                  >
-                    {educationDegrees.map((item) => {
-                      const isSelected = profileData.EducationDegreeID
-                        ? String(profileData.EducationDegreeID)
-                            .split(",")
-                            .includes(String(item.id))
-                        : false;
-
-                      return (
-                        <label
-                          key={item.id}
-                          style={{
-                            display: "block",
-                            padding: "10px 15px",
-                            margin: 0,
-                            cursor: "pointer",
-                            borderBottom: "1px solid #f0f0f0",
-                            backgroundColor: isSelected ? "#f8faff" : "#fff",
-                            transition: "background-color 0.2s",
-                          }}
-                          onMouseEnter={(e) =>
-                            (e.currentTarget.style.backgroundColor = "#f1f1f1")
-                          }
-                          onMouseLeave={(e) =>
-                            (e.currentTarget.style.backgroundColor = isSelected
-                              ? "#f8faff"
-                              : "#fff")
-                          }
-                        >
-                          <input
-                            type="checkbox"
-                            checked={isSelected}
-                            onChange={() => handleEduCheckboxChange(item.id)}
-                            style={{
-                              marginRight: "10px",
-                              transform: "scale(1.2)",
-                              cursor: "pointer",
-                            }}
-                          />
-                          {item.name}
-                        </label>
-                      );
-                    })}
-                  </div>
-                )}
+              <div style={{ marginBottom: "16px" }}>
+                <SearchableSelect
+                  multi
+                  name="EducationDegreeID"
+                  value={profileData.EducationDegreeID || ""}
+                  options={educationDegrees}
+                  onChange={handleChange}
+                  placeholder="Search & select degrees"
+                />
               </div>
 
               <label>Education Detail</label>
@@ -926,15 +736,15 @@ const UserProfileEdit = () => {
               />
 
               <label>Occupation</label>
-              <select
-                className="form-select mb-3"
-                name="OccupationID"
-                value={profileData.OccupationID || ""}
-                onChange={handleChange}
-              >
-                <option value="">Select Occupation</option>
-                {renderOptions(occupations)}
-              </select>
+              <div className="mb-3">
+                <SearchableSelect
+                  name="OccupationID"
+                  value={profileData.OccupationID || ""}
+                  options={occupations}
+                  onChange={handleChange}
+                  placeholder="Search Occupation"
+                />
+              </div>
 
               <div className="row">
                 <div className="col-md-6 mb-3">
@@ -959,15 +769,15 @@ const UserProfileEdit = () => {
               </div>
 
               <label>Annual Income</label>
-              <select
-                className="form-select mb-3"
-                name="AnnualIncomeID"
-                value={profileData.AnnualIncomeID || ""}
-                onChange={handleChange}
-              >
-                <option value="">Select Income</option>
-                {renderOptions(incomeRanges)}
-              </select>
+              <div className="mb-3">
+                <SearchableSelect
+                  name="AnnualIncomeID"
+                  value={profileData.AnnualIncomeID || ""}
+                  options={incomeRanges}
+                  onChange={handleChange}
+                  placeholder="Search Income Range"
+                />
+              </div>
             </div>
           </div>
 
@@ -979,15 +789,15 @@ const UserProfileEdit = () => {
 
             <div className="mt-3">
               <label>Preferred Area of Marriage</label>
-              <select
-                className="form-select mb-3"
-                name="PreferredAreaOfMarriage"
-                value={profileData.PreferredAreaOfMarriage || ""}
-                onChange={handleChange}
-              >
-                <option value="">Select Area</option>
-                {renderOptions(preferenceMarriageAreas)}
-              </select>
+              <div className="mb-3">
+                <SearchableSelect
+                  name="PreferredAreaOfMarriage"
+                  value={profileData.PreferredAreaOfMarriage || ""}
+                  options={preferenceMarriageAreas}
+                  onChange={handleChange}
+                  placeholder="Search Area"
+                />
+              </div>
 
               <label>Paitrik/Niwas</label>
               <input
@@ -998,15 +808,15 @@ const UserProfileEdit = () => {
               />
 
               <label>Diet</label>
-              <select
-                className="form-select mb-3"
-                name="DietID"
-                value={profileData.DietID || ""}
-                onChange={handleChange}
-              >
-                <option value="">Select Diet</option>
-                {renderOptions(diets)}
-              </select>
+              <div className="mb-3">
+                <SearchableSelect
+                  name="DietID"
+                  value={profileData.DietID || ""}
+                  options={diets}
+                  onChange={handleChange}
+                  placeholder="Search Diet"
+                />
+              </div>
 
               <label>Hobbies</label>
               <input
@@ -1045,15 +855,13 @@ const UserProfileEdit = () => {
               <div className="row">
                 <div className="col-md-6 mb-3">
                   <label>Relationship</label>
-                  <select
-                    className="form-select"
+                  <SearchableSelect
                     name="ContactPersonRelationshipID"
                     value={profileData.ContactPersonRelationshipID || ""}
+                    options={relationships}
                     onChange={handleChange}
-                  >
-                    <option value="">Select Relationship</option>
-                    {renderOptions(relationships)}
-                  </select>
+                    placeholder="Search Relationship"
+                  />
                 </div>
 
                 <div className="col-md-6 mb-3">
@@ -1107,36 +915,25 @@ const UserProfileEdit = () => {
               />
 
               <label>Contact City</label>
-              <select
-                className="form-select"
+              <SearchableSelect
                 name="ContactCityID"
                 value={profileData.ContactCityID || ""}
+                options={cities}
                 onChange={handleChange}
-              >
-                <option value="">Select City</option>
-                {renderOptions(cities)}
-              </select>
+                placeholder="Search City"
+              />
+              
             </div>
           </div>
 
           {/* -------------------------------------- */}
           {/* SUBMIT */}
           {/* -------------------------------------- */}
-          <div className="text-end mt-4">
+          <div className="dw-submit-row">
             <button
               type="submit"
               disabled={submitting}
-              style={{
-                padding: "12px 30px",
-                borderRadius: "50px",
-                backgroundColor: "#007bff",
-                border: "none",
-                color: "white",
-                fontSize: "17px",
-                fontWeight: "500",
-                boxShadow: "0 4px 10px rgba(0,0,0,0.2)",
-                cursor: "pointer",
-              }}
+              className="dw-submit-btn"
             >
               {submitting ? "Updating..." : "Update Profile"}
             </button>

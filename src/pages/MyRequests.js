@@ -1,7 +1,12 @@
 import React, { useEffect, useState } from "react";
 import { fetchMyRequests, manageConnectionRequest } from "../api";
+import usePageTitle from "../hooks/usePageTitle";
 
 const MyRequests = () => {
+  usePageTitle("My Requests", {
+    description:
+      "View and manage your incoming and outgoing connection requests on Dewangan Links.",
+  });
   const [incoming, setIncoming] = useState([]);
   const [outgoing, setOutgoing] = useState([]);
   const [loading, setLoading] = useState(true);

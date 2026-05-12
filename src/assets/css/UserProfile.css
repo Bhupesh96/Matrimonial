@@ -1,0 +1,335 @@
+/* ==========================================================================
+   USER PROFILE PAGE — PREMIUM WEDDING-THEMED VIEW
+   --------------------------------------------------------------------------
+   Scoped under .dw-profile-page so legacy styles elsewhere stay untouched.
+   Replaces the pink #d32163 accent with the brand gold and adds a
+   responsive grid for mobile/tablet/desktop.
+   ========================================================================== */
+
+.dw-profile-page {
+  background: linear-gradient(180deg, #fdf9ee 0%, #faf2dd 100%);
+  min-height: calc(100vh - var(--dw-header-h, 78px));
+}
+
+/* Outer container — replace inline marginTop with a class-driven value */
+.dw-profile-page .container.dw-profile-container {
+  padding-top: 28px;
+  padding-bottom: 60px;
+  max-width: 1180px;
+}
+
+/* ============================================================
+   HEADER CARD — Photo + Name + UID + CTA + Badges
+   ============================================================ */
+.dw-profile-page .dw-pf-header {
+  background: #ffffff;
+  border-radius: 18px;
+  border: 1px solid rgba(202, 152, 67, 0.18);
+  box-shadow: 0 20px 50px rgba(102, 69, 28, 0.12),
+    0 3px 10px rgba(102, 69, 28, 0.05);
+  padding: 28px 28px;
+  margin-bottom: 28px;
+  position: relative;
+  overflow: hidden;
+}
+
+.dw-profile-page .dw-pf-header::before {
+  content: "";
+  position: absolute;
+  top: 0;
+  left: 0;
+  right: 0;
+  height: 100px;
+  background: linear-gradient(135deg, #ffd25a 0%, #c8902a 100%);
+  opacity: 0.08;
+  pointer-events: none;
+  border-radius: 18px 18px 0 0;
+}
+
+.dw-profile-page .dw-pf-photo {
+  width: 180px;
+  height: 220px;
+  border-radius: 14px;
+  overflow: hidden;
+  border: 3px solid #fff;
+  box-shadow: 0 12px 30px rgba(102, 69, 28, 0.22);
+  margin: 0 auto;
+  position: relative;
+  background: linear-gradient(135deg, #fff7e6 0%, #f3e2c1 100%);
+}
+
+.dw-profile-page .dw-pf-photo img {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+}
+
+.dw-profile-page .dw-pf-name {
+  font-family: "Playfair Display", "Georgia", serif;
+  font-size: 30px;
+  font-weight: 700;
+  color: #2a1c00;
+  margin: 0 0 8px;
+  line-height: 1.2;
+}
+
+.dw-profile-page .dw-pf-meta {
+  color: #7a6a4b;
+  font-size: 14px;
+  margin-bottom: 14px;
+  letter-spacing: 0.2px;
+}
+
+.dw-profile-page .dw-pf-meta strong {
+  color: #5a3c07;
+  font-weight: 700;
+}
+
+/* CTA buttons in header */
+.dw-profile-page .dw-pf-actions {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 10px;
+  margin: 4px 0 14px;
+}
+
+.dw-profile-page .dw-pf-actions .btn,
+.dw-profile-page .dw-pf-actions .badge {
+  font-size: 13px !important;
+  padding: 9px 16px !important;
+  border-radius: 999px !important;
+  font-weight: 700 !important;
+  letter-spacing: 0.3px;
+  display: inline-flex !important;
+  align-items: center;
+  gap: 6px;
+  border: none;
+  transition: transform 0.2s ease, box-shadow 0.2s ease, filter 0.2s ease;
+}
+
+.dw-profile-page .dw-pf-actions .btn-primary {
+  background: linear-gradient(135deg, #ffd25a, #d49a2a) !important;
+  color: #2a1c00 !important;
+  box-shadow: 0 8px 18px rgba(200, 144, 42, 0.38);
+}
+
+.dw-profile-page .dw-pf-actions .btn-primary:hover {
+  filter: brightness(1.05);
+  transform: translateY(-1px);
+}
+
+.dw-profile-page .dw-pf-actions .badge.bg-warning {
+  background: linear-gradient(135deg, #ffe9a3, #ffd25a) !important;
+  color: #6a3f00 !important;
+}
+
+.dw-profile-page .dw-pf-actions .badge.bg-success {
+  background: linear-gradient(135deg, #b1e2a7, #7bc66f) !important;
+  color: #1d4d11 !important;
+}
+
+/* Quick-fact pill badges (Height / Religion / City / Complexion) */
+.dw-profile-page .dw-pf-pills {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 8px;
+}
+
+.dw-profile-page .dw-pf-pills .badge {
+  background: #fff5dc !important;
+  color: #5a3c07 !important;
+  border: 1px solid rgba(200, 144, 42, 0.3);
+  padding: 6px 14px !important;
+  border-radius: 999px !important;
+  font-size: 12.5px !important;
+  font-weight: 600 !important;
+  letter-spacing: 0.2px;
+}
+
+/* ============================================================
+   DETAIL SECTIONS (Basic / Birth / Family / etc.)
+   ============================================================ */
+.dw-profile-page .dw-pf-section {
+  background: #ffffff;
+  border-radius: 16px;
+  border: 1px solid rgba(202, 152, 67, 0.15);
+  box-shadow: 0 12px 30px rgba(102, 69, 28, 0.07);
+  padding: 24px 26px;
+  margin-bottom: 22px;
+  transition: box-shadow 0.25s ease, transform 0.25s ease;
+}
+
+.dw-profile-page .dw-pf-section:hover {
+  box-shadow: 0 18px 38px rgba(102, 69, 28, 0.12);
+}
+
+.dw-profile-page .dw-pf-section-title {
+  font-family: "Playfair Display", "Georgia", serif;
+  font-size: 21px;
+  font-weight: 700;
+  color: #2a1c00;
+  margin: 0 0 22px;
+  padding-bottom: 12px;
+  border-bottom: 1px solid #f1e2c0;
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  position: relative;
+}
+
+.dw-profile-page .dw-pf-section-title::before {
+  content: "";
+  display: inline-block;
+  width: 8px;
+  height: 24px;
+  background: linear-gradient(180deg, #ffd25a, #c8902a);
+  border-radius: 4px;
+  flex-shrink: 0;
+}
+
+/* Field rows */
+.dw-profile-page .dw-pf-section .row > [class*="col-"] {
+  margin-bottom: 16px;
+}
+
+.dw-profile-page .dw-pf-field-label {
+  font-size: 12px;
+  color: #b28a45;
+  font-weight: 600;
+  letter-spacing: 1px;
+  text-transform: uppercase;
+  margin-bottom: 4px;
+}
+
+.dw-profile-page .dw-pf-field-value {
+  font-size: 15px;
+  color: #2a1c00;
+  font-weight: 600;
+  line-height: 1.45;
+  word-break: break-word;
+}
+
+/* ============================================================
+   PHOTO GALLERY
+   ============================================================ */
+.dw-profile-page .dw-pf-gallery {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(190px, 1fr));
+  gap: 14px;
+}
+
+.dw-profile-page .dw-pf-gallery-item {
+  position: relative;
+  border-radius: 12px;
+  overflow: hidden;
+  border: 1px solid rgba(202, 152, 67, 0.2);
+  background: #fff;
+  cursor: pointer;
+  transition: transform 0.25s ease, box-shadow 0.25s ease;
+  aspect-ratio: 4 / 5;
+}
+
+.dw-profile-page .dw-pf-gallery-item img {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  transition: transform 0.4s ease;
+  display: block;
+}
+
+.dw-profile-page .dw-pf-gallery-item:hover {
+  transform: translateY(-4px);
+  box-shadow: 0 14px 30px rgba(102, 69, 28, 0.22);
+}
+
+.dw-profile-page .dw-pf-gallery-item:hover img {
+  transform: scale(1.05);
+}
+
+/* ============================================================
+   RESPONSIVE
+   ============================================================ */
+
+/* Tablet — single column for col-md-4 fields stays as 2 across */
+@media (max-width: 991px) {
+  .dw-profile-page .container.dw-profile-container {
+    padding-top: 20px;
+  }
+
+  .dw-profile-page .dw-pf-header {
+    padding: 22px 18px;
+    text-align: center;
+  }
+
+  .dw-profile-page .dw-pf-photo {
+    width: 160px;
+    height: 200px;
+    margin: 0 auto 18px;
+  }
+
+  .dw-profile-page .dw-pf-name {
+    font-size: 26px;
+  }
+
+  .dw-profile-page .dw-pf-actions,
+  .dw-profile-page .dw-pf-pills {
+    justify-content: center;
+  }
+
+  /* col-md-4 fields go 2 across on tablet, full width on phones */
+  .dw-profile-page .dw-pf-section .col-md-4 {
+    width: 50%;
+    flex: 0 0 50%;
+    max-width: 50%;
+  }
+}
+
+@media (max-width: 575px) {
+  .dw-profile-page .container.dw-profile-container {
+    padding-left: 12px;
+    padding-right: 12px;
+  }
+
+  .dw-profile-page .dw-pf-header {
+    padding: 20px 16px;
+    border-radius: 14px;
+  }
+
+  .dw-profile-page .dw-pf-photo {
+    width: 140px;
+    height: 174px;
+  }
+
+  .dw-profile-page .dw-pf-name {
+    font-size: 22px;
+  }
+
+  .dw-profile-page .dw-pf-section {
+    padding: 20px 16px;
+    border-radius: 14px;
+  }
+
+  .dw-profile-page .dw-pf-section-title {
+    font-size: 18px;
+    margin-bottom: 18px;
+  }
+
+  .dw-profile-page .dw-pf-section .col-md-4 {
+    width: 100%;
+    flex: 0 0 100%;
+    max-width: 100%;
+  }
+
+  .dw-profile-page .dw-pf-gallery {
+    grid-template-columns: repeat(2, 1fr);
+    gap: 10px;
+  }
+}
+
+@media (max-width: 380px) {
+  .dw-profile-page .dw-pf-actions .btn,
+  .dw-profile-page .dw-pf-actions .badge {
+    padding: 8px 12px !important;
+    font-size: 12px !important;
+  }
+}

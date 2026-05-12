@@ -1,4 +1,5 @@
 import React from "react";
+import usePageTitle from "../hooks/usePageTitle";
 import Preloader from "../components/Preloader";
 import PoopUpSearch from "../components/PoopUpSearch";
 import TopMenu from "../components/TopMenu";
@@ -12,6 +13,10 @@ import Footer from "../components/Footer";
 import CopyRight from "../components/CopyRight";
 
 const InvalidRoute = () => {
+  usePageTitle("Page Not Found (404)", {
+    description:
+      "The page you're looking for doesn't exist on Dewangan Links. Return home to continue browsing matches.",
+  });
   return (
     <div>
       <Preloader />

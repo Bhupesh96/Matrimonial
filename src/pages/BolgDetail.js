@@ -1,4 +1,5 @@
 import React from "react";
+import usePageTitle from "../hooks/usePageTitle";
 import TopMenu from "../components/TopMenu";
 import Preloader from "../components/Preloader";
 import PoopUpSearch from "../components/PoopUpSearch";
@@ -12,6 +13,7 @@ import CopyRight from "../components/CopyRight";
 import { Link } from "react-router-dom";
 
 const BolgDetail = () => {
+  usePageTitle("Blog Detail");
   return (
     <div>
       <Preloader />

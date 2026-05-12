@@ -1,59 +1,230 @@
 <!DOCTYPE html>
 <html lang="en">
-  <head>
-    <meta charset="utf-8" />
-    <link rel="icon" href="%PUBLIC_URL%/favicon.ico" />
-    <meta name="viewport" content="width=device-width, initial-scale=1" />
-    <meta name="theme-color" content="#000000" />
-    <meta
-      name="description"
-      content="Web site created using create-react-app"
-    />
-    <link rel="apple-touch-icon" href="%PUBLIC_URL%/logo192.png" />
-    <link rel="stylesheet" href="%PUBLIC_URL%/css/bootstrap.css" />
-    <link rel="stylesheet" href="%PUBLIC_URL%/css/font-awesome.min.css" />
-    <link rel="stylesheet" href="%PUBLIC_URL%/css/animate.min.css" />
-    <link rel="stylesheet" href="%PUBLIC_URL%/css/style.css" />
-    <!--
-      manifest.json provides metadata used when your web app is installed on a
-      user's mobile device or desktop. See https://developers.google.com/web/fundamentals/web-app-manifest/
-    -->
-    <link rel="manifest" href="%PUBLIC_URL%/manifest.json" />
-    <!--
-      Notice the use of %PUBLIC_URL% in the tags above.
-      It will be replaced with the URL of the `public` folder during the build.
-      Only files inside the `public` folder can be referenced from the HTML.
 
-      Unlike "/favicon.ico" or "favicon.ico", "%PUBLIC_URL%/favicon.ico" will
-      work correctly both with client-side routing and a non-root public URL.
-      Learn how to configure a non-root public URL by running `npm run build`.
-    -->
-    <title>Dewangan Links</title>
-  </head>
-  <body>
-    <noscript>You need to enable JavaScript to run this app.</noscript>
-    <div id="root"></div>
-    <!--
-      This HTML file is a template.
-      If you open it directly in the browser, you will see an empty page.
+<head>
+  <meta charset="utf-8" />
+  <meta http-equiv="X-UA-Compatible" content="IE=edge" />
+  <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover" />
 
-      You can add webfonts, meta tags, or analytics to this file.
-      The build step will place the bundled scripts into the <body> tag.
+  <!-- ===== PRIMARY SEO ===== -->
+  <title>
+    Dewangan Links | Trusted Matrimony for the Dewangan Community
+  </title>
+  <meta name="description"
+    content="Dewangan Links is India's most trusted matrimonial platform for the Dewangan community. Browse verified profiles, find your perfect life partner, and start your wedding journey with confidence." />
+  <meta name="keywords"
+    content="Dewangan Links, Dewangan Matrimony, Dewangan Samaj Vivah, Chhattisgarh Matrimony, Raipur Matrimony, Dewangan Bride, Dewangan Groom, Dewangan Marriage, Indian Matrimonial Site, Verified Matrimony Profiles" />
+  <meta name="author" content="Dewangan Links" />
+  <meta name="robots" content="index, follow" />
+  <meta name="language" content="English" />
+  <meta name="rating" content="general" />
+  <meta name="theme-color" content="#7a1f1f" />
+  <link rel="canonical" href="https://dewanganlink.in/" />
 
-      To begin the development, run `npm start` or `yarn start`.
-      To create a production bundle, use `npm run build` or `yarn build`.
-    -->
-    <!-- JS -->
-    <script src="%PUBLIC_URL%/js/jquery.min.js"></script>
+  <!-- ===== ICONS (?v=2 cache-busts the old React favicon) ===== -->
+  <!-- 1. SVG icon (modern browsers — sharp at any size) -->
+  <link rel="icon" type="image/svg+xml" href="%PUBLIC_URL%/favicon.svg?v=2" />
+  <!-- 2. PNG sizes (Chrome / Android / older WebKit) -->
+  <link rel="icon" type="image/png" sizes="32x32" href="%PUBLIC_URL%/favicon-32.png?v=2" />
+  <link rel="icon" type="image/png" sizes="16x16" href="%PUBLIC_URL%/favicon-16.png?v=2" />
+  <!-- 3. ICO fallback (legacy / Windows tile) -->
+  <link rel="shortcut icon" href="%PUBLIC_URL%/favicon.ico?v=2" />
+  <!-- 4. iOS / iPadOS home-screen -->
+  <link rel="apple-touch-icon" sizes="180x180" href="%PUBLIC_URL%/apple-touch-icon.png?v=2" />
+  <!-- 5. Safari pinned-tab -->
+  <link rel="mask-icon" href="%PUBLIC_URL%/favicon.svg?v=2" color="#c8902a" />
+  <meta name="apple-mobile-web-app-title" content="Dewangan Links" />
+  <meta name="application-name" content="Dewangan Links" />
+  <meta name="msapplication-TileColor" content="#7a1f1f" />
+  <meta name="msapplication-TileImage" content="%PUBLIC_URL%/logo192.png?v=2" />
 
-    <script src="%PUBLIC_URL%/js/jquery.validate.min.js"></script>
+  <!-- ===== OPEN GRAPH (Facebook / WhatsApp / LinkedIn) ===== -->
+  <meta property="og:type" content="website" />
+  <meta property="og:site_name" content="Dewangan Links" />
+  <meta property="og:url" content="https://dewanganlink.in/" />
+  <meta property="og:title" content="Dewangan Links | Trusted Matrimony for the Dewangan Community" />
+  <meta property="og:description"
+    content="Find your perfect life partner from verified Dewangan community profiles. Trusted by thousands of families across India." />
+  <meta property="og:image" content="https://dewanganlink.in/logo512.png" />
+  <meta property="og:image:width" content="512" />
+  <meta property="og:image:height" content="512" />
+  <meta property="og:image:alt" content="Dewangan Links logo" />
+  <meta property="og:locale" content="en_IN" />
 
-    <script src="%PUBLIC_URL%/js/bootstrap.min.js"></script>
-    <script src="%PUBLIC_URL%/js/popper.min.js"></script>
+  <!-- ===== TWITTER CARD ===== -->
+  <meta name="twitter:card" content="summary_large_image" />
+  <meta name="twitter:title" content="Dewangan Links | Trusted Matrimony for the Dewangan Community" />
+  <meta name="twitter:description"
+    content="Find your perfect life partner from verified Dewangan community profiles." />
+  <meta name="twitter:image" content="https://dewanganlink.in/logo512.png" />
 
-    <script src="%PUBLIC_URL%/js/custom.js"></script>
+  <!-- ===== STRUCTURED DATA (Google rich result) ===== -->
+  <!-- 1. Organization -->
+  <script type="application/ld+json">
+      {
+        "@context": "https://schema.org",
+        "@type": "Organization",
+        "name": "Dewangan Links",
+        "alternateName": ["Dewangan Link", "Dewangan Matrimony"],
+        "url": "https://dewanganlink.in/",
+        "logo": "https://dewanganlink.in/logo512.png",
+        "description": "India's most trusted matrimonial platform for the Dewangan community.",
+        "address": {
+          "@type": "PostalAddress",
+          "addressLocality": "Raipur",
+          "addressRegion": "Chhattisgarh",
+          "postalCode": "492001",
+          "addressCountry": "IN"
+        },
+        "contactPoint": {
+          "@type": "ContactPoint",
+          "telephone": "+91-98068-63659",
+          "contactType": "customer service",
+          "email": "raipurlink@gmail.com",
+          "areaServed": "IN",
+          "availableLanguage": ["English", "Hindi"]
+        },
+        "sameAs": [
+          "https://wa.me/919806863659"
+        ]
+      }
+    </script>
 
-    <script src="%PUBLIC_URL%/js/select-opt.js"></script>
-    <script src="%PUBLIC_URL%/js/slick.js"></script>
-  </body>
+  <!-- 2. WebSite (enables Google sitelinks search box) -->
+  <script type="application/ld+json">
+      {
+        "@context": "https://schema.org",
+        "@type": "WebSite",
+        "name": "Dewangan Links",
+        "alternateName": "Dewangan Matrimony",
+        "url": "https://dewanganlink.in/",
+        "inLanguage": "en-IN",
+        "potentialAction": {
+          "@type": "SearchAction",
+          "target": {
+            "@type": "EntryPoint",
+            "urlTemplate": "https://dewanganlink.in/all-profiles?q={search_term_string}"
+          },
+          "query-input": "required name=search_term_string"
+        }
+      }
+    </script>
+
+  <!-- 3. LocalBusiness (helps Google Maps / "near me" queries) -->
+  <script type="application/ld+json">
+      {
+        "@context": "https://schema.org",
+        "@type": "LocalBusiness",
+        "name": "Dewangan Links",
+        "image": "https://dewanganlink.in/logo512.png",
+        "url": "https://dewanganlink.in/",
+        "telephone": "+91-98068-63659",
+        "email": "raipurlink@gmail.com",
+        "priceRange": "Free to Premium",
+        "address": {
+          "@type": "PostalAddress",
+          "addressLocality": "Raipur",
+          "addressRegion": "Chhattisgarh",
+          "postalCode": "492001",
+          "addressCountry": "IN"
+        },
+        "areaServed": [
+          { "@type": "Country", "name": "India" },
+          { "@type": "State", "name": "Chhattisgarh" },
+          { "@type": "City", "name": "Raipur" },
+          { "@type": "City", "name": "Bilaspur" },
+          { "@type": "City", "name": "Bhilai" },
+          { "@type": "City", "name": "Durg" }
+        ],
+        "openingHoursSpecification": {
+          "@type": "OpeningHoursSpecification",
+          "dayOfWeek": [
+            "Monday","Tuesday","Wednesday","Thursday","Friday","Saturday"
+          ],
+          "opens": "09:00",
+          "closes": "20:00"
+        }
+      }
+    </script>
+
+  <!-- 4. FAQPage (eligible for rich snippet on Google Search) -->
+  <script type="application/ld+json">
+      {
+        "@context": "https://schema.org",
+        "@type": "FAQPage",
+        "mainEntity": [
+          {
+            "@type": "Question",
+            "name": "Is Dewangan Links free to register?",
+            "acceptedAnswer": {
+              "@type": "Answer",
+              "text": "Yes. Creating your profile on Dewangan Links is completely free. You can browse verified matches and send connection requests at no cost."
+            }
+          },
+          {
+            "@type": "Question",
+            "name": "Who can register on Dewangan Links?",
+            "acceptedAnswer": {
+              "@type": "Answer",
+              "text": "Dewangan Links is built specifically for unmarried, divorced or widowed members of the Dewangan community across India who are looking for a life partner from within the samaj."
+            }
+          },
+          {
+            "@type": "Question",
+            "name": "Are the profiles on Dewangan Links verified?",
+            "acceptedAnswer": {
+              "@type": "Answer",
+              "text": "Every profile on Dewangan Links is reviewed and approved by our admin team before it goes live, so you only see trusted, genuine matches."
+            }
+          },
+          {
+            "@type": "Question",
+            "name": "How do I find Dewangan grooms or brides near me?",
+            "acceptedAnswer": {
+              "@type": "Answer",
+              "text": "Use the Browse Profiles page and filter by city, gotra, age, education or occupation. We have members from Raipur, Bhilai, Durg, Bilaspur and across India."
+            }
+          },
+          {
+            "@type": "Question",
+            "name": "How does the connection request system work?",
+            "acceptedAnswer": {
+              "@type": "Answer",
+              "text": "When you find an interesting profile, you can send a connection request. The receiver can accept or reject it. Once accepted, you can view full contact details and start a conversation."
+            }
+          },
+          {
+            "@type": "Question",
+            "name": "Where is Dewangan Links based?",
+            "acceptedAnswer": {
+              "@type": "Answer",
+              "text": "Our office is in Raipur, Chhattisgarh. You can reach us at +91 98068 63659 or raipurlink@gmail.com for any help."
+            }
+          }
+        ]
+      }
+    </script>
+
+  <!-- ===== STYLES ===== -->
+  <link rel="manifest" href="%PUBLIC_URL%/manifest.json" />
+  <link rel="stylesheet" href="%PUBLIC_URL%/css/bootstrap.css" />
+  <link rel="stylesheet" href="%PUBLIC_URL%/css/font-awesome.min.css" />
+  <link rel="stylesheet" href="%PUBLIC_URL%/css/animate.min.css" />
+  <link rel="stylesheet" href="%PUBLIC_URL%/css/style.css" />
+</head>
+
+<body>
+  <noscript>You need to enable JavaScript to run this app.</noscript>
+  <div id="root"></div>
+
+  <!-- JS -->
+  <script src="%PUBLIC_URL%/js/jquery.min.js"></script>
+  <script src="%PUBLIC_URL%/js/jquery.validate.min.js"></script>
+  <script src="%PUBLIC_URL%/js/bootstrap.min.js"></script>
+  <script src="%PUBLIC_URL%/js/popper.min.js"></script>
+  <script src="%PUBLIC_URL%/js/custom.js"></script>
+  <script src="%PUBLIC_URL%/js/select-opt.js"></script>
+  <script src="%PUBLIC_URL%/js/slick.js"></script>
+</body>
+
 </html>

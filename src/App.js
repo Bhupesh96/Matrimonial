@@ -1,4 +1,6 @@
 import "./App.css";
+import "./assets/css/Header.css";
+import "./assets/css/MobileResponsive.css";
 import React, { useEffect } from "react";
 import { BrowserRouter as Router, Route, Routes } from "react-router-dom";
 import Home from "./pages/Home";
@@ -14,6 +16,7 @@ import UserProfile from "./pages/UserProfile";
 import { ToastContainer } from "react-toastify";
 
 import ProtectedRoute from "./components/ProtectedRoute";
+import GuestAuthPromo from "./components/GuestAuthPromo";
 import LoginModal from "./pages/LoginModal";
 import Community from "./pages/Community";
 import CoupleStories from "./pages/CoupleStories";
@@ -43,6 +46,7 @@ function App() {
           window.location.reload(); // Force react to re-evaluate local storage
         }}
       />
+      <GuestAuthPromo openLoginModal={openLogin} />
       <Routes>
         <Route index element={<Home />} />
         <Route path="sign-up" element={<SignUp />} />
@@ -52,38 +56,16 @@ function App() {
         <Route path="blog-detail" element={<BolgDetail />} />
         <Route path="community" element={<Community />} />
         <Route path="experiences" element={<Experiences />} />
+        {/* Public: guests see approved listings & profile detail (contact fields masked in UI / API). */}
+        <Route path="all-profiles" element={<AllProfiles />} />
+        <Route path="user-profile/:id" element={<UserProfile />} />
+        <Route path="couple-stories" element={<CoupleStories />} />
         {/* 🔐 PROTECTED ROUTES */}
-        <Route
-          path="all-profiles"
-          element={
-            <ProtectedRoute openLogin={openLogin}>
-              <AllProfiles />
-            </ProtectedRoute>
-          }
-        />
-
-        <Route
-          path="user-profile/:id"
-          element={
-            <ProtectedRoute openLogin={openLogin}>
-              <UserProfile />
-            </ProtectedRoute>
-          }
-        />
-
         <Route
           path="user-profile-edit"
           element={
             <ProtectedRoute openLogin={openLogin}>
               <UserProfileEdit />
-            </ProtectedRoute>
-          }
-        />
-        <Route
-          path="couple-stories"
-          element={
-            <ProtectedRoute openLogin={openLogin}>
-              <CoupleStories />
             </ProtectedRoute>
           }
         />

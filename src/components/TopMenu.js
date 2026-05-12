@@ -21,20 +21,33 @@ const TopMenu = () => {
               <li>
                 <Link to="/contact">Contact</Link>
               </li>
+              <li>
+                <Link to="/couple-stories">Couple Stories</Link>
+              </li>
             </ul>
           </div>
           <div className="rhs">
             <ul>
               <li>
-                <a href="tel:+9704462944">
-                  <i className="fa fa-phone" aria-hidden="true"></i>&nbsp;+01
-                  5312 5312
+                <a href="tel:+919806863659">
+                  <i className="fa fa-phone" aria-hidden="true"></i>&nbsp;+91
+                  98068 63659
                 </a>
               </li>
               <li>
-                <a href="mailto:info@example.com">
+                <a href="mailto:raipurlink@gmail.com">
                   <i className="fa fa-envelope-o" aria-hidden="true"></i>&nbsp;
-                  help@company.com
+                  raipurlink@gmail.com
+                </a>
+              </li>
+              <li>
+                <a
+                  href="https://wa.me/919806863659"
+                  target="_blank"
+                  rel="noopener noreferrer"
+                >
+                  <i className="fa fa-whatsapp" aria-hidden="true"></i>&nbsp;
+                  WhatsApp
                 </a>
               </li>
               <li>

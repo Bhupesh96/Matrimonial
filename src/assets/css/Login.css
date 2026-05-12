@@ -1,0 +1,544 @@
+/* ==========================================================================
+   LOGIN PAGE - PREMIUM WEDDING-THEMED UI
+   --------------------------------------------------------------------------
+   Scoped under .dw-login-page so it only overrides legacy template styles
+   on the login screen.
+   ========================================================================== */
+
+.dw-login-page .login {
+  background: linear-gradient(180deg, #fff9ee 0%, #fdf2dd 100%);
+  padding: 40px 0 60px;
+  min-height: calc(100vh - var(--dw-header-h, 78px));
+}
+
+.dw-login-page .login .container {
+  max-width: 1180px;
+}
+
+/* ---- INNER GRID (image LHS, form RHS) ---- */
+.dw-login-page .login .inn {
+  background: #ffffff;
+  border-radius: 22px;
+  box-shadow: 0 22px 60px rgba(102, 69, 28, 0.16),
+    0 4px 14px rgba(102, 69, 28, 0.06);
+  overflow: hidden;
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  border: 1px solid rgba(202, 152, 67, 0.18);
+}
+
+/* The legacy template (public/css/style.css) sets:
+     .login .lhs { float: left; width: 40% }
+     .login .rhs { float: left; width: 60%; margin-left: 40% }
+   These rules push content of .rhs 40% to the right INSIDE its grid track
+   (which is already 50% of the parent), leaving most of the form area
+   empty. Reset float/width/margin so the grid alone controls layout. */
+.dw-login-page .login .lhs,
+.dw-login-page .login .rhs {
+  float: none !important;
+  width: auto !important;
+  margin-left: 0 !important;
+  margin-right: 0 !important;
+}
+
+/* ============================================================
+   LEFT SIDE — Headline + couple illustration
+   ============================================================ */
+.dw-login-page .login .lhs {
+  position: relative;
+  background:
+    radial-gradient(140% 80% at 50% 0%, #ffe9a3 0%, #ffd25a 55%, #e8b94a 100%);
+  padding: 60px 40px 0;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: flex-start;
+  text-align: center;
+  overflow: hidden;
+  min-height: 520px;
+}
+
+.dw-login-page .login .lhs::before {
+  content: "";
+  position: absolute;
+  inset: 0;
+  background: radial-gradient(60% 40% at 100% 0%, rgba(255,255,255,0.45), transparent 70%);
+  pointer-events: none;
+}
+
+.dw-login-page .login .lhs .tit {
+  position: relative;
+  z-index: 2;
+  margin-bottom: 30px;
+}
+
+.dw-login-page .login .lhs .tit h2 {
+  font-family: "Playfair Display", "Georgia", serif;
+  color: #2a1c00;
+  font-size: 30px;
+  line-height: 1.25;
+  font-weight: 400;
+  margin: 0;
+  letter-spacing: 0.2px;
+}
+
+.dw-login-page .login .lhs .tit h2 b {
+  font-weight: 800;
+  display: block;
+  font-size: 38px;
+  margin: 6px 0;
+  background: linear-gradient(90deg, #6a3f00 0%, #2a1c00 100%);
+  -webkit-background-clip: text;
+  background-clip: text;
+  -webkit-text-fill-color: transparent;
+  color: transparent;
+}
+
+.dw-login-page .login .lhs .im {
+  position: relative;
+  z-index: 2;
+  width: 100%;
+  margin-top: auto;
+  display: flex;
+  justify-content: center;
+}
+
+.dw-login-page .login .lhs .im img {
+  max-width: 100%;
+  height: auto;
+  filter: drop-shadow(0 12px 22px rgba(102, 69, 28, 0.25));
+}
+
+.dw-login-page .login .lhs .log-bg {
+  display: none;
+}
+
+/* ============================================================
+   RIGHT SIDE — Form
+   ============================================================ */
+.dw-login-page .login .rhs {
+  padding: 50px 48px 56px;
+  display: flex;
+  flex-direction: column;
+  justify-content: center; /* vertical centering — main axis is now Y */
+  align-items: stretch; /* children fill the full width of the RHS */
+  background: #ffffff;
+}
+
+/* Each direct child of .rhs (language switcher, form-tit, status notice,
+   form-login wrapper) should be a normal stacked block at full width. */
+.dw-login-page .login .rhs > * {
+  width: 100%;
+  flex: 0 0 auto;
+}
+
+.dw-login-page .login .rhs > div {
+  width: 100%;
+}
+
+/* ----- Language switcher tabs ----- */
+.dw-login-page .lang-btn,
+.dw-login-page .active-lang-btn {
+  background: transparent;
+  border: none;
+  font-size: 15px;
+  padding: 6px 4px;
+  cursor: pointer;
+  font-weight: 600;
+  letter-spacing: 0.3px;
+  transition: color 0.2s ease, border-color 0.2s ease;
+  border-bottom: 2px solid transparent;
+}
+.dw-login-page .lang-btn {
+  color: #9a8769;
+}
+.dw-login-page .lang-btn:hover {
+  color: #c8902a;
+}
+.dw-login-page .active-lang-btn {
+  color: #b28a45;
+  border-bottom-color: #c8902a;
+}
+
+/* ----- Form title block ----- */
+.dw-login-page .form-tit {
+  text-align: center;
+  margin-bottom: 28px;
+}
+
+.dw-login-page .form-tit h4 {
+  font-size: 12px;
+  font-weight: 700;
+  color: #c8902a;
+  text-transform: uppercase;
+  letter-spacing: 2.2px;
+  margin: 0 0 10px;
+}
+
+.dw-login-page .form-tit h1 {
+  font-family: "Playfair Display", "Georgia", serif;
+  color: #2a1c00;
+  font-size: 30px;
+  font-weight: 700;
+  margin: 0 0 12px;
+  line-height: 1.2;
+}
+
+.dw-login-page .form-tit p {
+  font-size: 14px;
+  color: #7a6a4b;
+  margin: 0;
+}
+
+.dw-login-page .form-tit p a {
+  color: #c8902a;
+  font-weight: 700;
+  text-decoration: none;
+  border-bottom: 1px dashed #d6a93a;
+}
+.dw-login-page .form-tit p a:hover {
+  color: #8a5e1c;
+}
+
+/* ----- Form fields ----- */
+.dw-login-page .form-login .form-group {
+  margin-bottom: 18px;
+}
+
+.dw-login-page .form-login .lb,
+.dw-login-page .form-login label {
+  display: block;
+  font-size: 13px;
+  font-weight: 700;
+  color: #5a3c07;
+  margin-bottom: 8px;
+  letter-spacing: 0.3px;
+}
+
+.dw-login-page .form-login .form-control {
+  width: 100%;
+  height: 50px;
+  padding: 12px 16px;
+  font-size: 15px;
+  color: #2a1c00;
+  background: #fdfaf2;
+  border: 1.5px solid #ead7af;
+  border-radius: 12px;
+  outline: none;
+  transition: border-color 0.2s ease, box-shadow 0.2s ease, background 0.2s ease;
+  box-shadow: none;
+}
+
+.dw-login-page .form-login .form-control::placeholder {
+  color: #b39c6f;
+}
+
+.dw-login-page .form-login .form-control:focus {
+  border-color: #c8902a;
+  background: #ffffff;
+  box-shadow: 0 0 0 4px rgba(200, 144, 42, 0.15);
+}
+
+/* SELECT dropdowns — match input style, add gold chevron */
+.dw-login-page .form-login select.form-control {
+  appearance: none;
+  -webkit-appearance: none;
+  -moz-appearance: none;
+  background-image: url("data:image/svg+xml;utf8,<svg xmlns='http://www.w3.org/2000/svg' width='12' height='12' viewBox='0 0 24 24' fill='%23c8902a'><path d='M7 10l5 5 5-5z'/></svg>");
+  background-repeat: no-repeat;
+  background-position: right 14px center;
+  background-size: 14px;
+  padding-right: 38px;
+  cursor: pointer;
+}
+
+/* Read-only User ID field — cream tone (was gray) */
+.dw-login-page .form-login .form-control.dw-readonly-id,
+.dw-login-page .form-login input[readonly] {
+  background: linear-gradient(180deg, #fff3d6 0%, #fde6ad 100%);
+  color: #6a3f00;
+  font-weight: 700;
+  letter-spacing: 0.5px;
+  border-color: #e8c66c;
+  cursor: not-allowed;
+}
+
+/* Number input arrows hidden for cleaner look */
+.dw-login-page .form-login input[type="number"]::-webkit-outer-spin-button,
+.dw-login-page .form-login input[type="number"]::-webkit-inner-spin-button {
+  -webkit-appearance: none;
+  margin: 0;
+}
+.dw-login-page .form-login input[type="number"] {
+  -moz-appearance: textfield;
+}
+
+/* Inline phone-error helper text */
+.dw-login-page .form-login small[style*="color: red"],
+.dw-login-page .form-login small[style*="color:red"] {
+  display: block;
+  margin-top: 6px;
+  color: #c0392b !important;
+  font-size: 12.5px;
+  font-weight: 600;
+}
+
+/* Password eye icon — already inline-styled in JSX; keep top aligned */
+.dw-login-page .form-login .form-group span i.fa-eye,
+.dw-login-page .form-login .form-group span i.fa-eye-slash {
+  color: #b28a45 !important;
+}
+
+/* ----- Remember me checkbox (the previously HUGE one) ----- */
+.dw-login-page .form-login .form-check {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  margin-bottom: 22px;
+}
+
+.dw-login-page .form-login .form-check-label {
+  font-size: 14px !important;
+  color: #5a3c07 !important;
+  font-weight: 500 !important;
+  margin: 0 !important;
+  display: inline-flex !important;
+  align-items: center;
+  gap: 8px;
+  cursor: pointer;
+}
+
+.dw-login-page .form-login .form-check-input {
+  /* Force a small, normal-sized checkbox even if the template tries
+     to stretch all inputs to width:100% */
+  appearance: auto !important;
+  -webkit-appearance: auto !important;
+  width: 18px !important;
+  height: 18px !important;
+  margin: 0 !important;
+  padding: 0 !important;
+  flex: 0 0 18px !important;
+  accent-color: #c8902a;
+  cursor: pointer;
+  border-radius: 4px;
+  background: #ffffff;
+  border: 1.5px solid #c8902a;
+  box-shadow: none !important;
+  display: inline-block !important;
+  vertical-align: middle;
+  position: static !important;
+}
+
+/* ----- Sign In button — gold gradient (override template slate) ----- */
+.dw-login-page .form-login .btn.btn-primary {
+  width: 100%;
+  height: 52px;
+  padding: 0 24px !important;
+  font-size: 16px !important;
+  font-weight: 700 !important;
+  letter-spacing: 0.5px !important;
+  color: #2a1c00 !important;
+  background: linear-gradient(135deg, #ffd25a 0%, #d49a2a 100%) !important;
+  background-color: #d49a2a !important;
+  border: none !important;
+  border-radius: 12px !important;
+  cursor: pointer;
+  transition: transform 0.2s ease, box-shadow 0.2s ease, filter 0.2s ease;
+  box-shadow: 0 10px 22px rgba(200, 144, 42, 0.38),
+    inset 0 -2px 0 rgba(102, 69, 28, 0.18);
+  text-transform: none !important;
+  font-family: inherit !important;
+}
+
+.dw-login-page .form-login .btn.btn-primary:hover,
+.dw-login-page .form-login .btn.btn-primary:focus {
+  filter: brightness(1.05);
+  transform: translateY(-1px);
+  box-shadow: 0 14px 28px rgba(200, 144, 42, 0.5),
+    inset 0 -2px 0 rgba(102, 69, 28, 0.18);
+  color: #2a1c00 !important;
+}
+
+.dw-login-page .form-login .btn.btn-primary:active {
+  transform: translateY(0);
+  filter: brightness(0.98);
+}
+
+.dw-login-page .form-login .btn.btn-primary:disabled,
+.dw-login-page .form-login .btn.btn-primary[disabled] {
+  opacity: 0.7;
+  cursor: not-allowed;
+  transform: none;
+}
+
+/* ============================================================
+   SIGNUP-PAGE SPECIFIC TWEAKS
+   ============================================================ */
+.dw-signup-page .login .inn {
+  align-items: stretch;
+}
+
+/* Form is much taller than login — anchor the LHS panel so it doesn't
+   stretch into an awkward tall image area on desktop. */
+.dw-signup-page .login .lhs {
+  position: sticky;
+  top: var(--dw-header-h, 78px);
+  align-self: flex-start;
+  height: calc(100vh - var(--dw-header-h, 78px));
+  max-height: 760px;
+  justify-content: center;
+}
+
+.dw-signup-page .login .lhs .im img {
+  max-height: 280px;
+  width: auto;
+}
+
+/* Replace Bootstrap's row/col flex grid with our own CSS grid so it
+   reliably stacks on mobile without fighting bootstrap defaults. */
+.dw-signup-page .form-login form {
+  width: 100%;
+  display: block;
+}
+
+.dw-signup-page .form-login .row {
+  display: grid !important;
+  grid-template-columns: 1fr 1fr;
+  gap: 0 22px;
+  margin: 0 !important;
+  width: 100%;
+}
+
+.dw-signup-page .form-login .row > [class*="col-"] {
+  width: auto !important;
+  max-width: none !important;
+  flex: 0 0 auto !important;
+  padding: 0 !important;
+  margin: 0 !important;
+  float: none !important;
+  min-width: 0; /* allow grid cell to shrink so inputs don't blow out */
+}
+
+/* The form-tit "Create Your Matrimony Profile" is a touch smaller on
+   signup since the form below is dense. */
+.dw-signup-page .form-tit h1 {
+  font-size: 26px;
+}
+
+/* "Registering for someone else" notice — keep inline colours but
+   integrate spacing with the rest of the form. */
+.dw-signup-page [role="status"] {
+  border-radius: 10px !important;
+  margin-bottom: 22px !important;
+}
+
+/* Submit button gets a bit more breathing room since the form is long */
+.dw-signup-page .form-login .btn.btn-primary {
+  margin-top: 8px;
+}
+
+/* ============================================================
+   MOBILE  (<= 992px)  - stack LHS over RHS
+   ============================================================ */
+@media (max-width: 992px) {
+  .dw-login-page .login {
+    padding: 22px 0 40px;
+  }
+
+  .dw-login-page .login .inn {
+    grid-template-columns: 1fr;
+    border-radius: 18px;
+  }
+
+  .dw-login-page .login .lhs {
+    min-height: 0;
+    padding: 36px 24px 0;
+  }
+
+  /* SignUp: release sticky so the LHS becomes a normal stacked block */
+  .dw-signup-page .login .lhs {
+    position: static;
+    height: auto;
+    max-height: none;
+  }
+
+  /* SignUp: stack the two-column grid into one column on mobile/tablet */
+  .dw-signup-page .form-login .row {
+    grid-template-columns: 1fr !important;
+    gap: 0;
+  }
+
+  .dw-login-page .login .lhs .tit h2 {
+    font-size: 24px;
+  }
+
+  .dw-login-page .login .lhs .tit h2 b {
+    font-size: 30px;
+  }
+
+  .dw-login-page .login .lhs .im img {
+    max-height: 200px;
+    width: auto;
+  }
+
+  .dw-login-page .login .rhs {
+    padding: 36px 28px 40px;
+  }
+
+  .dw-login-page .form-tit h1 {
+    font-size: 26px;
+  }
+}
+
+/* ============================================================
+   PHONE  (<= 480px)
+   ============================================================ */
+@media (max-width: 480px) {
+  .dw-login-page .login {
+    padding: 14px 0 30px;
+  }
+
+  .dw-login-page .login .container {
+    padding-left: 12px;
+    padding-right: 12px;
+  }
+
+  .dw-login-page .login .lhs {
+    padding: 28px 18px 0;
+  }
+
+  .dw-login-page .login .lhs .tit h2 {
+    font-size: 22px;
+  }
+
+  .dw-login-page .login .lhs .tit h2 b {
+    font-size: 26px;
+  }
+
+  .dw-login-page .login .lhs .im img {
+    max-height: 170px;
+  }
+
+  .dw-login-page .login .rhs {
+    padding: 28px 20px 32px;
+  }
+
+  .dw-login-page .form-tit h4 {
+    font-size: 11px;
+    letter-spacing: 1.8px;
+  }
+
+  .dw-login-page .form-tit h1 {
+    font-size: 24px;
+  }
+
+  .dw-login-page .form-login .form-control {
+    height: 48px;
+    font-size: 14px;
+  }
+
+  .dw-login-page .form-login .btn.btn-primary {
+    height: 50px;
+    font-size: 15px !important;
+  }
+}

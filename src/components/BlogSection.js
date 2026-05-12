@@ -5,51 +5,64 @@ import "swiper/css/navigation";
 import { Autoplay, Navigation } from "swiper/modules";
 import { Swiper, SwiperSlide } from "swiper/react";
 import { fetchCommunityEvents } from "../api";
+import { resolveImageUrl } from "../utils/imageUrl";
+
+import "../assets/css/BlogSection.css";
+
+const excerpt = (text, max = 100) => {
+  const t = (text || "").trim();
+  if (t.length <= max) return t;
+  return `${t.slice(0, max).trim()}…`;
+};
 
 const BlogSection = () => {
   const [events, setEvents] = useState([]);
-
-  // CONFIG: Base URL for images
-  const IMG_BASE_URL = "https://techwithus.in/matro/admin/plug/";
+  const [loading, setLoading] = useState(true);
 
   useEffect(() => {
     const loadEvents = async () => {
       try {
         const data = await fetchCommunityEvents();
-        const sortedData = data.sort(
+        const activeOnly = data.filter((e) => Number(e?.IsActive) === 1);
+        const sorted = [...activeOnly].sort(
           (a, b) => new Date(b.EventDate) - new Date(a.EventDate),
         );
-        setEvents(sortedData);
+        setEvents(sorted);
       } catch (error) {
         console.error("Error fetching community events:", error);
+        setEvents([]);
+      } finally {
+        setLoading(false);
       }
     };
     loadEvents();
   }, []);
 
   const fullURL = (img) => {
-    if (!img) return "images/blog/default.jpg";
-    return img.startsWith("http") ? img : `${IMG_BASE_URL}${img}`;
+    if (!img) return `${process.env.PUBLIC_URL}/images/blog/default.jpg`;
+    return (
+      resolveImageUrl(img) || `${process.env.PUBLIC_URL}/images/blog/default.jpg`
+    );
   };
 
   const formatDateTime = (dateStr, timeStr) => {
     try {
       const dateObj = new Date(dateStr);
       const dateOptions = { day: "numeric", month: "short", year: "numeric" };
-      const formattedDate = dateObj.toLocaleDateString("en-US", dateOptions);
-
-      const timeParts = timeStr.split(":");
+      const formattedDate = dateObj.toLocaleDateString("en-IN", dateOptions);
+      if (!timeStr) return formattedDate;
+      const timeParts = String(timeStr).split(":");
       let formattedTime = timeStr;
       if (timeParts.length >= 2) {
-        const hour = parseInt(timeParts[0]);
-        const minute = timeParts[1];
+        const hour = parseInt(timeParts[0], 10);
+        const minute = timeParts[1]?.slice(0, 2) || "00";
         const ampm = hour >= 12 ? "PM" : "AM";
         const hour12 = hour % 12 || 12;
         formattedTime = `${hour12}:${minute} ${ampm}`;
       }
-      return `${formattedDate} • ${formattedTime}`;
-    } catch (e) {
-      return `${dateStr} ${timeStr}`;
+      return `${formattedDate} · ${formattedTime}`;
+    } catch {
+      return `${dateStr || ""} ${timeStr || ""}`.trim();
     }
   };
 
@@ -61,173 +74,80 @@ const BlogSection = () => {
             <div className="home-tit">
               <p>Community Updates</p>
               <h2>
-                <span>Events & News</span>
+                <span>Events &amp; News</span>
               </h2>
               <span className="leaf1"></span>
               <span className="tit-ani-"></span>
             </div>
 
-            <div
-              className="blog"
-              style={{ position: "relative", padding: "0 15px" }}
-            >
-              {events.length > 0 ? (
+            <div className="blog dw-event-swiper-wrap">
+              {loading ? (
+                <div className="dw-event-empty dw-event-empty--muted">
+                  Loading events…
+                </div>
+              ) : events.length === 0 ? (
+                <div className="dw-event-empty">
+                  No upcoming events right now.{" "}
+                  <Link to="/community">View community page</Link> for updates.
+                </div>
+              ) : (
                 <Swiper
+                  className="dw-event-swiper"
                   modules={[Autoplay, Navigation]}
-                  spaceBetween={30}
+                  spaceBetween={24}
                   slidesPerView={3}
-                  navigation={true} // Enables built-in prev/next arrows
+                  navigation
                   autoplay={{
-                    delay: 4000,
+                    delay: 4500,
                     disableOnInteraction: false,
-                    pauseOnMouseEnter: true, // Native Swiper pause on hover!
+                    pauseOnMouseEnter: true,
                   }}
                   breakpoints={{
-                    320: { slidesPerView: 1 }, // Mobile: 1 item
-                    768: { slidesPerView: 2 }, // Tablet: 2 items
-                    1024: { slidesPerView: 3 }, // Desktop: 3 items
+                    320: { slidesPerView: 1, spaceBetween: 16 },
+                    576: { slidesPerView: 1.15, spaceBetween: 16 },
+                    768: { slidesPerView: 2, spaceBetween: 20 },
+                    1024: { slidesPerView: 3, spaceBetween: 24 },
                   }}
-                  style={{ padding: "10px 0" }} // Room for box-shadows
+                  style={{ padding: "10px 0" }}
                 >
                   {events.map((event) => (
                     <SwiperSlide key={event.EventID} style={{ height: "auto" }}>
-                      <div
-                        className="blog-box"
-                        style={{
-                          height: "100%", // Forces equal height columns
-                          display: "flex",
-                          flexDirection: "column",
-                          background: "#fff",
-                          borderRadius: "12px",
-                          boxShadow: "0 4px 15px rgba(0,0,0,0.06)",
-                          overflow: "hidden",
-                          border: "1px solid #f0f0f0",
-                        }}
-                      >
-                        {/* IMAGE CONTAINER */}
-                        <div
-                          style={{
-                            position: "relative",
-                            width: "100%",
-                            height: "240px",
-                          }}
-                        >
+                      <article className="dw-event-card">
+                        <div className="dw-event-card__media">
                           <img
                             src={fullURL(event.EventPosterURL)}
-                            alt={event.EventTitle}
+                            alt={event.EventTitle || "Event"}
                             loading="lazy"
-                            style={{
-                              width: "100%",
-                              height: "100%",
-                              objectFit: "cover", // Fixes the unequal image sizes perfectly
-                            }}
                           />
-                          <span
-                            style={{
-                              position: "absolute",
-                              top: "15px",
-                              left: "15px",
-                              background: "#e5026b",
-                              color: "#fff",
-                              padding: "4px 12px",
-                              fontSize: "11px",
-                              borderRadius: "4px",
-                              textTransform: "uppercase",
-                              fontWeight: "600",
-                              letterSpacing: "1px",
-                              boxShadow: "0 2px 8px rgba(0,0,0,0.2)",
-                            }}
-                          >
-                            {event.EventType}
-                          </span>
+                          {event.EventType ? (
+                            <span className="dw-event-card__tag">
+                              {event.EventType}
+                            </span>
+                          ) : null}
                         </div>
-
-                        {/* CONTENT CONTAINER */}
-                        <div
-                          style={{
-                            padding: "25px",
-                            display: "flex",
-                            flexDirection: "column",
-                            flexGrow: 1, // Pushes the button to the bottom
-                          }}
-                        >
-                          <div
-                            style={{
-                              color: "#888",
-                              fontSize: "13px",
-                              marginBottom: "10px",
-                              display: "flex",
-                              alignItems: "center",
-                              gap: "6px",
-                              fontWeight: "500",
-                            }}
-                          >
-                            <i className="fa fa-clock-o"></i>
+                        <div className="dw-event-card__body">
+                          <div className="dw-event-card__meta">
+                            <i className="fa fa-clock-o" aria-hidden="true" />
                             {formatDateTime(event.EventDate, event.EventTime)}
                           </div>
-
-                          <h2
-                            style={{
-                              fontSize: "19px",
-                              fontWeight: "700",
-                              margin: "0 0 12px",
-                              lineHeight: "1.4",
-                              color: "#222",
-                            }}
-                          >
+                          <h3 className="dw-event-card__title">
                             {event.EventTitle}
-                          </h2>
-
-                          <p
-                            style={{
-                              fontSize: "14px",
-                              color: "#666",
-                              lineHeight: "1.6",
-                              marginBottom: "20px",
-                            }}
-                          >
-                            {event.ShortDescription.length > 90
-                              ? event.ShortDescription.substring(0, 90) + "..."
-                              : event.ShortDescription}
+                          </h3>
+                          <p className="dw-event-card__excerpt">
+                            {excerpt(event.ShortDescription, 110)}
                           </p>
-
-                          {/* CTA BUTTON (Pushed to bottom) */}
-                          <div style={{ marginTop: "auto" }}>
-                            <Link
-                              to={`/community#event-${event.EventID}`}
-                              style={{
-                                display: "inline-block",
-                                padding: "8px 0",
-                                color: "#e5026b",
-                                fontWeight: "600",
-                                fontSize: "14px",
-                                textTransform: "uppercase",
-                                borderBottom: "2px solid #e5026b",
-                                textDecoration: "none",
-                              }}
-                            >
-                              Read more{" "}
-                              <i
-                                className="fa fa-angle-right"
-                                style={{ marginLeft: "4px" }}
-                              ></i>
-                            </Link>
-                          </div>
+                          <Link
+                            className="dw-event-card__link"
+                            to={`/community#event-${event.EventID}`}
+                          >
+                            Read more{" "}
+                            <i className="fa fa-angle-right" aria-hidden="true" />
+                          </Link>
                         </div>
-                      </div>
+                      </article>
                     </SwiperSlide>
                   ))}
                 </Swiper>
-              ) : (
-                <div
-                  style={{
-                    width: "100%",
-                    textAlign: "center",
-                    padding: "40px",
-                  }}
-                >
-                  Loading events...
-                </div>
               )}
             </div>
           </div>

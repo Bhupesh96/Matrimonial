@@ -1,4 +1,5 @@
 import React, { useState, useEffect } from "react"; // <-- 1. Import hooks
+import usePageTitle from "../hooks/usePageTitle";
 import Footer from "../components/Footer";
 import Preloader from "../components/Preloader";
 import PoopUpSearch from "../components/PoopUpSearch";
@@ -24,8 +25,14 @@ import BlogSection from "../components/BlogSection";
 import FindMatchSection from "../components/FindMatchSection";
 import CopyRight from "../components/CopyRight";
 import MyAboutUS from "../components/MyAboutUS";
+import SEOSection from "../components/SEOSection";
 
 const Home = () => {
+  usePageTitle("Home", {
+    suffix: false,
+    description:
+      "Dewangan Links — India's most trusted matrimony platform for the Dewangan community. Browse verified profiles and find your perfect life partner.",
+  });
   // 2. Add loading state, default to true
   const [loading, setLoading] = useState(true);
 
@@ -61,7 +68,7 @@ const Home = () => {
       <QuickAccess />
       <CustomerReviews />
       <WhyChooseUs />
-      <MyAboutUS/>
+      <MyAboutUS />
       {/* <AboutWelcome /> */}
       {/* <AboutCounter /> */}
       <HowItWorks />
@@ -70,6 +77,7 @@ const Home = () => {
       {/* <PhotoGallery /> */}
       <BlogSection />
       <FindMatchSection />
+      <SEOSection />
       <Footer />
       <CopyRight />
     </div>

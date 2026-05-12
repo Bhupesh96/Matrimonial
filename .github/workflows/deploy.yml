@@ -1,9 +1,25 @@
+# Deploy static build/ to Hostinger via FTPS.
+# Requires repo secrets: FTP_HOST, FTP_USERNAME, FTP_PASSWORD
+#
+# Triggers: push to main/master, or "Run workflow" (Actions → Deploy to Hostinger via FTP).
+#
+# If the live site still looks old: (1) GitHub → Actions → confirm this workflow ran green
+# after your last push. (2) Push must be to main or master (other branches do not deploy).
+# (3) server-dir must be the folder that actually serves https://dewanganlink.in/.
+# (4) Purge Hostinger / LiteSpeed / Cloudflare cache after deploy. (5) Hard-refresh the site.
+
 name: Deploy to Hostinger via FTP
 
 on:
   push:
     branches:
-      - main # or master if that's your branch
+      - main
+      - master
+  workflow_dispatch:
+
+concurrency:
+  group: deploy-hostinger
+  cancel-in-progress: true
 
 jobs:
   deploy:
@@ -11,26 +27,34 @@ jobs:
 
     steps:
       - name: Checkout repository
-        uses: actions/checkout@v3
+        uses: actions/checkout@v4
 
       - name: Set up Node.js
-        uses: actions/setup-node@v3
+        uses: actions/setup-node@v4
         with:
-          node-version: "18"
+          node-version: "20"
+          cache: "npm"
 
       - name: Install dependencies
         run: npm install --legacy-peer-deps
 
       - name: Build project
-        run: CI='' npm run build
+        env:
+          CI: ""
+        run: npm run build
 
       - name: Deploy via FTP
-        uses: SamKirkland/FTP-Deploy-Action@v4.3.4
+        uses: SamKirkland/FTP-Deploy-Action@v4.3.6
         with:
           server: ${{ secrets.FTP_HOST }}
           username: ${{ secrets.FTP_USERNAME }}
           password: ${{ secrets.FTP_PASSWORD }}
           protocol: ftps
+          # Must match the folder that serves https://dewanganlink.in/ (often public_html).
+          # If your React build lives in a subfolder, change this (e.g. /public_html/app/).
           server-dir: /public_html/
           local-dir: ./build/
+          # Incremental upload. If old hashed JS piles up or index.html seems stuck,
+          # try a one-time manual clean of /public_html/static/ then re-run this job.
           dangerous-clean-slate: false
+          log-level: standard

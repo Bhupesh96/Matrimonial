@@ -4,7 +4,7 @@ module.exports = function (app) {
   app.use(
     "/api",
     createProxyMiddleware({
-      target: "https://techwithus.in/matro/admin/plug/api/",
+      target: "https://dewanganlink.in/matro/admin/plug/api/",
       changeOrigin: true,
       secure: false,
       pathRewrite: {

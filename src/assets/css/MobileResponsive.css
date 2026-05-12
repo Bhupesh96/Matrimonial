@@ -1,0 +1,1002 @@
+/* ==========================================================================
+   GLOBAL MOBILE RESPONSIVE OVERRIDES
+   --------------------------------------------------------------------------
+   Loaded LAST from App.js so it wins the cascade against the legacy
+   template (public/css/style.css) and component CSS.
+
+   Breakpoints used here:
+     - 1200px : large desktop -> small desktop tweaks
+     - 992px  : tablet landscape (also where MobileMenu kicks in)
+     - 768px  : tablet portrait / large phones
+     - 576px  : small phones
+     - 480px  : extra small phones
+     - 360px  : compact phones
+   ========================================================================== */
+
+/* ==========================================================================
+   1. GLOBAL FOUNDATION
+   ========================================================================== */
+html,
+body {
+  max-width: 100vw;
+  overflow-x: hidden;
+  -webkit-text-size-adjust: 100%;
+  text-size-adjust: 100%;
+}
+
+/* Prevent any nested overflow from creating horizontal scroll on phones */
+@media (max-width: 992px) {
+  #root,
+  .str,
+  .hero-container,
+  .hero-carousel,
+  .carousel,
+  .carousel .slider-wrapper,
+  .carousel .slider,
+  .slick-slider,
+  .slick-list {
+    max-width: 100vw !important;
+    overflow-x: hidden !important;
+  }
+}
+
+* {
+  -webkit-tap-highlight-color: rgba(0, 0, 0, 0);
+}
+
+img,
+video {
+  max-width: 100%;
+  height: auto;
+}
+
+iframe {
+  max-width: 100%;
+}
+
+/* Wrap wide tables so they scroll horizontally instead of breaking layout */
+table {
+  display: block;
+  max-width: 100%;
+  overflow-x: auto;
+  -webkit-overflow-scrolling: touch;
+}
+
+/* ==========================================================================
+   2. <= 1200px  small desktop / large tablet
+   ========================================================================== */
+@media (max-width: 1200px) {
+  .container {
+    max-width: 100%;
+    padding-left: 20px;
+    padding-right: 20px;
+  }
+
+  /* MainMenu: tighten spacing so menu fits */
+  .hom-nav .bl ul > li > a,
+  .hom-nav .bl ul > li > .smenu {
+    font-size: 14px;
+  }
+}
+
+/* ==========================================================================
+   3. <= 992px  tablet -> mobile menu kicks in
+   --------------------------------------------------------------------------
+   The site has a separate <MobileMenu /> component that displays a slide
+   panel via .mob-menu-btn. From 992px down we hide the desktop menu chrome
+   and the floating "ContactExpert" panel (.menu-pop2) which is huge on phones.
+   ========================================================================== */
+@media (max-width: 992px) {
+  /* Hide top utility bar (already done in template, reinforce) */
+  .head-top {
+    display: none !important;
+  }
+
+  /* Hide desktop nav links — hamburger menu lists them */
+  .hom-nav .bl {
+    display: none !important;
+  }
+
+  /* Keep header CTAs (Login / Join Free or user badge) visible like desktop */
+  .hom-nav .al.dw-actions {
+    display: flex !important;
+    align-items: center;
+    flex-shrink: 0;
+    float: none !important;
+    width: auto !important;
+    max-width: none !important;
+  }
+
+  /* Leave space for fixed .mob-menu-btn so CTAs are not covered */
+  .dw-header .hom-nav {
+    justify-content: space-between !important;
+    align-items: center !important;
+    padding-right: 76px !important;
+    gap: 12px;
+  }
+
+  .dw-header .logo {
+    min-width: 0;
+  }
+
+  /* Compact header */
+  .hom-top {
+    padding: 8px 0;
+  }
+
+  .hom-nav {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    width: 100%;
+  }
+
+  .logo {
+    float: none;
+    width: auto;
+    max-width: none;
+  }
+
+  .logo .ic-logo {
+    max-height: 48px;
+    width: auto;
+  }
+
+  /* Floating support / ContactExpert popup -> hide on tablets & phones */
+  .menu-pop2,
+  .menu-pop.menu-pop2,
+  .menu-pop-help,
+  .late-news,
+  .prof-rhs-help {
+    display: none !important;
+  }
+
+  /* DashboardMenu floating widget cleanup if any */
+  .dashboard-fab,
+  .dash-floating {
+    display: none !important;
+  }
+
+  /* Inner page banner */
+  .inn-ban {
+    padding: 50px 20px 70px;
+  }
+
+  .inn-ban h1 {
+    font-size: 32px;
+    line-height: 40px;
+    padding: 0 5% 12px;
+  }
+
+  .inn-ban p {
+    font-size: 15px;
+  }
+
+  /* Bootstrap col stacking helpers (template uses col-md-X w/o col-12) */
+  .row > [class*="col-"] {
+    margin-bottom: 16px;
+  }
+}
+
+/* ==========================================================================
+   4. <= 768px  tablet portrait & large phones
+   ========================================================================== */
+@media (max-width: 768px) {
+  /* Container & gutter */
+  .container,
+  .container-fluid {
+    padding-left: 15px;
+    padding-right: 15px;
+  }
+
+  /* Typography scale */
+  h1 {
+    font-size: 28px !important;
+    line-height: 1.25 !important;
+  }
+  h2 {
+    font-size: 24px !important;
+    line-height: 1.3 !important;
+  }
+  h3 {
+    font-size: 20px !important;
+    line-height: 1.35 !important;
+  }
+  h4 {
+    font-size: 17px !important;
+    line-height: 1.4 !important;
+  }
+  h5 {
+    font-size: 15px !important;
+  }
+  p,
+  li,
+  a,
+  span,
+  label {
+    font-size: 14px;
+    line-height: 1.55;
+  }
+
+  /* Inner page banner */
+  .inn-ban {
+    padding: 40px 15px 55px;
+  }
+  .inn-ban h1 {
+    font-size: 26px;
+    line-height: 34px;
+    padding: 0 0 10px;
+  }
+  .inn-ban p {
+    font-size: 14px;
+  }
+
+  /* Generic section padding */
+  section,
+  .home-acces,
+  .home-about,
+  .home-event,
+  .hom-partners,
+  .all-list-sh {
+    padding-top: 40px !important;
+    padding-bottom: 40px !important;
+  }
+
+  /* ===== FORMS - touch friendly ===== */
+  input[type="text"],
+  input[type="email"],
+  input[type="password"],
+  input[type="tel"],
+  input[type="number"],
+  input[type="search"],
+  input[type="date"],
+  select,
+  textarea,
+  .form-control {
+    font-size: 16px !important;     /* prevents iOS auto-zoom */
+    min-height: 44px;
+    padding: 10px 12px;
+    box-sizing: border-box;
+    width: 100%;
+  }
+
+  textarea,
+  .form-control[as="textarea"] {
+    min-height: 90px;
+  }
+
+  button,
+  .btn,
+  input[type="submit"],
+  input[type="button"],
+  a.btn {
+    min-height: 44px;
+    font-size: 15px;
+    padding: 10px 18px;
+    touch-action: manipulation;
+  }
+
+  /* Forms in login/register/contact/profile-edit */
+  .form-login,
+  .form-login .form-group,
+  .form-login form,
+  .common-form,
+  .common-form .form-group {
+    width: 100% !important;
+  }
+
+  .form-login .form-group input,
+  .form-login .form-group select,
+  .form-login .form-group textarea {
+    width: 100%;
+  }
+
+  /* Force any 2-col form rows to single col */
+  .form-row,
+  .form-grid,
+  .row.form-row > [class*="col-"] {
+    flex-direction: column;
+    width: 100%;
+  }
+
+  /* ===== FOOTER ===== */
+  .wed-hom-footer {
+    padding: 30px 0 60px;
+    text-align: center;
+  }
+
+  .foot-supp {
+    width: 92%;
+    padding: 22px 14px;
+    margin: -30px auto 0;
+  }
+
+  .foot-supp h2 {
+    font-size: 14px !important;
+    line-height: 22px;
+  }
+
+  .foot-supp h2 br {
+    display: none;
+  }
+
+  .wed-foot-link {
+    padding: 40px 0 25px;
+  }
+
+  .wed-foot-link [class*="col-"] {
+    width: 100%;
+    margin-bottom: 25px;
+    text-align: center;
+  }
+
+  .wed-foot-link h4 {
+    padding-bottom: 12px;
+    font-size: 16px !important;
+  }
+
+  .wed-foot-link ul {
+    display: inline-block;
+  }
+
+  .fot-soc ul {
+    display: flex;
+    justify-content: center;
+    gap: 12px;
+    flex-wrap: wrap;
+  }
+
+  .fot-soc ul li {
+    float: none !important;
+    margin: 0 !important;
+  }
+
+  .foot-count {
+    padding: 25px 15px 0;
+    text-align: center;
+  }
+
+  .foot-count p {
+    font-size: 13px;
+    line-height: 22px;
+  }
+
+  /* ===== ALL PROFILES PAGE ===== */
+  .all-list-sh ul {
+    margin: 0;
+    padding: 0;
+  }
+
+  .all-list-sh ul li {
+    float: none !important;
+    width: 100% !important;
+    padding: 8px 0 !important;
+  }
+
+  .all-list-sh .all-pro-box {
+    margin: 0 0 12px 0 !important;
+  }
+
+  .all-pro-box .pro-img,
+  .all-pro-box div:nth-child(1) img {
+    width: 100% !important;
+    height: auto !important;
+    max-height: 280px;
+    object-fit: cover;
+  }
+
+  .pro-detail {
+    padding: 16px !important;
+    width: 100% !important;
+  }
+
+  .pro-detail h4 {
+    font-size: 16px !important;
+  }
+
+  /* Sidebar filter -> hidden by default, slides in via class */
+  .all-weddpro .col-md-3,
+  .all-weddpro .col-md-9 {
+    width: 100% !important;
+    padding: 0 !important;
+  }
+
+  /* ===== USER PROFILE PAGE ===== */
+  .prof-main,
+  .prof-main .col-md-8,
+  .prof-main .col-md-4,
+  .user-prof,
+  .user-prof .col-md-3,
+  .user-prof .col-md-9 {
+    width: 100% !important;
+    padding: 0 !important;
+  }
+
+  .user-pro-img,
+  .prof-main img {
+    width: 100%;
+    height: auto;
+  }
+
+  /* ===== CARDS / GRIDS ===== */
+  .col-md-2,
+  .col-md-3,
+  .col-md-4,
+  .col-md-5,
+  .col-md-6,
+  .col-md-7,
+  .col-md-8,
+  .col-md-9,
+  .col-md-10 {
+    width: 100% !important;
+    flex: 0 0 100% !important;
+    max-width: 100% !important;
+  }
+
+  .col-sm-6 {
+    width: 100% !important;
+    flex: 0 0 100% !important;
+    max-width: 100% !important;
+  }
+
+  /* ===== MENU POPUPS =====
+     IMPORTANT: .menu-pop is a fixed full-height side panel that the
+     legacy template hides off-screen via left:-500px / right:-500px,
+     and slides in by adding the `.act` class. We must ONLY restyle
+     the OPEN state — never force left/right:0 on the base class, or
+     it will permanently cover the whole viewport in white. */
+  .menu-pop.act,
+  .menu-pop1.act,
+  .menu-pop2.act {
+    width: 92% !important;
+    max-width: 360px !important;
+    padding: 24px 18px !important;
+  }
+
+  /* ===== CHAT BOX  ===== */
+  .chat-box,
+  .ChatBox,
+  .chatbox-wrap {
+    bottom: 12px !important;
+    right: 12px !important;
+    max-width: calc(100vw - 24px) !important;
+  }
+
+  /* ===== TABLES (force horizontal scroll wrapper) ===== */
+  .table-responsive,
+  table {
+    display: block;
+    overflow-x: auto;
+    -webkit-overflow-scrolling: touch;
+    width: 100%;
+  }
+
+  /* ===== LOGIN MODAL ===== */
+  .login-modal,
+  .login-modal-content,
+  .modal-dialog {
+    width: 95% !important;
+    max-width: 95% !important;
+    margin: 8px auto !important;
+  }
+
+  .modal-content {
+    border-radius: 14px !important;
+  }
+
+  /* ===== Generic carousels ===== */
+  .slick-slider .slick-prev,
+  .slick-slider .slick-next {
+    width: 32px;
+    height: 32px;
+  }
+
+  /* ===== Quick Access / Why Choose / How It Works grids ===== */
+  .qa-grid,
+  .why-grid,
+  .how-grid,
+  .blog-grid,
+  .team-grid,
+  .review-grid {
+    grid-template-columns: 1fr !important;
+    gap: 16px !important;
+  }
+}
+
+/* ==========================================================================
+   5. <= 576px  small phones
+   ========================================================================== */
+@media (max-width: 576px) {
+  h1 {
+    font-size: 24px !important;
+  }
+  h2 {
+    font-size: 20px !important;
+  }
+  h3 {
+    font-size: 18px !important;
+  }
+
+  .inn-ban {
+    padding: 35px 12px 45px;
+  }
+  .inn-ban h1 {
+    font-size: 22px;
+    line-height: 30px;
+  }
+  .inn-ban p {
+    font-size: 13px;
+  }
+
+  /* Header - hide text, keep just logo + burger */
+  .logo .ic-logo {
+    max-height: 42px;
+  }
+
+  /* Sections */
+  section,
+  .home-acces,
+  .home-about,
+  .home-event,
+  .hom-partners,
+  .all-list-sh {
+    padding-top: 30px !important;
+    padding-bottom: 30px !important;
+  }
+
+  /* Buttons */
+  .btn,
+  button {
+    font-size: 14px;
+    padding: 10px 16px;
+  }
+
+  /* Footer */
+  .foot-supp h2 {
+    font-size: 13px !important;
+    line-height: 20px;
+  }
+
+  .wed-hom-footer p {
+    font-size: 13px;
+    line-height: 22px;
+  }
+
+  /* Profile cards image height */
+  .all-pro-box .pro-img,
+  .all-pro-box div:nth-child(1) img {
+    max-height: 240px;
+  }
+}
+
+/* ==========================================================================
+   6. <= 480px  extra small phones
+   ========================================================================== */
+@media (max-width: 480px) {
+  .container,
+  .container-fluid {
+    padding-left: 12px;
+    padding-right: 12px;
+  }
+
+  h1 {
+    font-size: 22px !important;
+  }
+  h2 {
+    font-size: 18px !important;
+  }
+
+  .inn-ban h1 {
+    font-size: 20px;
+    line-height: 26px;
+  }
+
+  .logo .ic-logo {
+    max-height: 38px;
+  }
+
+  /* MobileMenu toggle button slightly smaller */
+  .mob-menu-btn {
+    width: 44px !important;
+    height: 44px !important;
+  }
+
+  /* Buttons full-width inside narrow cards */
+  .all-pro-box .btn,
+  .pro-detail .btn,
+  .qa-card .qa-btn,
+  .why-card .btn {
+    width: 100%;
+    text-align: center;
+  }
+}
+
+/* ==========================================================================
+   7. <= 360px  very compact phones (older Androids, foldables closed)
+   ========================================================================== */
+@media (max-width: 360px) {
+  h1 {
+    font-size: 20px !important;
+  }
+  h2 {
+    font-size: 17px !important;
+  }
+  h3 {
+    font-size: 16px !important;
+  }
+
+  .container,
+  .container-fluid {
+    padding-left: 10px;
+    padding-right: 10px;
+  }
+
+  .logo .ic-logo {
+    max-height: 34px;
+  }
+
+  .btn,
+  button {
+    font-size: 13px;
+    padding: 9px 14px;
+  }
+}
+
+/* ==========================================================================
+   8. HERO SECTION - DESKTOP / MOBILE SWAP
+   --------------------------------------------------------------------------
+   HeroSection.js renders TWO sections: `.hero-container.hero-desktop-only`
+   and `.mhero`. We toggle visibility based on viewport.
+   ========================================================================== */
+
+/* Hide the new mobile hero on desktop */
+.mhero {
+  display: none;
+}
+
+@media (max-width: 768px) {
+  .hero-desktop-only {
+    display: none !important;
+  }
+
+  .mhero {
+    display: block;
+    width: 100%;
+    margin-top: 0; /* fixed header clearance handled by body padding-top */
+    background: #fff;
+  }
+
+  /* === SECTION 1 : BANNER (simple rotating <img>) === */
+  .mhero-banner {
+    position: relative;
+    width: 100%;
+    height: 230px;
+    background: #f6efe1;
+    overflow: hidden;
+  }
+
+  .mhero-banner-img {
+    display: block !important;
+    width: 100% !important;
+    height: 230px !important;
+    object-fit: cover !important;
+    object-position: center !important;
+    animation: mheroFade 0.6s ease-in;
+  }
+
+  @keyframes mheroFade {
+    from {
+      opacity: 0.4;
+    }
+    to {
+      opacity: 1;
+    }
+  }
+
+  /* Indicator dots overlaid bottom-center */
+  .mhero-dots {
+    position: absolute;
+    left: 0;
+    right: 0;
+    bottom: 10px;
+    display: flex;
+    justify-content: center;
+    gap: 6px;
+    z-index: 2;
+  }
+
+  .mhero-dot {
+    width: 7px;
+    height: 7px;
+    border-radius: 50%;
+    background: rgba(255, 255, 255, 0.6);
+    border: none;
+    padding: 0;
+    cursor: pointer;
+    transition: background 0.2s ease, transform 0.2s ease;
+  }
+
+  .mhero-dot.active {
+    background: #ffd25a;
+    transform: scale(1.3);
+  }
+
+  /* === SECTION 2 : HEADLINE + FORM CARD === */
+  .mhero-card {
+    background: linear-gradient(180deg, #fff7e6 0%, #f3e2c1 100%);
+    padding: 28px 18px 36px;
+    text-align: center;
+  }
+
+  .mhero-title {
+    font-size: 26px;
+    line-height: 1.25;
+    font-weight: 800;
+    color: #5a3c07;
+    margin: 0 0 4px 0;
+    font-family: "Playfair Display", serif;
+  }
+
+  .mhero-title-hi {
+    font-size: 22px;
+    line-height: 1.3;
+    font-weight: 700;
+    color: #5a3c07;
+    margin: 0 0 14px 0;
+  }
+
+  .mhero-gold {
+    background: linear-gradient(90deg, #b28a45, #d6a93a, #b28a45);
+    -webkit-background-clip: text;
+    background-clip: text;
+    -webkit-text-fill-color: transparent;
+    color: transparent;
+  }
+
+  .mhero-sub {
+    font-size: 14px;
+    line-height: 1.55;
+    color: #6a4f1c;
+    margin: 0 0 4px 0;
+  }
+  .mhero-sub-hi {
+    margin-bottom: 22px;
+  }
+
+  /* Form card */
+  .mhero-search {
+    background: #ffffff;
+    border: 1px solid #e7d7b8;
+    border-radius: 16px;
+    box-shadow: 0 10px 25px rgba(88, 60, 7, 0.12);
+    padding: 14px;
+    display: flex;
+    flex-direction: column;
+    gap: 10px;
+  }
+
+  .mhero-search select,
+  .mhero-search button {
+    width: 100%;
+    min-height: 46px;
+    border-radius: 10px;
+    font-size: 15px;
+    font-weight: 600;
+    border: 1px solid #e0d4b6;
+    padding: 0 14px;
+    outline: none;
+    box-sizing: border-box;
+  }
+
+  .mhero-search select {
+    background: #fdfaf2;
+    color: #5a3c07;
+    appearance: none;
+    -webkit-appearance: none;
+    background-image: url("data:image/svg+xml;utf8,<svg xmlns='http://www.w3.org/2000/svg' width='12' height='12' viewBox='0 0 24 24' fill='%235a3c07'><path d='M7 10l5 5 5-5z'/></svg>");
+    background-repeat: no-repeat;
+    background-position: right 14px center;
+    padding-right: 36px;
+  }
+
+  .mhero-search button {
+    background: linear-gradient(90deg, #ffdd55, #ffbb00);
+    color: #2a1c00;
+    font-weight: 700;
+    border: none;
+    cursor: pointer;
+    box-shadow: 0 4px 12px rgba(255, 187, 0, 0.35);
+    margin-top: 4px;
+  }
+
+  .mhero-search button:active {
+    transform: translateY(1px);
+  }
+}
+
+@media (max-width: 480px) {
+  .mhero {
+    margin-top: 0;
+  }
+
+  .mhero-banner,
+  .mhero-banner-img {
+    height: 200px !important;
+  }
+
+  .mhero-card {
+    padding: 24px 14px 30px;
+  }
+
+  .mhero-title {
+    font-size: 22px;
+  }
+  .mhero-title-hi {
+    font-size: 18px;
+  }
+  .mhero-sub {
+    font-size: 13px;
+  }
+}
+
+/* ==========================================================================
+   9. LANDSCAPE PHONE - shorter banner so form is reachable without scroll
+   ========================================================================== */
+@media (max-width: 900px) and (orientation: landscape) {
+  .mhero-banner,
+  .mhero-banner-img {
+    height: 170px !important;
+  }
+}
+
+/* ==========================================================================
+   9. PRINT / ACCESSIBILITY
+   ========================================================================== */
+@media (prefers-reduced-motion: reduce) {
+  *,
+  *::before,
+  *::after {
+    animation-duration: 0.001ms !important;
+    animation-iteration-count: 1 !important;
+    transition-duration: 0.001ms !important;
+  }
+}
+
+/* Safe-area for iPhone notch */
+@supports (padding: max(0px)) {
+  body {
+    padding-left: env(safe-area-inset-left);
+    padding-right: env(safe-area-inset-right);
+  }
+
+  .mob-menu-btn {
+    top: max(15px, env(safe-area-inset-top)) !important;
+    right: max(15px, env(safe-area-inset-right)) !important;
+  }
+}
+
+/* =========================================================
+   PrimeReact searchable dropdowns used by <SearchableSelect>.
+   Goal: look identical to a Bootstrap <input class="form-control"> so
+   that the dropdown sits next to text inputs without looking odd.
+   We scope all rules with `.dw-search-select` so we don't accidentally
+   restyle PrimeReact widgets used elsewhere in the app.
+   ========================================================= */
+
+/* The OUTER widget — the visible "field" */
+.p-dropdown.dw-search-select,
+.p-multiselect.dw-search-select {
+  width: 100%;
+  min-height: 42px;
+  display: flex;
+  align-items: center;
+  background: #fff !important;
+  border: 1px solid #ced4da !important;
+  border-radius: 6px !important;
+  box-shadow: none !important;
+  font-size: 15px;
+  color: #212529;
+  transition: border-color 0.15s ease, box-shadow 0.15s ease;
+}
+
+.p-dropdown.dw-search-select:hover,
+.p-multiselect.dw-search-select:hover {
+  border-color: #b58a48 !important;
+}
+
+.p-dropdown.dw-search-select.p-focus,
+.p-multiselect.dw-search-select.p-focus {
+  border-color: #c8902a !important;
+  box-shadow: 0 0 0 0.2rem rgba(200, 144, 42, 0.15) !important;
+  outline: none !important;
+}
+
+/* The visible label text inside the field */
+.p-dropdown.dw-search-select .p-dropdown-label,
+.p-multiselect.dw-search-select .p-multiselect-label {
+  padding: 9px 12px !important;
+  color: #212529 !important;
+  font-size: 15px;
+  line-height: 1.5;
+  background: transparent !important;
+  border: none !important;
+  box-shadow: none !important;
+}
+
+.p-dropdown.dw-search-select .p-dropdown-label.p-placeholder,
+.p-multiselect.dw-search-select .p-multiselect-label.p-placeholder {
+  color: #8a8f96 !important;
+}
+
+/* Caret + clear button on the right */
+.p-dropdown.dw-search-select .p-dropdown-trigger,
+.p-multiselect.dw-search-select .p-multiselect-trigger {
+  width: 2.4rem;
+  color: #6c757d;
+}
+
+.p-dropdown.dw-search-select .p-dropdown-clear-icon,
+.p-multiselect.dw-search-select .p-multiselect-clear-icon {
+  color: #98a0a8;
+  right: 2.6rem;
+}
+
+/* The floating dropdown panel */
+.p-dropdown-panel,
+.p-multiselect-panel {
+  border: 1px solid #ddd !important;
+  border-radius: 8px !important;
+  box-shadow: 0 8px 24px rgba(0, 0, 0, 0.12) !important;
+  z-index: 2000 !important;
+}
+
+/* Search box inside the panel */
+.p-dropdown-filter,
+.p-multiselect-filter {
+  padding: 8px 12px !important;
+  border: 1px solid #ced4da !important;
+  border-radius: 6px !important;
+  font-size: 14px;
+}
+
+.p-dropdown-filter-container,
+.p-multiselect-filter-container {
+  padding: 8px;
+}
+
+/* Items in the dropdown list */
+.p-dropdown-item,
+.p-multiselect-item {
+  padding: 10px 14px !important;
+  font-size: 14px;
+  color: #333;
+}
+
+.p-dropdown-item.p-highlight,
+.p-multiselect-item.p-highlight {
+  background: #fbf6ee !important;
+  color: #7a4f1f !important;
+}
+
+.p-dropdown-item:not(.p-highlight):hover,
+.p-multiselect-item:not(.p-highlight):hover {
+  background: #f5f5f5 !important;
+}
+
+/* Multi-select chips shown inside the field */
+.p-multiselect.dw-search-select .p-multiselect-token {
+  background: #fbf6ee !important;
+  color: #7a4f1f !important;
+  border-radius: 4px !important;
+  padding: 3px 8px;
+  margin: 2px 4px 2px 0;
+  font-size: 13px;
+}
+
+/* Empty/no-results state */
+.p-dropdown-empty-message,
+.p-multiselect-empty-message {
+  padding: 12px 14px;
+  color: #888;
+  font-size: 14px;
+}

@@ -215,8 +215,11 @@ const QuickAccess = () => {
         <Swiper
           slidesPerView={4}
           spaceBetween={24}
-          autoplay={{ delay: 2500 }}
-          loop
+          autoplay={{ delay: 2500, disableOnInteraction: false }}
+          /* IMPORTANT: with only 4 services and slidesPerView=4,
+             Swiper's loop mode collapses the slides (renders nothing).
+             Disable loop so cards always show. */
+          loop={false}
           modules={[Autoplay]}
           breakpoints={{
             320: { slidesPerView: 1 },
@@ -224,6 +227,7 @@ const QuickAccess = () => {
             768: { slidesPerView: 3 },
             1024: { slidesPerView: 4 },
           }}
+          className="qa-swiper"
         >
           {services.map((item, index) => (
             <SwiperSlide key={index}>

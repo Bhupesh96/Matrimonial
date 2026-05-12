@@ -1,6 +1,9 @@
 const Preloader = () => {
+  /* Use a dedicated class — NOT id="preloader". Legacy public/js/custom.js runs
+   * $("#preloader").fadeOut() on document ready; sharing that id makes the React
+   * route loader disappear while API calls are still in flight (blank screen). */
   return (
-    <div id="preloader">
+    <div className="dw-react-preloader" role="status" aria-busy="true">
       <div className="plod">
         <span className="lod1">
           <img src="/images/loder/1.png" alt="" loading="lazy" />

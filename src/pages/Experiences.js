@@ -1,6 +1,8 @@
 import React, { useEffect, useState } from "react";
 import { fetchTestimonials, addTestimonial } from "../api";
+import { resolveImageUrl } from "../utils/imageUrl";
 import "../assets/css/ExperiencePage.css";
+import usePageTitle from "../hooks/usePageTitle";
 
 import PoopUpSearch from "../components/PoopUpSearch";
 import TopMenu from "../components/TopMenu";
@@ -14,6 +16,10 @@ import CopyRight from "../components/CopyRight";
 import AlertService from "../services/AlertServices";
 
 const Experiences = () => {
+  usePageTitle("Member Experiences", {
+    description:
+      "Read what our members say about their Dewangan Links experience and share your own testimonial.",
+  });
   const [reviews, setReviews] = useState([]);
   const [loading, setLoading] = useState(false);
   const [name, setName] = useState("");
@@ -24,10 +30,7 @@ const Experiences = () => {
   const defaultPreview = "/images/default.png";
   const [photoPreview, setPhotoPreview] = useState(defaultPreview);
 
-  const fullURL = (img) =>
-    img?.startsWith("http")
-      ? img
-      : `https://techwithus.in/matro/admin/plug/${img}`;
+  const fullURL = (img) => resolveImageUrl(img);
 
   useEffect(() => {
     const loadReviews = async () => {

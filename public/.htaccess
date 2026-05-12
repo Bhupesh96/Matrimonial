@@ -1,0 +1,17 @@
+# Hostinger / Apache / LiteSpeed — helps browsers pick up new React builds after deploy.
+# CRA serves hashed JS/CSS; if index.html is cached, users keep loading old chunk filenames.
+
+<IfModule mod_headers.c>
+  <Files "index.html">
+    Header set Cache-Control "no-store, no-cache, must-revalidate, max-age=0"
+    Header set Pragma "no-cache"
+  </Files>
+</IfModule>
+
+# Optional: long-lived cache for hashed static assets (paths include content hash).
+<IfModule mod_expires.c>
+  ExpiresActive On
+  ExpiresByType text/css "access plus 1 year"
+  ExpiresByType application/javascript "access plus 1 year"
+  ExpiresByType application/json "access plus 0 seconds"
+</IfModule>

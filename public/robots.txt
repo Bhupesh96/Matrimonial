@@ -1,3 +1,18 @@
 # https://www.robotstxt.org/robotstxt.html
+# Dewangan Links — robots policy
+
 User-agent: *
-Disallow:
+Allow: /
+
+# Don't index private/utility paths
+Disallow: /user-profile-edit
+Disallow: /api/
+Disallow: /matro/
+Disallow: /*?*sessionid=
+Disallow: /*?*token=
+
+# Polite crawl rate
+Crawl-delay: 1
+
+# Sitemap
+Sitemap: https://dewanganlink.in/sitemap.xml

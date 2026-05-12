@@ -1,7 +1,8 @@
 // src/pages/UserProfile.js
 import { useEffect, useState } from "react";
-import { useParams } from "react-router-dom";
+import { Link, useNavigate, useParams } from "react-router-dom";
 import { apiFetch } from "../api";
+import usePageTitle from "../hooks/usePageTitle";
 import ContactExpert from "../components/ContactExpert";
 import CopyRight from "../components/CopyRight";
 import DashboardMenu from "../components/DashBoardMenu";
@@ -12,6 +13,9 @@ import MobileMenu from "../components/MobileMenu";
 import PoopUpSearch from "../components/PoopUpSearch";
 import Preloader from "../components/Preloader";
 import TopMenu from "../components/TopMenu";
+
+import "../assets/css/UserProfile.css";
+
 const API = process.env.REACT_APP_API_URL;
 
 // master types (lowercase)
@@ -26,6 +30,9 @@ const masterTypes = [
   "rashis",
   "diets",
   "incomeranges",
+  "bloodgroups",
+  "mothertongues",
+  "relationships",
 ];
 
 const UserProfile = () => {
@@ -33,9 +40,23 @@ const UserProfile = () => {
   const [profile, setProfile] = useState(null);
   const [masters, setMasters] = useState({});
 
+  const profileTitle = profile
+    ? `${profile.firstname || ""} ${profile.lastname || ""}`.trim() ||
+    "View Profile"
+    : "View Profile";
+  usePageTitle(profileTitle, {
+    description:
+      "View detailed matrimonial profile on Dewangan Links — education, family, partner expectations and more.",
+  });
+
   const IMG_BASE = process.env.REACT_APP_IMG_BASE_URL;
   const DEFAULT_IMG = "images/default.png";
   const { id } = useParams();
+  const navigate = useNavigate();
+  const viewerID = localStorage.getItem("profileID");
+  const isAuthenticated =
+    !!viewerID && viewerID !== "undefined" && viewerID !== "null";
+
   useEffect(() => {
     (async () => {
       try {
@@ -58,14 +79,15 @@ const UserProfile = () => {
           return;
         }
 
-        // Use apiFetch for the user profile
-        const json = await apiFetch(
-          `${API}?api=get_profile&ProfileID=${profileID}`,
-        );
+        // Pass ViewerID so the backend knows whether to mask sensitive fields
+        let url = `${API}?api=get_profile&ProfileID=${profileID}`;
+        if (isAuthenticated) {
+          url += `&ViewerID=${encodeURIComponent(viewerID)}`;
+        }
+        const json = await apiFetch(url);
 
         if (json.status === 200 && Array.isArray(json.data) && json.data[0]) {
           const p = json.data[0];
-          console.log("User profile: ", JSON.stringify(p, null, 2));
           setProfile(p);
         } else {
           setProfile(null);
@@ -77,7 +99,8 @@ const UserProfile = () => {
         setLoading(false);
       }
     })();
-  }, [id]); // Note: good practice to add 'id' to the dependency array
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [id]);
 
   const lookup = (type, id) => {
     if (!id) return "-";
@@ -86,7 +109,17 @@ const UserProfile = () => {
     return found ? found.name : "-";
   };
 
-  const calcAge = (dob) => {
+  /** Father occupation: master ID, or any text column the API may return. */
+  const fatherOccupationDisplay = (p) => {
+    const fromMaster = lookup("occupations", p.FatherOccupationID);
+    if (fromMaster && fromMaster !== "-") return fromMaster;
+    if (p.FatherOccupation) return p.FatherOccupation;
+    if (p.FatherOccupationName) return p.FatherOccupationName;
+    return "-";
+  };
+
+  const calcAge = (dob, fallbackAge) => {
+    if (fallbackAge) return `${fallbackAge} Years`;
     if (!dob) return "-";
     const diff = Date.now() - new Date(dob).getTime();
     return `${new Date(diff).getUTCFullYear() - 1970} Years`;
@@ -97,11 +130,55 @@ const UserProfile = () => {
   if (!profile) {
     return (
       <div style={{ padding: 40, textAlign: "center" }}>
-        No profile found. Please login or set <code>profileID</code> in
-        localStorage.
+        No profile found. The profile may have been removed.
       </div>
     );
   }
+
+  const canSeeSensitiveContact = !!profile.IsConnected || !!profile.IsOwner;
+  const connectionStatus = profile.ConnectionStatus; // null | Pending | Accepted | Rejected
+
+  /** Extra gallery images — only after login (main profile photo is public). */
+  const canSeeGallery = isAuthenticated;
+  const galleryCount = Array.isArray(profile.gallery_images)
+    ? profile.gallery_images.length
+    : 0;
+
+  const lockPlaceholder = (title, label) => (
+    <span
+      style={{
+        display: "inline-flex",
+        alignItems: "center",
+        gap: 6,
+        color: "#a07a16",
+        fontWeight: 600,
+        background: "#fff8e1",
+        border: "1px dashed #f0c14b",
+        borderRadius: 6,
+        padding: "3px 10px",
+        fontSize: 13,
+      }}
+      title={title}
+    >
+      <i className="fa fa-lock" aria-hidden="true"></i>
+      {label}
+    </span>
+  );
+
+  /** Email / phone / full address — only after mutual connection (or own profile). */
+  const maskedContact = (value) => {
+    if (canSeeSensitiveContact) return value || "-";
+    return lockPlaceholder(
+      "Visible after your connection is accepted",
+      "Visible after match",
+    );
+  };
+
+  /** DOB / birth details — hidden for guests only; visible to any logged-in viewer. */
+  const maskedBirthForGuest = (value) => {
+    if (isAuthenticated) return value || "-";
+    return lockPlaceholder("Log in to view this detail", "Log in to view");
+  };
 
   // --- NEW HELPER FUNCTION FOR IMAGES ---
   const getFullImageUrl = (imagePath) => {
@@ -116,79 +193,56 @@ const UserProfile = () => {
     return `${IMG_BASE}${cleanPath}`;
   };
 
-  // Safely grab the main profile picture
-  const rawImageSrc = profile?.ProfilePhoto || profile?.ProfileImageURL;
-  const imageSrc = rawImageSrc ? getFullImageUrl(rawImageSrc) : DEFAULT_IMG;
+  // Safely grab the main profile picture. Prefer the newer "ProfileImageURL"
+  // column (set by the photo-upload endpoint) over the legacy "ProfilePhoto"
+  // value, so a freshly uploaded photo always wins even if the older column
+  // still holds a stale path.
+  const rawImageSrc = profile?.ProfileImageURL || profile?.ProfilePhoto;
+  const placeholderSrc = `${process.env.PUBLIC_URL}/${DEFAULT_IMG}`;
+  /* Main profile photo: visible to everyone (guests included). */
+  const imageSrc = rawImageSrc
+    ? getFullImageUrl(rawImageSrc)
+    : placeholderSrc;
 
-  // two-line partner expectation fallback
-  const partnerExpectations =
-    profile.PartnerExpectations && profile.PartnerExpectations.trim().length > 0
-      ? profile.PartnerExpectations
-      : "Looking for a caring and educated partner who values family and traditions.\nShould be supportive, kind and ready to build a happy married life together.";
+  const publicCity =
+    profile.ContactCity ||
+    lookup("cities", profile.ContactCityID) ||
+    "-";
 
-  // Inline styles (clean, integrated look)
-  const containerStyle = { marginTop: "6.5rem", marginBottom: "3rem" };
-  const headerRow = { display: "flex", gap: "20px", alignItems: "center" };
-  const passportStyle = {
-    width: 120,
-    height: 150,
-    objectFit: "cover",
-    borderRadius: 6,
-    border: "1px solid #e6e6e6",
-    boxShadow: "0 4px 12px rgba(0,0,0,0.06)",
-  };
-  const nameStyle = { margin: 0, fontSize: 22, fontWeight: 600, color: "#222" };
-  const uidStyle = { color: "#666", marginTop: 6, marginBottom: 12 };
-  const badge = {
-    display: "inline-block",
-    padding: "6px 10px",
-    borderRadius: 20,
-    background: "#f8f0f4",
-    color: "#d32163",
-    fontSize: 13,
-    marginRight: 8,
-    marginBottom: 8,
-  };
-  const sectionTitle = {
-    fontSize: 18,
-    marginBottom: 12,
-    color: "#d32163",
-    fontWeight: 600,
-  };
-  const fieldLabel = { color: "#666", fontSize: 13, marginBottom: 4 };
-  const fieldValue = { color: "#222", fontSize: 15, marginBottom: 10 };
-  const threeColRow = { marginBottom: 20 };
-  const modernBtn = {
-    padding: "9px 18px",
-    background: "linear-gradient(90deg,#d32163,#ff5a8f)",
-    color: "#fff",
-    border: "none",
-    borderRadius: 8,
-    fontWeight: 600,
-    boxShadow: "0 6px 18px rgba(211,33,99,0.18)",
-    cursor: "pointer",
-    textDecoration: "none",
-  };
-
-  // Helper to render a 3-column row with label/value pairs
-  const RenderThreeCols = ({ items }) => {
-    // items: array of { label, value }
-    return (
-      <div className="row" style={threeColRow}>
-        {items.map((it, idx) => (
-          <div className="col-md-4" key={idx}>
-            <div>
-              <div style={fieldLabel}>{it.label}</div>
-              <div style={fieldValue}>{it.value ?? "-"}</div>
-            </div>
-          </div>
-        ))}
-      </div>
-    );
-  };
+  const contactSectionRows = !isAuthenticated
+    ? [
+        {
+          label: "City (general location)",
+          value: publicCity !== "-" ? publicCity : "—",
+        },
+        { label: "Email", value: maskedContact(profile.ContactEmail) },
+        {
+          label: "Contact Mobile",
+          value: maskedContact(profile.ContactMobile),
+        },
+        { label: "Phone", value: maskedContact(profile.ContactPhone) },
+        {
+          label: "Address",
+          value: maskedContact(profile.Address),
+          fullWidth: true,
+        },
+      ]
+    : [
+        { label: "Email", value: maskedContact(profile.ContactEmail) },
+        {
+          label: "Contact Mobile",
+          value: maskedContact(profile.ContactMobile),
+        },
+        { label: "Phone", value: maskedContact(profile.ContactPhone) },
+        {
+          label: "Address",
+          value: maskedContact(profile.Address),
+          fullWidth: true,
+        },
+      ];
 
   return (
-    <div>
+    <div className="dw-profile-page">
       <PoopUpSearch />
       <TopMenu />
       <MenuPopUp />
@@ -197,124 +251,132 @@ const UserProfile = () => {
       <MobileMenu />
       <DashboardMenu />
 
-      <div
-        className="container"
-        style={{ marginTop: "7rem", marginBottom: "5rem" }}
-      >
+      <div className="container dw-profile-container">
         {/* HEADER CARD */}
-        <div
-          className="p-4 rounded shadow-sm mb-5"
-          style={{
-            background: "white",
-            border: "1px solid #eee",
-            borderRadius: 15,
-          }}
-        >
+        <div className="dw-pf-header">
           <div className="row align-items-center">
             {/* IMAGE */}
             <div className="col-md-3 text-center">
-              <div
-                style={{
-                  width: 160,
-                  height: 200,
-                  borderRadius: 12,
-                  overflow: "hidden",
-                  border: "1px solid #ddd",
-                  boxShadow: "0 4px 14px rgba(0,0,0,0.08)",
-                  margin: "0 auto",
-                }}
-              >
-                <img
-                  src={imageSrc}
-                  alt="Profile"
-                  style={{ width: "100%", height: "100%", objectFit: "cover" }}
-                />
+              <div className="dw-pf-photo">
+                <img src={imageSrc} alt="Profile" />
+                {!isAuthenticated && galleryCount > 0 && (
+                  <p className="dw-pf-photo-hint text-muted small mt-2 mb-0 px-1">
+                    Log in to view the photo gallery ({galleryCount} more
+                    {galleryCount === 1 ? " photo" : " photos"}).
+                  </p>
+                )}
               </div>
             </div>
 
             {/* NAME & BASICS */}
-            <div className="col-md-6 mt-4 mt-md-0">
-              <h2 className="fw-bold mb-1" style={{ fontSize: 28 }}>
+            <div className="col-md-9 mt-4 mt-md-0">
+              <h2 className="dw-pf-name">
                 {profile.Title ? `${profile.Title} ` : ""}
                 {profile.firstname} {profile.MiddleName} {profile.lastname}
               </h2>
 
-              <div className="text-muted mb-3" style={{ fontSize: 15 }}>
-                <strong>UserID:</strong> {profile.UserID} &nbsp; | &nbsp;
-                <strong>Age:</strong> {calcAge(profile.DateOfBirth)}
+              <div className="dw-pf-meta">
+                <strong>UserID:</strong> {profile.UserID} &nbsp;|&nbsp;
+                <strong>Age:</strong>{" "}
+                {calcAge(profile.DateOfBirth, profile.Age)}
               </div>
 
-              {/* BADGES */}
-              <div className="d-flex flex-wrap gap-2 mt-2">
-                <span className="badge bg-light text-dark px-3 py-2">
+              {/* Contextual CTA */}
+              <div className="dw-pf-actions">
+                {!isAuthenticated && (
+                  <Link to="/login" className="btn btn-primary">
+                    <i className="fa fa-sign-in"></i>
+                    Login to Connect
+                  </Link>
+                )}
+                {isAuthenticated &&
+                  !profile.IsOwner &&
+                  !connectionStatus && (
+                    <button
+                      type="button"
+                      className="btn btn-primary"
+                      onClick={() => navigate("/all-profiles")}
+                    >
+                      <i className="fa fa-paper-plane"></i>
+                      Send Interest
+                    </button>
+                  )}
+                {isAuthenticated && connectionStatus === "Pending" && (
+                  <span className="badge bg-warning text-dark">
+                    <i className="fa fa-hourglass-half"></i>
+                    Request Pending
+                  </span>
+                )}
+                {isAuthenticated && connectionStatus === "Accepted" && (
+                  <span className="badge bg-success">
+                    <i className="fa fa-check-circle"></i>
+                    Connected
+                  </span>
+                )}
+              </div>
+
+              {/* QUICK-FACT PILLS */}
+              <div className="dw-pf-pills">
+                <span className="badge">
+                  <i className="fa fa-arrows-v" style={{ marginRight: 5 }}></i>
                   {lookup("heights", profile.HeightID)}
                 </span>
-                <span className="badge bg-light text-dark px-3 py-2">
+                <span className="badge">
+                  <i className="fa fa-star-o" style={{ marginRight: 5 }}></i>
                   {lookup("religions", profile.ReligionID)}
                 </span>
-                <span className="badge bg-light text-dark px-3 py-2">
+                <span className="badge">
+                  <i
+                    className="fa fa-map-marker"
+                    style={{ marginRight: 5 }}
+                  ></i>
                   {lookup("cities", profile.ContactCityID)}
                 </span>
-                <span className="badge bg-light text-dark px-3 py-2">
+                <span className="badge">
+                  <i className="fa fa-tint" style={{ marginRight: 5 }}></i>
                   {profile.Complexion || "Complexion: -"}
                 </span>
               </div>
             </div>
-
-            {/* BUTTONS */}
           </div>
         </div>
-        {/* ================= GALLERY SECTION ================= */}
-        {profile.gallery_images && profile.gallery_images.length > 0 && (
-          <div
-            className="p-4 mb-4 rounded shadow-sm"
-            style={{
-              background: "white",
-              border: "1px solid #eee",
-              borderRadius: 15,
-            }}
-          >
-            <h4 className="fw-bold mb-4" style={{ color: "#d32163" }}>
-              Photo Gallery
-            </h4>
 
-            <div
-              style={{
-                display: "grid",
-                gridTemplateColumns: "repeat(auto-fill, minmax(180px, 1fr))",
-                gap: 16,
-              }}
-            >
-              {profile.gallery_images.map((img, i) => (
-                <div
-                  key={i}
-                  style={{
-                    borderRadius: 12,
-                    overflow: "hidden",
-                    border: "1px solid #ddd",
-                    boxShadow: "0 6px 16px rgba(0,0,0,0.08)",
-                    background: "#fff",
-                  }}
-                >
-                  <img
-                    src={getFullImageUrl(img)} /* <--- WRAPPED img HERE */
-                    alt={`Gallery ${i + 1}`}
-                    style={{
-                      width: "100%",
-                      height: 200,
-                      objectFit: "cover",
-                      cursor: "pointer",
-                      transition: "0.3s",
-                    }}
-                    onClick={() =>
-                      window.open(getFullImageUrl(img), "_blank")
-                    } /* <--- WRAPPED img HERE */
-                  />
-                </div>
-              ))}
-            </div>
+        {/* Gallery teaser for guests (no thumbnails of extra photos) */}
+        {!isAuthenticated && galleryCount > 0 && (
+          <div className="dw-pf-section dw-pf-gallery-teaser">
+            <h4 className="dw-pf-section-title">Photo gallery</h4>
+            <p className="dw-pf-field-value mb-0" style={{ lineHeight: 1.65 }}>
+              This profile has{" "}
+              <strong>
+                {galleryCount} additional{" "}
+                {galleryCount === 1 ? "photo" : "photos"}
+              </strong>{" "}
+              in the gallery.{" "}
+              <Link to="/login">Log in</Link> to view them. Street address,
+              phone and email stay hidden until a match accepts your connection.
+            </p>
           </div>
         )}
+
+        {/* ================= GALLERY (logged-in only) ================= */}
+        {canSeeGallery &&
+          profile.gallery_images &&
+          profile.gallery_images.length > 0 && (
+            <div className="dw-pf-section">
+              <h4 className="dw-pf-section-title">Photo Gallery</h4>
+              <div className="dw-pf-gallery">
+                {profile.gallery_images.map((img, i) => (
+                  <div
+                    key={i}
+                    className="dw-pf-gallery-item"
+                    onClick={() => window.open(getFullImageUrl(img), "_blank")}
+                  >
+                    <img src={getFullImageUrl(img)} alt={`Gallery ${i + 1}`} />
+                  </div>
+                ))}
+              </div>
+            </div>
+          )}
 
         {/* ============= SECTIONS ============= */}
 
@@ -334,23 +396,52 @@ const UserProfile = () => {
           {
             title: "Birth & Astrology",
             rows: [
-              { label: "Date of Birth", value: profile.DateOfBirth },
-              { label: "Birth Time", value: profile.BirthTime },
-              { label: "Birth Place", value: profile.BirthPlace },
-              { label: "Birth Name", value: profile.BirthName },
+              {
+                label: "Date of Birth",
+                value: maskedBirthForGuest(profile.DateOfBirth),
+              },
+              {
+                label: "Birth Time",
+                value: maskedBirthForGuest(profile.BirthTime),
+              },
+              {
+                label: "Birth Place",
+                value: maskedBirthForGuest(profile.BirthPlace),
+              },
+              {
+                label: "Birth Name",
+                value: maskedBirthForGuest(profile.BirthName),
+              },
               { label: "Rashi", value: profile.Rashi },
               { label: "Gotra", value: profile.GotraName },
               { label: "Nana Gotra", value: profile.NanaGotraName },
-              { label: "Manglik", value: profile.Manglik == 1 ? "Yes" : "No" },
+              {
+                label: "Manglik",
+                value:
+                  profile.Manglik === undefined || profile.Manglik === null
+                    ? "-"
+                    : Number(profile.Manglik) === 1
+                      ? "Yes"
+                      : "No",
+              },
             ],
           },
           {
             title: "Physical Details",
             rows: [
-              { label: "Height", value: lookup("heights", profile.HeightID) },
+              {
+                label: "Height",
+                value:
+                  profile.HeightValue || lookup("heights", profile.HeightID),
+              },
               { label: "Weight", value: profile.Weight },
               { label: "Complexion", value: profile.Complexion },
-              { label: "Blood Group", value: profile.BloodGroupID },
+              {
+                label: "Blood Group",
+                value:
+                  profile.BloodGroupName ||
+                  lookup("bloodgroups", profile.BloodGroupID),
+              },
             ],
           },
           {
@@ -375,10 +466,20 @@ const UserProfile = () => {
             rows: [
               { label: "Father Name", value: profile.FatherName },
               { label: "Father Status", value: profile.FatherStatus },
+              {
+                label: "Father Occupation",
+                value: fatherOccupationDisplay(profile),
+              },
               { label: "Mother Name", value: profile.MotherName },
               { label: "Mother Occupation", value: profile.MotherOccupation },
-              { label: "Brothers", value: profile.NoOfBrothers },
-              { label: "Sisters", value: profile.NoOfSisters },
+              {
+                label: "Brothers (Total / Married)",
+                value: `${profile.NoOfBrothers ?? 0} / ${profile.NoOfBrothersMarried ?? 0}`,
+              },
+              {
+                label: "Sisters (Total / Married)",
+                value: `${profile.NoOfSisters ?? 0} / ${profile.NoOfSistersMarried ?? 0}`,
+              },
             ],
           },
           {
@@ -398,36 +499,26 @@ const UserProfile = () => {
           },
           {
             title: "Contact Details",
-            rows: [
-              { label: "Email", value: profile.ContactEmail },
-              { label: "Contact Mobile", value: profile.ContactMobile },
-              { label: "Phone", value: profile.ContactPhone },
-              { label: "Address", value: profile.Address, fullWidth: true },
-            ],
+            rows: contactSectionRows,
           },
         ].map((section, idx) => (
-          <div
-            key={idx}
-            className="p-4 mb-4 rounded shadow-sm"
-            style={{
-              background: "white",
-              border: "1px solid #eee",
-              borderRadius: 15,
-            }}
-          >
-            <h4 className="fw-bold mb-4" style={{ color: "#d32163" }}>
-              {section.title}
-            </h4>
+          <div key={idx} className="dw-pf-section">
+            <h4 className="dw-pf-section-title">{section.title}</h4>
 
             <div className="row">
               {section.rows.map((item, i) => (
                 <div
                   className={item.fullWidth ? "col-md-12" : "col-md-4"}
                   key={i}
-                  style={{ marginBottom: 20 }}
                 >
-                  <div className="text-muted small">{item.label}</div>
-                  <div className="fw-semibold">{item.value || "-"}</div>
+                  <div className="dw-pf-field-label">{item.label}</div>
+                  <div className="dw-pf-field-value">
+                    {item.value === undefined ||
+                    item.value === null ||
+                    item.value === ""
+                      ? "-"
+                      : item.value}
+                  </div>
                 </div>
               ))}
             </div>

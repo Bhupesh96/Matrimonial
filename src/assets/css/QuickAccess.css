@@ -3,7 +3,15 @@
   padding: 70px 0;
   background: linear-gradient(180deg, #fff7e6, #f3e2c1, #e8d2a8);
   position: relative;
- 
+}
+
+/* Guarantee the swiper has height even before slides settle, so the
+   section never appears as just an empty tan band */
+.qa-swiper {
+  min-height: 240px;
+}
+.qa-swiper .swiper-slide {
+  height: auto;
 }
 
 /* HEADER */

@@ -2,6 +2,7 @@ import React, { useState } from "react";
 import { Link, useNavigate } from "react-router-dom";
 import { loginUser, apiFetch } from "../api";
 import AlertService from "../services/AlertServices";
+import usePageTitle from "../hooks/usePageTitle";
 
 // Layout Components
 import Preloader from "../components/Preloader";
@@ -15,9 +16,15 @@ import DashboardMenu from "../components/DashBoardMenu";
 import Footer from "../components/Footer";
 import CopyRight from "../components/CopyRight";
 
+import "../assets/css/Login.css";
+
 const API_BASE_URL = process.env.REACT_APP_API_URL;
 
 const Login = () => {
+  usePageTitle("Login", {
+    description:
+      "Login to your Dewangan Links account to view matches, send connection requests, and manage your profile.",
+  });
   const [identifier, setIdentifier] = useState("");
   const [password, setPassword] = useState("");
   const [loading, setLoading] = useState(false);
@@ -81,16 +88,24 @@ const Login = () => {
         localStorage.setItem("profileID", data.data.ProfileID);
         localStorage.setItem("userID", data.data.UserID);
         localStorage.setItem("profileName", data.data.ProfileName);
-        localStorage.setItem("login_token", data.login_token);
+        if (data.login_token) {
+          localStorage.setItem("login_token", data.login_token);
+        } else {
+          localStorage.removeItem("login_token");
+        }
 
         // Fetch profile photo
         apiFetch(
           `${API_BASE_URL}?api=get_profile&ProfileID=${data.data.ProfileID}`,
         )
           .then((profileRes) => {
-            const photo = profileRes?.data?.[0]?.ProfilePhoto;
+            const row = profileRes?.data?.[0];
+            const photo = row?.ProfilePhoto;
             if (photo) {
               localStorage.setItem("profilePhoto", photo);
+            }
+            if (row?.GenderID != null && row.GenderID !== "") {
+              localStorage.setItem("viewerGenderID", String(row.GenderID));
             }
           })
           .catch((err) => console.error("Failed to fetch profile photo:", err));
@@ -116,7 +131,7 @@ const Login = () => {
   if (loading) return <Preloader />;
 
   return (
-    <div>
+    <div className="dw-login-page">
       <PoopUpSearch />
       <TopMenu />
       <MenuPopUp />
@@ -267,23 +282,6 @@ const Login = () => {
 
       <Footer />
       <CopyRight />
-
-      {/* Language Switcher CSS */}
-      <style>{`
-        .lang-btn {
-          background: transparent;
-          border: none;
-          font-size: 15px;
-          color: #777;
-          padding-bottom: 4px;
-          cursor: pointer;
-        }
-        .active-lang-btn {
-          font-weight: 700;
-          color: #007bff;
-          border-bottom: 2px solid #007bff;
-        }
-      `}</style>
     </div>
   );
 };

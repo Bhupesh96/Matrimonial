@@ -5,27 +5,29 @@ import "swiper/css";
 import "swiper/css/pagination";
 import "../assets/css/CustomerReviews.css";
 
-import { fetchTestimonials } from "../api";
+import { fetchActiveTestimonials, fetchTestimonials } from "../api";
 import { Link } from "react-router-dom";
+import { resolveImageUrl } from "../utils/imageUrl";
 
 const CustomerReviews = () => {
   const [reviews, setReviews] = useState([]);
 
-  const fullURL = (img) =>
-    img.startsWith("http")
-      ? img
-      : `https://techwithus.in/matro/admin/plug/${img}`;
+  const fullURL = (img) => resolveImageUrl(img);
 
   useEffect(() => {
     const loadReviews = async () => {
       try {
-        let data = await fetchTestimonials();
-
-        // Show only approved testimonials
-        const approved = data.filter(
-          (t) => Number(t.IsApproved) === 1 && t.DeleteFlag === "N"
-        );
-
+        // Prefer the public approved-only endpoint; fall back to the full
+        // list (filtered client-side) if it isn't available yet.
+        let approved = [];
+        try {
+          approved = await fetchActiveTestimonials();
+        } catch (_) {
+          const all = await fetchTestimonials();
+          approved = all.filter(
+            (t) => Number(t.IsApproved) === 1 && t.DeleteFlag === "N",
+          );
+        }
         setReviews(approved);
       } catch (err) {
         console.log("Testimonial load error:", err);

@@ -170,6 +170,20 @@
   opacity: 0.85;
 }
 
+/* Secondary "View Profile" button – distinct from the gold "Send Interest"
+   primary button so users can tell them apart at a glance. */
+.btn-view-profile {
+  background: linear-gradient(135deg, #d32163, #ff5a8f) !important;
+  color: #fff !important;
+  border: none;
+  font-weight: 600;
+}
+
+.btn-view-profile:hover {
+  filter: brightness(1.05);
+  opacity: 1;
+}
+
 .btn-details {
   background: #e8e8e8;
   color: #333;

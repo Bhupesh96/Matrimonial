@@ -1,18 +1,21 @@
 import React, { useEffect, useState } from "react";
-// IMPORT API
 import { fetchBanners } from "../api";
+import { resolveImageUrl } from "../utils/imageUrl";
+
+// Local fallbacks — must use site-absolute paths so they keep working on
+// React Router sub-routes (e.g. /about-us). PUBLIC_URL is "." in this build,
+// which would resolve as `./images/about/1.jpg` and 404 under any sub-route.
+const DEFAULT_WELCOME_1 = "/images/about/1.jpg";
+const DEFAULT_WELCOME_2 = "/images/about/2.jpg";
+
 const MyAboutUS = () => {
   const [banners, setBanners] = useState({ img1: null, img2: null });
-
-  // Base URL for Banner Images
-  const IMG_BASE_URL = "https://techwithus.in";
 
   useEffect(() => {
     const loadBanners = async () => {
       try {
         const allBanners = await fetchBanners("bottom");
 
-        // Find Banner with DisplayOrder 1
         const b1 = allBanners.find(
           (b) =>
             b.BannerPosition === "bottom" &&
@@ -20,7 +23,6 @@ const MyAboutUS = () => {
             b.IsActive === 1
         );
 
-        // Find Banner with DisplayOrder 2
         const b2 = allBanners.find(
           (b) =>
             b.BannerPosition === "bottom" &&
@@ -29,8 +31,8 @@ const MyAboutUS = () => {
         );
 
         setBanners({
-          img1: b1 ? `${IMG_BASE_URL}${b1.BannerImage}` : null,
-          img2: b2 ? `${IMG_BASE_URL}${b2.BannerImage}` : null,
+          img1: b1 ? resolveImageUrl(b1.BannerImage) : null,
+          img2: b2 ? resolveImageUrl(b2.BannerImage) : null,
         });
       } catch (err) {
         console.error("Error loading banners:", err);
@@ -94,24 +96,28 @@ const MyAboutUS = () => {
                 <div className="ab-wel-lhs">
                   <span className="ab-wel-3"></span>
 
-                  {/* IMAGE 1: Dynamic or Default */}
+                  {/* IMAGE 1: API banner with on-error fallback to local default */}
                   <img
-                    src={
-                      banners.img1 ||
-                      `${process.env.PUBLIC_URL}/images/about/1.jpg`
-                    }
+                    src={banners.img1 || DEFAULT_WELCOME_1}
                     alt="Welcome 1"
                     className="ab-wel-1"
+                    onError={(e) => {
+                      if (e.currentTarget.src.indexOf(DEFAULT_WELCOME_1) === -1) {
+                        e.currentTarget.src = DEFAULT_WELCOME_1;
+                      }
+                    }}
                   />
 
-                  {/* IMAGE 2: Dynamic or Default */}
+                  {/* IMAGE 2: API banner with on-error fallback to local default */}
                   <img
-                    src={
-                      banners.img2 ||
-                      `${process.env.PUBLIC_URL}/images/about/2.jpg`
-                    }
+                    src={banners.img2 || DEFAULT_WELCOME_2}
                     alt="Welcome 2"
                     className="ab-wel-2"
+                    onError={(e) => {
+                      if (e.currentTarget.src.indexOf(DEFAULT_WELCOME_2) === -1) {
+                        e.currentTarget.src = DEFAULT_WELCOME_2;
+                      }
+                    }}
                   />
 
                   <span className="ab-wel-4"></span>
@@ -158,7 +164,7 @@ const MyAboutUS = () => {
                         <div>
                           <i className="fa fa-phone" aria-hidden="true"></i>
                           <h4>
-                            Enquiry <em>+01 2242 3366</em>
+                            Enquiry <em>+91 98068 63659</em>
                           </h4>
                         </div>
                       </li>
@@ -169,7 +175,7 @@ const MyAboutUS = () => {
                             aria-hidden="true"
                           ></i>
                           <h4>
-                            Get Support <em>info@example.com</em>
+                            Get Support <em>raipurlink@gmail.com</em>
                           </h4>
                         </div>
                       </li>

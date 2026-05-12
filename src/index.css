@@ -22,3 +22,12 @@ body .toast.fade,
 body .toast.show {
   all: unset !important;
 }
+
+/* React route loader — same full-screen treatment as theme #preloader, but a
+   unique selector so jQuery in public/js/custom.js does not fade this out. */
+.dw-react-preloader {
+  position: fixed;
+  inset: 0;
+  background-color: #fff;
+  z-index: 99999;
+}
