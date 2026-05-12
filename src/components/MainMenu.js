@@ -3,6 +3,7 @@ import { Link, useNavigate } from "react-router-dom";
 import { logoutUser } from "../api";
 import AlertService from "../services/AlertServices";
 import Brand from "./Brand";
+import { resolveImageUrl } from "../utils/imageUrl";
 
 const MainMenu = () => {
   const [profileName, setProfileName] = useState("");
@@ -100,11 +101,17 @@ const MainMenu = () => {
                   <img
                     src={
                       profilePhoto
-                        ? profilePhoto
+                        ? resolveImageUrl(profilePhoto) ||
+                          `${process.env.PUBLIC_URL}/images/default.png`
                         : `${process.env.PUBLIC_URL}/images/default.png`
                     }
                     alt="Profile"
                     loading="lazy"
+                    referrerPolicy="no-referrer"
+                    onError={(e) => {
+                      e.target.onerror = null;
+                      e.target.src = `${process.env.PUBLIC_URL}/images/default.png`;
+                    }}
                   />
 
                   <b>Welcome</b>

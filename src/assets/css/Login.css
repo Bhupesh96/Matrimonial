@@ -542,3 +542,390 @@
     font-size: 15px !important;
   }
 }
+
+/* ==========================================================================
+   LOGIN MODAL — same visual language as full /login page (two-column card)
+   ========================================================================== */
+
+.dw-login-modal-overlay {
+  position: fixed;
+  inset: 0;
+  z-index: 10050;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: 16px;
+  background: rgba(22, 14, 6, 0.55);
+  backdrop-filter: blur(8px);
+  -webkit-backdrop-filter: blur(8px);
+}
+
+.dw-login-modal {
+  position: relative;
+  width: 100%;
+  max-width: 900px;
+  max-height: min(92vh, 640px);
+  background: #ffffff;
+  border-radius: 22px;
+  overflow: hidden;
+  box-shadow: 0 28px 70px rgba(42, 28, 0, 0.35),
+    0 8px 24px rgba(102, 69, 28, 0.12);
+  border: 1px solid rgba(202, 152, 67, 0.22);
+}
+
+.dw-login-modal__close {
+  position: absolute;
+  top: 12px;
+  right: 12px;
+  z-index: 5;
+  width: 40px;
+  height: 40px;
+  border: none;
+  border-radius: 50%;
+  cursor: pointer;
+  font-size: 22px;
+  line-height: 1;
+  color: #5a3c07;
+  background: rgba(255, 250, 240, 0.95);
+  box-shadow: 0 4px 14px rgba(102, 69, 28, 0.12);
+  transition: background 0.2s ease, transform 0.2s ease;
+}
+
+.dw-login-modal__close:hover {
+  background: #ffffff;
+  transform: scale(1.05);
+}
+
+.dw-login-modal__grid {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  min-height: 480px;
+  max-height: min(92vh, 640px);
+}
+
+.dw-login-modal__lhs {
+  position: relative;
+  background: radial-gradient(
+    140% 80% at 50% 0%,
+    #ffe9a3 0%,
+    #ffd25a 55%,
+    #e8b94a 100%
+  );
+  padding: 44px 28px 24px;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  text-align: center;
+  overflow: hidden;
+}
+
+.dw-login-modal__lhs::before {
+  content: "";
+  position: absolute;
+  inset: 0;
+  background: radial-gradient(
+    60% 40% at 100% 0%,
+    rgba(255, 255, 255, 0.45),
+    transparent 70%
+  );
+  pointer-events: none;
+}
+
+.dw-login-modal__lhs-tit {
+  position: relative;
+  z-index: 2;
+  margin-bottom: 16px;
+}
+
+.dw-login-modal__lhs-tit h2 {
+  font-family: "Playfair Display", "Georgia", serif;
+  color: #2a1c00;
+  font-size: 26px;
+  line-height: 1.25;
+  font-weight: 400;
+  margin: 0;
+  letter-spacing: 0.2px;
+}
+
+.dw-login-modal__lhs-tit h2 b {
+  font-weight: 800;
+  display: block;
+  font-size: 32px;
+  margin: 4px 0;
+  background: linear-gradient(90deg, #6a3f00 0%, #2a1c00 100%);
+  -webkit-background-clip: text;
+  background-clip: text;
+  -webkit-text-fill-color: transparent;
+  color: transparent;
+}
+
+.dw-login-modal__lhs-im {
+  position: relative;
+  z-index: 2;
+  margin-top: auto;
+  display: flex;
+  justify-content: center;
+  width: 100%;
+}
+
+.dw-login-modal__lhs-im img {
+  max-width: 100%;
+  max-height: 220px;
+  width: auto;
+  height: auto;
+  filter: drop-shadow(0 12px 22px rgba(102, 69, 28, 0.25));
+}
+
+.dw-login-modal__rhs {
+  padding: 40px 36px 44px;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: stretch;
+  background: #ffffff;
+  overflow-y: auto;
+}
+
+.dw-login-modal__lang {
+  display: flex;
+  justify-content: center;
+  gap: 16px;
+  margin-bottom: 22px;
+}
+
+.dw-login-modal .lang-btn,
+.dw-login-modal .active-lang-btn {
+  background: transparent;
+  border: none;
+  font-size: 15px;
+  padding: 6px 4px;
+  cursor: pointer;
+  font-weight: 600;
+  letter-spacing: 0.3px;
+  transition: color 0.2s ease, border-color 0.2s ease;
+  border-bottom: 2px solid transparent;
+}
+
+.dw-login-modal .lang-btn {
+  color: #9a8769;
+}
+
+.dw-login-modal .lang-btn:hover {
+  color: #c8902a;
+}
+
+.dw-login-modal .active-lang-btn {
+  color: #b28a45;
+  border-bottom-color: #c8902a;
+}
+
+.dw-login-modal .form-tit {
+  text-align: center;
+  margin-bottom: 22px;
+}
+
+.dw-login-modal .form-tit h4 {
+  font-size: 12px;
+  font-weight: 700;
+  color: #c8902a;
+  text-transform: uppercase;
+  letter-spacing: 2.2px;
+  margin: 0 0 10px;
+}
+
+.dw-login-modal .form-tit h1 {
+  font-family: "Playfair Display", "Georgia", serif;
+  color: #2a1c00;
+  font-size: 28px;
+  font-weight: 700;
+  margin: 0 0 10px;
+  line-height: 1.2;
+}
+
+.dw-login-modal .form-tit p {
+  font-size: 14px;
+  color: #7a6a4b;
+  margin: 0;
+}
+
+.dw-login-modal .form-tit p a {
+  color: #c8902a;
+  font-weight: 700;
+  text-decoration: none;
+  border-bottom: 1px dashed #d6a93a;
+}
+
+.dw-login-modal .form-tit p a:hover {
+  color: #8a5e1c;
+}
+
+.dw-login-modal .form-login .form-group {
+  margin-bottom: 16px;
+}
+
+.dw-login-modal .form-login .lb,
+.dw-login-modal .form-login label {
+  display: block;
+  font-size: 13px;
+  font-weight: 700;
+  color: #5a3c07;
+  margin-bottom: 8px;
+  letter-spacing: 0.3px;
+}
+
+.dw-login-modal .form-login .form-control {
+  width: 100%;
+  height: 50px;
+  padding: 12px 16px;
+  font-size: 15px;
+  color: #2a1c00;
+  background: #fdfaf2;
+  border: 1.5px solid #ead7af;
+  border-radius: 12px;
+  outline: none;
+  transition: border-color 0.2s ease, box-shadow 0.2s ease, background 0.2s ease;
+  box-shadow: none;
+}
+
+.dw-login-modal .form-login .form-control::placeholder {
+  color: #b39c6f;
+}
+
+.dw-login-modal .form-login .form-control:focus {
+  border-color: #c8902a;
+  background: #ffffff;
+  box-shadow: 0 0 0 4px rgba(200, 144, 42, 0.15);
+}
+
+.dw-login-modal__pw-wrap {
+  position: relative;
+}
+
+.dw-login-modal__eye {
+  position: absolute;
+  right: 10px;
+  top: 50%;
+  transform: translateY(-50%);
+  border: none;
+  background: transparent;
+  padding: 8px;
+  cursor: pointer;
+  color: #b28a45;
+  font-size: 18px;
+  line-height: 1;
+}
+
+.dw-login-modal__eye:hover {
+  color: #8a5e1c;
+}
+
+.dw-login-modal .form-login .form-check {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  margin-bottom: 18px;
+}
+
+.dw-login-modal .form-login .form-check-label {
+  font-size: 14px !important;
+  color: #5a3c07 !important;
+  font-weight: 500 !important;
+  margin: 0 !important;
+  display: inline-flex !important;
+  align-items: center;
+  gap: 8px;
+  cursor: pointer;
+}
+
+.dw-login-modal .form-login .form-check-input {
+  appearance: auto !important;
+  -webkit-appearance: auto !important;
+  width: 18px !important;
+  height: 18px !important;
+  margin: 0 !important;
+  padding: 0 !important;
+  flex: 0 0 18px !important;
+  accent-color: #c8902a;
+  cursor: pointer;
+  border-radius: 4px;
+  background: #ffffff;
+  border: 1.5px solid #c8902a;
+  box-shadow: none !important;
+  display: inline-block !important;
+  vertical-align: middle;
+  position: static !important;
+}
+
+.dw-login-modal .form-login .btn.btn-primary {
+  width: 100%;
+  height: 52px;
+  padding: 0 24px !important;
+  font-size: 16px !important;
+  font-weight: 700 !important;
+  letter-spacing: 0.5px !important;
+  color: #2a1c00 !important;
+  background: linear-gradient(135deg, #ffd25a 0%, #d49a2a 100%) !important;
+  background-color: #d49a2a !important;
+  border: none !important;
+  border-radius: 12px !important;
+  cursor: pointer;
+  transition: transform 0.2s ease, box-shadow 0.2s ease, filter 0.2s ease;
+  box-shadow: 0 10px 22px rgba(200, 144, 42, 0.38),
+    inset 0 -2px 0 rgba(102, 69, 28, 0.18);
+  text-transform: none !important;
+  font-family: inherit !important;
+}
+
+.dw-login-modal .form-login .btn.btn-primary:hover:not(:disabled),
+.dw-login-modal .form-login .btn.btn-primary:focus:not(:disabled) {
+  filter: brightness(1.05);
+  transform: translateY(-1px);
+  box-shadow: 0 14px 28px rgba(200, 144, 42, 0.5),
+    inset 0 -2px 0 rgba(102, 69, 28, 0.18);
+  color: #2a1c00 !important;
+}
+
+.dw-login-modal .form-login .btn.btn-primary:disabled {
+  opacity: 0.7;
+  cursor: not-allowed;
+  transform: none;
+}
+
+@media (max-width: 768px) {
+  .dw-login-modal {
+    max-height: none;
+    max-width: 440px;
+  }
+
+  .dw-login-modal__grid {
+    grid-template-columns: 1fr;
+    min-height: 0;
+    max-height: none;
+  }
+
+  .dw-login-modal__lhs {
+    padding: 28px 20px 12px;
+    min-height: 0;
+  }
+
+  .dw-login-modal__lhs-tit h2 {
+    font-size: 22px;
+  }
+
+  .dw-login-modal__lhs-tit h2 b {
+    font-size: 26px;
+  }
+
+  .dw-login-modal__lhs-im img {
+    max-height: 160px;
+  }
+
+  .dw-login-modal__rhs {
+    padding: 28px 22px 36px;
+  }
+
+  .dw-login-modal .form-tit h1 {
+    font-size: 24px;
+  }
+}
+

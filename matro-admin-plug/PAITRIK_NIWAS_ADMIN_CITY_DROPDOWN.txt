@@ -1,26 +1,91 @@
 ================================================================================
-ADMIN PORTAL — Paitrik / Niwas (PaitthiNivasKhor) as city dropdown
+ADMIN: "Paitthi Nivas / Khor" → CITY DROPDOWN (same idea as "Current City")
+URL example: https://dewanganlink.in/matro/admin/?editprofile&ProfileID=63
 ================================================================================
-The React member site now uses the same `cities` master list as a searchable
-dropdown and still saves the value in column/field **PaitthiNivasKhor** as the
-**city name** (string), e.g. "Bilaspur" — same as the API already expects.
+The member React app already saves **PaitthiNivasKhor** as a **city name** string
+(e.g. "Raipur") using the cities master — see `src/pages/UserProfileEdit.js`.
 
-On the Hostinger PHP admin "edit profile" screen:
+Your admin form must do the same on the SERVER (PHP / JS under
+`public_html/matro/admin/`). There is no admin PHP in this Git repo.
 
-1) Load cities from your existing master API or table (same source as
-   `get_master&master_type=cities` on the member site).
+--------------------------------------------------------------------------------
+STEP A — Find the file that renders this page
+--------------------------------------------------------------------------------
+In File Manager or your IDE (FTP), search under `matro/admin/` for:
+  editprofile, edit_profile, ProfileID, PaitthiNivasKhor, Paitthi, Nivas, Khor
 
-2) Replace the free-text input for PaitthiNivasKhor / "Paitrik Niwas" with a
-   <select> (or Select2) populated with those cities. On save, POST the
-   **selected city name** into `PaitthiNivasKhor` (or keep your current field
-   name in the update query).
+Open the PHP (or PHP + HTML) that outputs the "Edit Candidate Profile" form.
 
-3) When loading a profile for edit, set the select’s selected option by
-   matching `profile.PaitthiNivasKhor` to city name (case-insensitive is safer).
+--------------------------------------------------------------------------------
+STEP B — Copy how "Current City" is built
+--------------------------------------------------------------------------------
+On the SAME page you already have **"Current City"** as a searchable dropdown.
 
-4) Optional: if the stored value does not match any city (old typo), show the
-   raw value in a "legacy" note or default the select to empty so staff can fix.
+1) Find the HTML/PHP block for **Current City** (often bound to ContactCityID
+   or LocationCityID + Select2 / Choices.js / AJAX to cities).
 
-No database migration is required if the column already stores VARCHAR text.
+2) **Duplicate that pattern** for **Paitthi Nivas / Khor**:
+   - Use the **same city list** (same API URL or same SQL query as Current City).
+   - The **value you save** in the database should be the **city name** string
+     in column **PaitthiNivasKhor** (to match `get_profile` and the React app).
+     If your Current City saves an **ID**, either:
+       (i) change admin to save **name** for Paitthi only, OR
+       (ii) add a new column e.g. PaitthiNivasCityID and update the API — more work.
 
+Recommended: store **name** in `PaitthiNivasKhor` (VARCHAR), same as now with "Raipur".
+
+3) **Pre-select** on edit load:
+   - Read `$profile['PaitthiNivasKhor']` (or your row array key).
+   - Mark the `<option>` selected where `option` text or value equals that string
+     (trim; case-insensitive compare is safer: strcasecmp).
+
+--------------------------------------------------------------------------------
+STEP C — Minimal HTML pattern (if you use plain <select>)
+--------------------------------------------------------------------------------
+PHP-style sketch (adjust variable names to your code):
+
+```php
+$cityRows = /* same array you use for Current City, from DB or API */;
+$currentPaitthi = isset($profile['PaitthiNivasKhor']) ? trim($profile['PaitthiNivasKhor']) : '';
+echo '<label>Paitthi Nivas / Khor</label>';
+echo '<select name="PaitthiNivasKhor" class="form-control" required>';
+echo '<option value="">Select city</option>';
+foreach ($cityRows as $c) {
+    $name = $c['name']; // or $c->name
+    $sel = (strcasecmp($name, $currentPaitthi) === 0) ? ' selected' : '';
+    echo '<option value="'.htmlspecialchars($name, ENT_QUOTES).'"'.$sel.'>'
+        .htmlspecialchars($name).'</option>';
+}
+echo '</select>';
+```
+
+On **Save**, include `PaitthiNivasKhor` in your UPDATE statement (POST value =
+selected city **name**).
+
+--------------------------------------------------------------------------------
+STEP D — If "Current City" uses Select2 + AJAX
+--------------------------------------------------------------------------------
+- Duplicate the Select2 init for **#paitthi_nivas** (or your new input id).
+- Point `ajax.url` (or `data`) to the **same** cities endpoint you use for
+  Current City.
+- On load, call `$('#paitthi_nivas').val(...)` or set the initial data with the
+  existing **name** "Raipur" so the pill shows correctly.
+
+--------------------------------------------------------------------------------
+STEP E — API / member site consistency
+--------------------------------------------------------------------------------
+Cities master (member site):  
+`https://dewanganlink.in/matro/admin/plug/api/?api=get_master&master_type=cities`
+
+Admin should use the **same** list so names/IDs stay consistent.
+
+--------------------------------------------------------------------------------
+STEP F — If old value is not in the list
+--------------------------------------------------------------------------------
+If `PaitthiNivasKhor` is a typo or old village name with no city row, leave the
+select empty and show a one-line note: "Pick nearest city from list" so staff
+can correct it.
+
+================================================================================
+After editing PHP/JS, upload files and hard-refresh the admin edit page.
 ================================================================================

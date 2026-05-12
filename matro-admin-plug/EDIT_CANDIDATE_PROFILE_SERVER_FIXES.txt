@@ -1,0 +1,65 @@
+================================================================================
+DEWANGANLINK — Admin "Edit Candidate Profile" (?editprofile&ProfileID=…)
+Server-side fixes (PHP / Hostinger). This React repo does NOT contain admin files.
+================================================================================
+
+Open File Manager: public_html/matro/admin/ (or your real path). Search for:
+  editprofile, edit_profile, candidate, ProfileID
+
+--------------------------------------------------------------------------------
+1) PROFILE PHOTO NOT SHOWING / NO UPLOAD BLOCK ON FORM
+--------------------------------------------------------------------------------
+- Ensure the edit form includes:
+  - A preview <img> bound to ProfilePhoto / ProfileImageURL from get_profile.
+  - <input type="file" name="..."> for main photo (and gallery if you support it).
+- Image URL in DB/API should use YOUR domain, e.g.
+  https://dewanganlink.in/matro/admin/plug/uploads/profile_photos/USERID/profile/...
+- If old rows still store https://techwithus.in/... either:
+  (A) Run a one-time SQL UPDATE to replace that host with dewanganlink.in in the
+      profile columns, OR
+  (B) Rewrite URLs in PHP when rendering the <img src="...">.
+- Confirm on disk (FTP / File Manager) that the file exists under:
+  matro/admin/plug/uploads/profile_photos/DL2052/profile/
+  (folder name = UserID from that profile).
+- PHP upload handler: check max file size, upload path, and chmod 755/644 on
+  uploads folders.
+
+--------------------------------------------------------------------------------
+2) DROPDOWNS EMPTY (Father Occupation, Current City, etc.)
+--------------------------------------------------------------------------------
+- Admin selects must load the SAME master lists as the member API, e.g.:
+  .../plug/api/?api=get_master&master_type=cities
+  .../plug/api/?api=get_master&master_type=occupations
+- After building <option> list, set SELECTED option from the profile row:
+  - LocationCityID  -> cities master "id"
+  - FatherOccupationID -> occupations master "id"
+  - If the value is TEXT only (no ID), match by name or migrate DB to store ID.
+- If you use Select2 / AJAX, verify base URL is https://dewanganlink.in/...
+  (not http or old domain) and that there are no mixed-content / CORS blocks in
+  the browser console on the admin page.
+
+--------------------------------------------------------------------------------
+3) PAITTHI NIVAS / KHOR — CITY AS DROPDOWN (not plain text only)
+--------------------------------------------------------------------------------
+See also: matro-admin-plug/PAITRIK_NIWAS_ADMIN_CITY_DROPDOWN.txt
+- Replace free-text field with a <select> of cities; save city NAME into
+  PaitthiNivasKhor (or add PaitthiNivasCityID if you change the schema).
+
+--------------------------------------------------------------------------------
+4) HEIGHT SHOWING AS ID IN ADMIN QUICK VIEW
+--------------------------------------------------------------------------------
+See: matro-admin-plug/FIX_HEIGHT_DISPLAY.txt
+- Display HeightValue from get_profile, not HeightID.
+
+--------------------------------------------------------------------------------
+5) QUICK VERIFICATION
+--------------------------------------------------------------------------------
+In browser (logged in as admin), open DevTools → Network while loading edit page:
+- Confirm get_profile (or equivalent) returns status 200 and JSON for ProfileID.
+- Confirm any master_list / get_master calls return 200 and JSON arrays.
+- Open a broken image URL in a new tab: if 404, path or file is wrong on server;
+  if 403, permissions or hotlink rules.
+
+================================================================================
+After PHP/HTML/JS changes, save files and hard-refresh (?editprofile&ProfileID=63).
+================================================================================

@@ -23,20 +23,20 @@ const CopyRight = () => {
                 Designed &amp; developed with care by
               </span>
               <a
-                href="https://techwithus.in/"
+                href="https://dewanganlink.in/contact"
                 target="_blank"
                 rel="noopener noreferrer"
                 className="dw-credit-pill"
-                title="Tech With Us — Web, apps & IT solutions in Raipur"
+                title="Dewangan Links — contact & support"
               >
                 <span className="dw-credit-pill__glow" aria-hidden="true" />
                 <span className="dw-credit-pill__icon" aria-hidden="true">
                   <i className="fa fa-cubes" />
                 </span>
                 <span className="dw-credit-pill__text">
-                  <strong className="dw-credit-pill__name">Tech With Us</strong>
+                  <strong className="dw-credit-pill__name">Dewangan Links</strong>
                   <span className="dw-credit-pill__sub">
-                    Websites · Apps · Support · Raipur
+                    Matrimony · Support · Raipur
                   </span>
                 </span>
                 <span className="dw-credit-pill__ext" aria-hidden="true">

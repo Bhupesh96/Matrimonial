@@ -1,4 +1,6 @@
-const API_BASE_URL = process.env.REACT_APP_API_URL;
+const API_BASE_URL =
+  process.env.REACT_APP_API_URL ||
+  "https://dewanganlink.in/matro/admin/plug/api/";
 
 /* ----------------------------------------------------
     GLOBAL FETCH WRAPPER

@@ -14,6 +14,7 @@ import {
 } from "../api";
 import "../assets/css/ProfileData.css";
 import Preloader from "../components/Preloader";
+import { resolveImageUrl } from "../utils/imageUrl";
 
 const ProfileList = () => {
   const location = useLocation();
@@ -55,10 +56,15 @@ const ProfileList = () => {
 
   const PLACEHOLDER_PROFILE_IMG = `${process.env.PUBLIC_URL}/images/default.png`;
 
+  const resolveProfileThumb = (raw) => {
+    if (!raw) return PLACEHOLDER_PROFILE_IMG;
+    return resolveImageUrl(raw) || PLACEHOLDER_PROFILE_IMG;
+  };
+
   /** Main profile thumbnail: visible to everyone (gallery is login-only on detail page). */
   const browseCardImageSrc = (p) => {
     if (!p) return PLACEHOLDER_PROFILE_IMG;
-    return p.ProfileImageURL || p.ProfilePhoto || PLACEHOLDER_PROFILE_IMG;
+    return resolveProfileThumb(p.ProfileImageURL || p.ProfilePhoto);
   };
 
   // --- HELPER: Handle Broken Images ---
@@ -645,10 +651,9 @@ const ProfileList = () => {
 
                   <ul>
                     {incoming.map((req, i) => {
-                      const reqImg =
-                        req.ProfileImageURL ||
-                        req.ProfilePhoto ||
-                        `${process.env.PUBLIC_URL}/images/default.png`;
+                      const reqImg = resolveProfileThumb(
+                        req.ProfileImageURL || req.ProfilePhoto,
+                      );
                       return (
                         <li key={i}>
                           <div className="profile-card">
@@ -732,10 +737,9 @@ const ProfileList = () => {
                   <ul>
                     {outgoing.map((req, i) => {
                       const fullName = `${req.firstname} ${req.lastname}`;
-                      const imageSrc =
-                        req.ProfileImageURL ||
-                        req.ProfilePhoto ||
-                        `${process.env.PUBLIC_URL}/images/default.png`;
+                      const imageSrc = resolveProfileThumb(
+                        req.ProfileImageURL || req.ProfilePhoto,
+                      );
                       return (
                         <li key={i}>
                           <div className="profile-card">
@@ -801,10 +805,9 @@ const ProfileList = () => {
                     <ul>
                       {matches.map((match, i) => {
                         const fullName = `${match.firstname} ${match.lastname}`;
-                        const imageSrc =
-                          match.ProfileImageURL ||
-                          match.ProfilePhoto ||
-                          `${process.env.PUBLIC_URL}/images/default.png`;
+                        const imageSrc = resolveProfileThumb(
+                          match.ProfileImageURL || match.ProfilePhoto,
+                        );
                         return (
                           <li key={i}>
                             <div className="profile-card">

@@ -4,6 +4,7 @@ import { logoutUser } from "../api";
 import "../assets/css/MobileMenu.css";
 import AlertService from "../services/AlertServices";
 import Brand from "./Brand";
+import { resolveImageUrl } from "../utils/imageUrl";
 
 const MobileMenu = () => {
   const [open, setOpen] = useState(false);
@@ -82,11 +83,14 @@ const MobileMenu = () => {
               <div className="mm-user-avatar">
                 <img
                   src={
-                    profilePhoto ||
-                    `${process.env.PUBLIC_URL}/images/default.png`
+                    profilePhoto
+                      ? resolveImageUrl(profilePhoto) ||
+                        `${process.env.PUBLIC_URL}/images/default.png`
+                      : `${process.env.PUBLIC_URL}/images/default.png`
                   }
                   alt="Profile"
                   loading="lazy"
+                  referrerPolicy="no-referrer"
                   onError={(e) => {
                     e.target.onerror = null;
                     e.target.src = `${process.env.PUBLIC_URL}/images/default.png`;

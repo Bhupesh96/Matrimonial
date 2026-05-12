@@ -15,6 +15,7 @@ import Preloader from "../components/Preloader";
 import TopMenu from "../components/TopMenu";
 
 import "../assets/css/UserProfile.css";
+import { resolveImageUrl } from "../utils/imageUrl";
 
 const API = process.env.REACT_APP_API_URL;
 
@@ -56,7 +57,6 @@ const UserProfile = () => {
       "View detailed matrimonial profile on Dewangan Links — education, family, partner expectations and more.",
   });
 
-  const IMG_BASE = process.env.REACT_APP_IMG_BASE_URL;
   const DEFAULT_IMG = "images/default.png";
   const { id } = useParams();
   const navigate = useNavigate();
@@ -187,17 +187,11 @@ const UserProfile = () => {
     return lockPlaceholder("Log in to view this detail", "Log in to view");
   };
 
-  // --- NEW HELPER FUNCTION FOR IMAGES ---
+  // --- Profile / gallery images (legacy hostnames rewritten in resolveImageUrl) ---
   const getFullImageUrl = (imagePath) => {
-    if (!imagePath) return DEFAULT_IMG;
-    // If it's already a full URL, return it
-    if (imagePath.startsWith("http")) return imagePath;
-
-    // Otherwise, attach the base URL from your PHP server
-    const cleanPath = imagePath.startsWith("/")
-      ? imagePath.substring(1)
-      : imagePath;
-    return `${IMG_BASE}${cleanPath}`;
+    if (!imagePath) return `${process.env.PUBLIC_URL}/${DEFAULT_IMG}`;
+    const resolved = resolveImageUrl(imagePath);
+    return resolved || `${process.env.PUBLIC_URL}/${DEFAULT_IMG}`;
   };
 
   // Safely grab the main profile picture. Prefer the newer "ProfileImageURL"
@@ -265,7 +259,15 @@ const UserProfile = () => {
             {/* IMAGE */}
             <div className="col-md-3 text-center">
               <div className="dw-pf-photo">
-                <img src={imageSrc} alt="Profile" />
+                <img
+                  src={imageSrc}
+                  alt="Profile"
+                  referrerPolicy="no-referrer"
+                  onError={(e) => {
+                    e.target.onerror = null;
+                    e.target.src = placeholderSrc;
+                  }}
+                />
                 {!isAuthenticated && galleryCount > 0 && (
                   <p className="dw-pf-photo-hint text-muted small mt-2 mb-0 px-1">
                     Log in to view the photo gallery ({galleryCount} more
@@ -378,7 +380,15 @@ const UserProfile = () => {
                     className="dw-pf-gallery-item"
                     onClick={() => window.open(getFullImageUrl(img), "_blank")}
                   >
-                    <img src={getFullImageUrl(img)} alt={`Gallery ${i + 1}`} />
+                    <img
+                      src={getFullImageUrl(img)}
+                      alt={`Gallery ${i + 1}`}
+                      referrerPolicy="no-referrer"
+                      onError={(e) => {
+                        e.target.onerror = null;
+                        e.target.src = placeholderSrc;
+                      }}
+                    />
                   </div>
                 ))}
               </div>

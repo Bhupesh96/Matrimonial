@@ -1,47 +1,62 @@
 // src/pages/LoginModal.js
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
+import { Link, useNavigate } from "react-router-dom";
 import { getProfileDetails, loginUser, resolvePostLoginHomePath } from "../api";
 import AlertService from "../services/AlertServices";
-import { useNavigate } from "react-router-dom";
+import "../assets/css/Login.css";
 
 const LoginModal = ({ show, onClose, onSuccess }) => {
   const [identifier, setIdentifier] = useState("");
   const [password, setPassword] = useState("");
   const [loading, setLoading] = useState(false);
   const [lang, setLang] = useState("en");
-
-  // NEW STATE FOR PASSWORD VISIBILITY
   const [showPassword, setShowPassword] = useState(false);
 
   const navigate = useNavigate();
 
-  if (!show) return null;
+  useEffect(() => {
+    if (!show) return undefined;
+    const onKey = (e) => {
+      if (e.key === "Escape") onClose();
+    };
+    window.addEventListener("keydown", onKey);
+    return () => window.removeEventListener("keydown", onKey);
+  }, [show, onClose]);
 
-  // TRANSLATION TEXTS
   const t = {
     en: {
-      title: "Sign in to your account",
+      headline1: "Now find",
+      headline2: "your life partner",
+      headline3: "Easy and fast.",
+      title: "Sign in to Matrimony",
       subtitle: "Enter your credentials to continue",
       userId: "User ID",
-      placeholderUser: "Enter user ID",
+      placeholderUser: "Enter User ID, Email, or Mobile",
       password: "Password",
       placeholderPass: "Enter password",
       remember: "Remember me",
       signIn: "Sign In",
-      noAccount: "Don't have an account?",
-      createOne: "Create one",
+      noAccount: "Not a member?",
+      register: "Register",
+      requiredMsg: "Please enter both User ID and password.",
+      signing: "Signing In...",
     },
     hi: {
-      title: "अपने खाते में लॉगिन करें",
+      headline1: "अब पाएँ",
+      headline2: "अपना जीवनसाथी",
+      headline3: "आसानी से और तेज़ी से।",
+      title: "मैट्रिमोनी में लॉगिन करें",
       subtitle: "जारी रखने के लिए अपनी जानकारी दर्ज करें",
       userId: "यूज़र आईडी",
-      placeholderUser: "यूज़र आईडी दर्ज करें",
+      placeholderUser: "यूज़र आईडी, ईमेल या मोबाइल दर्ज करें",
       password: "पासवर्ड",
       placeholderPass: "पासवर्ड दर्ज करें",
       remember: "मुझे याद रखें",
       signIn: "लॉगिन",
-      noAccount: "खाता नहीं है?",
-      createOne: "नया खाता बनाएं",
+      noAccount: "अभी सदस्य नहीं हैं?",
+      register: "रजिस्टर करें",
+      requiredMsg: "कृपया यूज़र आईडी और पासवर्ड दर्ज करें।",
+      signing: "लॉगिन हो रहा है...",
     },
   };
 
@@ -50,11 +65,7 @@ const LoginModal = ({ show, onClose, onSuccess }) => {
     setLoading(true);
 
     if (!identifier || !password) {
-      AlertService.showError(
-        lang === "en"
-          ? "Please enter both User ID and password."
-          : "कृपया यूज़र आईडी और पासवर्ड दर्ज करें।",
-      );
+      AlertService.showError(t[lang].requiredMsg);
       setLoading(false);
       return;
     }
@@ -88,7 +99,7 @@ const LoginModal = ({ show, onClose, onSuccess }) => {
       }
 
       AlertService.showSuccessAndRedirect(
-        lang === "en" ? "Login Successful" : "लॉगिन सफल",
+        lang === "en" ? "Login successful!" : "लॉगिन सफल!",
         navigate,
         path,
       );
@@ -102,229 +113,153 @@ const LoginModal = ({ show, onClose, onSuccess }) => {
     }
   };
 
+  if (!show) return null;
+
   return (
     <div
+      className="dw-login-modal-overlay"
       onClick={onClose}
-      style={{
-        position: "fixed",
-        top: 0,
-        left: 0,
-        width: "100%",
-        height: "100%",
-        background: "rgba(0,0,0,0.65)",
-        backdropFilter: "blur(6px)",
-        display: "flex",
-        justifyContent: "center",
-        alignItems: "center",
-        zIndex: 9999,
-        padding: "20px",
-      }}
+      role="presentation"
     >
       <div
+        className="dw-login-modal"
+        role="dialog"
+        aria-modal="true"
+        aria-labelledby="dw-login-modal-title"
         onClick={(e) => e.stopPropagation()}
-        style={{
-          width: "100%",
-          maxWidth: "420px",
-          background: "#ffffff",
-          borderRadius: "20px",
-          padding: "32px",
-          boxShadow: "0 10px 40px rgba(0,0,0,0.25)",
-          position: "relative",
-        }}
       >
-        {/* Close Button */}
         <button
+          type="button"
+          className="dw-login-modal__close"
           onClick={onClose}
-          style={{
-            position: "absolute",
-            top: "16px",
-            right: "16px",
-            background: "#f3f3f3",
-            border: "none",
-            width: "34px",
-            height: "34px",
-            borderRadius: "50%",
-            fontSize: "20px",
-            cursor: "pointer",
-          }}
+          aria-label="Close"
         >
           ×
         </button>
 
-        {/* Language Switch */}
-        <div
-          style={{
-            display: "flex",
-            justifyContent: "center",
-            gap: "16px",
-            marginBottom: "20px",
-          }}
-        >
-          <button
-            onClick={() => setLang("en")}
-            style={{
-              background: "transparent",
-              border: "none",
-              fontSize: "15px",
-              fontWeight: lang === "en" ? "700" : "500",
-              color: lang === "en" ? "#007bff" : "#666",
-              paddingBottom: "4px",
-              borderBottom:
-                lang === "en" ? "2px solid #007bff" : "2px solid transparent",
-              cursor: "pointer",
-              transition: "0.3s",
-            }}
-          >
-            English
-          </button>
+        <div className="dw-login-modal__grid">
+          <div className="dw-login-modal__lhs">
+            <div className="dw-login-modal__lhs-tit">
+              <h2>
+                {t[lang].headline1} <br />
+                <b>{t[lang].headline2}</b>
+                <br />
+                {t[lang].headline3}
+              </h2>
+            </div>
+            <div className="dw-login-modal__lhs-im">
+              <img
+                src={`${process.env.PUBLIC_URL}/images/login-couple.png`}
+                alt=""
+              />
+            </div>
+          </div>
 
-          <button
-            onClick={() => setLang("hi")}
-            style={{
-              background: "transparent",
-              border: "none",
-              fontSize: "15px",
-              fontWeight: lang === "hi" ? "700" : "500",
-              color: lang === "hi" ? "#007bff" : "#666",
-              paddingBottom: "4px",
-              borderBottom:
-                lang === "hi" ? "2px solid #007bff" : "2px solid transparent",
-              cursor: "pointer",
-              transition: "0.3s",
-            }}
-          >
-            हिन्दी
-          </button>
+          <div className="dw-login-modal__rhs">
+            <div className="dw-login-modal__lang">
+              <button
+                type="button"
+                onClick={() => setLang("en")}
+                className={lang === "en" ? "active-lang-btn" : "lang-btn"}
+              >
+                English
+              </button>
+              <button
+                type="button"
+                onClick={() => setLang("hi")}
+                className={lang === "hi" ? "active-lang-btn" : "lang-btn"}
+              >
+                हिन्दी
+              </button>
+            </div>
+
+            <div className="form-tit">
+              <h4>{t[lang].subtitle}</h4>
+              <h1 id="dw-login-modal-title">{t[lang].title}</h1>
+              <p>
+                {t[lang].noAccount}{" "}
+                <Link
+                  to="/sign-up"
+                  onClick={() => {
+                    onClose();
+                  }}
+                >
+                  {t[lang].register}
+                </Link>
+              </p>
+            </div>
+
+            <div className="form-login">
+              <form onSubmit={handleSubmit}>
+                <div className="form-group">
+                  <label className="lb" htmlFor="dw-login-modal-user">
+                    {t[lang].userId}
+                  </label>
+                  <input
+                    id="dw-login-modal-user"
+                    type="text"
+                    className="form-control"
+                    placeholder={t[lang].placeholderUser}
+                    value={identifier}
+                    onChange={(e) => setIdentifier(e.target.value)}
+                    required
+                    autoComplete="username"
+                  />
+                </div>
+
+                <div className="form-group">
+                  <label className="lb" htmlFor="dw-login-modal-pass">
+                    {t[lang].password}
+                  </label>
+                  <div className="dw-login-modal__pw-wrap">
+                    <input
+                      id="dw-login-modal-pass"
+                      type={showPassword ? "text" : "password"}
+                      className="form-control"
+                      placeholder={t[lang].placeholderPass}
+                      value={password}
+                      onChange={(e) => setPassword(e.target.value)}
+                      required
+                      style={{ paddingRight: "44px" }}
+                      autoComplete="current-password"
+                    />
+                    <button
+                      type="button"
+                      className="dw-login-modal__eye"
+                      onClick={() => setShowPassword(!showPassword)}
+                      aria-label={
+                        showPassword ? "Hide password" : "Show password"
+                      }
+                      tabIndex={-1}
+                    >
+                      <i
+                        className={
+                          showPassword ? "fa fa-eye-slash" : "fa fa-eye"
+                        }
+                        aria-hidden="true"
+                      />
+                    </button>
+                  </div>
+                </div>
+
+                <div className="form-group form-check">
+                  <label className="form-check-label">
+                    <input className="form-check-input" type="checkbox" />{" "}
+                    {t[lang].remember}
+                  </label>
+                </div>
+
+                <button
+                  type="submit"
+                  className="btn btn-primary"
+                  disabled={loading}
+                >
+                  {loading ? t[lang].signing : t[lang].signIn}
+                </button>
+              </form>
+            </div>
+          </div>
         </div>
-
-        {/* Title */}
-        <h3
-          style={{
-            marginBottom: "8px",
-            fontSize: "24px",
-            fontWeight: "700",
-            textAlign: "center",
-            color: "#222",
-          }}
-        >
-          {t[lang].title}
-        </h3>
-
-        <p
-          style={{
-            marginBottom: "24px",
-            fontSize: "14px",
-            color: "#666",
-            textAlign: "center",
-          }}
-        >
-          {t[lang].subtitle}
-        </p>
-
-        {/* Form */}
-        <form onSubmit={handleSubmit}>
-          <label
-            style={{ fontWeight: "600", display: "block", marginBottom: "5px" }}
-          >
-            {t[lang].userId}
-          </label>
-          <input
-            type="text"
-            value={identifier}
-            placeholder={t[lang].placeholderUser}
-            onChange={(e) => setIdentifier(e.target.value)}
-            required
-            style={{
-              width: "100%",
-              padding: "14px",
-              borderRadius: "10px",
-              border: "1px solid #ddd",
-              marginBottom: "18px",
-              boxSizing: "border-box",
-            }}
-          />
-
-          <label
-            style={{ fontWeight: "600", display: "block", marginBottom: "5px" }}
-          >
-            {t[lang].password}
-          </label>
-
-          {/* UPDATED PASSWORD WRAPPER */}
-          <div style={{ position: "relative", marginBottom: "18px" }}>
-            <input
-              type={showPassword ? "text" : "password"}
-              value={password}
-              placeholder={t[lang].placeholderPass}
-              onChange={(e) => setPassword(e.target.value)}
-              required
-              style={{
-                width: "100%",
-                padding: "14px",
-                paddingRight: "45px", // Room for the eye icon
-                borderRadius: "10px",
-                border: "1px solid #ddd",
-                boxSizing: "border-box",
-              }}
-            />
-            <span
-              onClick={() => setShowPassword(!showPassword)}
-              style={{
-                position: "absolute",
-                right: "15px",
-                top: "50%",
-                transform: "translateY(-50%)",
-                cursor: "pointer",
-                color: "#777",
-                fontSize: "18px",
-              }}
-            >
-              <i className={showPassword ? "fa fa-eye-slash" : "fa fa-eye"}></i>
-            </span>
-          </div>
-
-          <button
-            type="submit"
-            disabled={loading}
-            style={{
-              width: "100%",
-              background: "#007bff",
-              padding: "14px",
-              color: "#fff",
-              border: "none",
-              borderRadius: "10px",
-              fontSize: "16px",
-              fontWeight: "600",
-            }}
-          >
-            {loading
-              ? lang === "en"
-                ? "Signing in..."
-                : "लॉगिन हो रहा है..."
-              : t[lang].signIn}
-          </button>
-
-          <div style={{ marginTop: "18px", textAlign: "center" }}>
-            <span style={{ fontSize: "14px", color: "#555" }}>
-              {t[lang].noAccount}
-            </span>
-            <span
-              onClick={() => {
-                onClose();
-                navigate("/sign-up");
-              }}
-              style={{
-                fontSize: "14px",
-                color: "#007bff",
-                marginLeft: "6px",
-                cursor: "pointer",
-                fontWeight: "600",
-              }}
-            >
-              {t[lang].createOne}
-            </span>
-          </div>
-        </form>
       </div>
     </div>
   );
