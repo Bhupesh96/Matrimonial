@@ -58,9 +58,13 @@ export const apiFetch = async (url, options = {}) => {
     }
 
     // 401 = session expired / not logged in.
+    // Only hard-redirect when we *had* a token (real session). Public pages call
+    // the same API without a token; if the backend returns 401 for those,
+    // redirecting would send every guest from "/" to "/login".
     // Don't auto-redirect during the explicit login attempt itself.
     if (data && data.status === 401) {
       if (
+        token &&
         !finalUrl.includes("api=user_login") &&
         !finalUrl.includes("api=admin_login")
       ) {
