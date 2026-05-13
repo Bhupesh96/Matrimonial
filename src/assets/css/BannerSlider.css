@@ -1,0 +1,100 @@
+/* Home secondary strip — avoids legacy .hom-ban-sli (hidden <1250px, z-index:-1). */
+
+.dw-secondary-banner {
+  width: 100%;
+  position: relative;
+  z-index: 2;
+  clear: both;
+  margin: 0;
+  padding: 0;
+  overflow: hidden;
+  border-top: 1px solid rgba(202, 152, 67, 0.25);
+  border-bottom: 1px solid rgba(202, 152, 67, 0.2);
+}
+
+.dw-secondary-banner__grid {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  min-height: 140px;
+}
+
+.dw-secondary-banner__cell {
+  min-height: 140px;
+  background-size: cover;
+  background-position: center;
+  position: relative;
+}
+
+.dw-secondary-banner__cell--left {
+  background-image: linear-gradient(
+      135deg,
+      rgba(42, 28, 0, 0.25) 0%,
+      rgba(42, 28, 0, 0.05) 100%
+    ),
+    radial-gradient(
+      ellipse 90% 70% at 20% 40%,
+      #ffd25a 0%,
+      #e8b94a 45%,
+      #8b6914 100%
+    );
+}
+
+.dw-secondary-banner__cell--right {
+  background-image: linear-gradient(
+      225deg,
+      rgba(80, 20, 40, 0.2) 0%,
+      rgba(42, 28, 0, 0.08) 100%
+    ),
+    radial-gradient(
+      ellipse 90% 70% at 80% 50%,
+      #f8c8d8 0%,
+      #c6285f 55%,
+      #5c1028 100%
+    );
+}
+
+.dw-secondary-banner__cell::after {
+  content: "";
+  position: absolute;
+  inset: 0;
+  background: linear-gradient(
+    to bottom,
+    rgba(255, 255, 255, 0.12),
+    transparent 40%,
+    rgba(0, 0, 0, 0.08)
+  );
+  pointer-events: none;
+}
+
+.dw-secondary-banner--photos .dw-secondary-banner__grid {
+  grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+}
+
+.dw-secondary-banner--photos .dw-secondary-banner__photo-wrap {
+  min-height: 160px;
+  overflow: hidden;
+}
+
+.dw-secondary-banner--photos img {
+  width: 100%;
+  height: 100%;
+  min-height: 160px;
+  object-fit: cover;
+  display: block;
+}
+
+@media (max-width: 600px) {
+  .dw-secondary-banner__grid {
+    grid-template-columns: 1fr;
+    min-height: 0;
+  }
+
+  .dw-secondary-banner__cell {
+    min-height: 100px;
+  }
+
+  .dw-secondary-banner--photos .dw-secondary-banner__photo-wrap,
+  .dw-secondary-banner--photos img {
+    min-height: 120px;
+  }
+}

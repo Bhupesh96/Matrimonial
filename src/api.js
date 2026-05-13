@@ -465,10 +465,23 @@ export const submitContactForm = async (formData) => {
 export const fetchBanners = async (position = "top") => {
   const url = `${API_BASE_URL}?api=banner_list&position=${position}`;
 
-  const data = await apiFetch(url);
-
-  if (!data || data.status !== 200) throw new Error(data.message);
-  return data.data || [];
+  try {
+    const data = await apiFetch(url);
+    const ok =
+      data &&
+      (data.status === 200 ||
+        data.status === 201 ||
+        data.status === true);
+    if (!ok) {
+      console.warn("fetchBanners: unexpected status", data?.status, data?.message);
+      return [];
+    }
+    const raw = data.data ?? data.banners ?? data.rows ?? [];
+    return Array.isArray(raw) ? raw : [];
+  } catch (e) {
+    console.warn("fetchBanners failed:", e?.message || e);
+    return [];
+  }
 };
 export const checkProfileCompleteness = async (userID) => {
   const url = `${API_BASE_URL}?api=profile_checker&UserID=${userID}`;

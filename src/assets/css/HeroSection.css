@@ -31,9 +31,19 @@
   background-color: #2a1c00;
 }
 
-/* When a fallback photo is layered via inline style, blend it in */
-.hero-container.has-fallback-bg {
+/* No API banners: keep default layered gradient (no missing /images/banner.jpg). */
+.hero-container.hero-api-banners-empty {
   background-blend-mode: normal;
+}
+
+/* Mobile hero: gradient placeholder when API has no image or load failed */
+.mhero-banner-fallback {
+  background:
+    linear-gradient(rgba(42, 28, 0, 0.35), rgba(42, 28, 0, 0.15)),
+    radial-gradient(ellipse 100% 80% at 50% 20%, #ffd25a 0%, transparent 55%),
+    radial-gradient(ellipse 80% 60% at 80% 70%, rgba(198, 40, 99, 0.35), transparent 50%),
+    linear-gradient(145deg, #2a1c00 0%, #66451c 50%, #8b6914 100%);
+  background-color: #2a1c00;
 }
 
 /* TOP + BOTTOM GRADIENT GLOW */

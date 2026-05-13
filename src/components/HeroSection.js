@@ -13,6 +13,8 @@ const HeroSection = () => {
   const [cities, setCities] = useState([]);
   const [banners, setBanners] = useState([]);
   const [mIdx, setMIdx] = useState(0);
+  /** Mobile hero: API image failed to load — show CSS fallback instead of broken <img>. */
+  const [mobileImgFailed, setMobileImgFailed] = useState(false);
 
   const [selectedGotra, setSelectedGotra] = useState("");
   const [selectedAge, setSelectedAge] = useState("");
@@ -40,19 +42,46 @@ const HeroSection = () => {
     return () => clearInterval(t);
   }, [banners.length]);
 
+  useEffect(() => {
+    setMobileImgFailed(false);
+  }, [banners]);
+
   /* LOAD BANNERS */
   useEffect(() => {
+    const normalizeRow = (b, idx) => {
+      if (!b || typeof b !== "object") return null;
+      const id = b.BannerID ?? b.banner_id ?? b.id ?? `banner-${idx}`;
+      const img = b.BannerImage ?? b.banner_image ?? b.image ?? "";
+      const title = b.BannerTitle ?? b.banner_title ?? "Banner";
+      const order = Number(b.DisplayOrder ?? b.display_order ?? idx) || 0;
+      if (!String(img).trim()) return null;
+      return {
+        ...b,
+        BannerID: id,
+        BannerImage: String(img).trim(),
+        BannerTitle: title,
+        DisplayOrder: order,
+      };
+    };
+
     const loadBanner = async () => {
-      const list = await fetchBanners("top");
+      try {
+        const list = await fetchBanners("top");
+        const final = list
+          .map(normalizeRow)
+          .filter(Boolean)
+          .sort((a, b) => a.DisplayOrder - b.DisplayOrder)
+          .map((b) => ({
+            ...b,
+            fullImage: resolveImageUrl(b.BannerImage),
+          }))
+          .filter((b) => b.fullImage);
 
-      const final = list
-        .sort((a, b) => a.DisplayOrder - b.DisplayOrder)
-        .map((b) => ({
-          ...b,
-          fullImage: resolveImageUrl(b.BannerImage),
-        }));
-
-      setBanners(final);
+        setBanners(final);
+      } catch (e) {
+        console.warn("Hero banners:", e?.message || e);
+        setBanners([]);
+      }
     };
 
     loadBanner();
@@ -115,17 +144,8 @@ const HeroSection = () => {
     </>
   );
 
-  /* Use a LOCAL fallback banner when the API returned nothing yet.
-     Bundled with the app, so this always works even if external CDNs
-     are blocked. */
-  const fallbackBanner = `${process.env.PUBLIC_URL}/images/banner.jpg`;
-
-  const mobileBannerSrc =
-    banners.length > 0 ? banners[mIdx % banners.length].fullImage : fallbackBanner;
-  const mobileBannerAlt =
-    banners.length > 0
-      ? banners[mIdx % banners.length].BannerTitle || "Banner"
-      : "Wedding banner";
+  const mobileSlide = banners.length > 0 ? banners[mIdx % banners.length] : null;
+  const showMobilePhoto = mobileSlide && !mobileImgFailed;
 
   return (
     <>
@@ -135,18 +155,8 @@ const HeroSection = () => {
           ============================================================ */}
       <section
         className={`hero-container hero-desktop-only${
-          banners.length === 0 ? " has-fallback-bg" : ""
+          banners.length === 0 ? " hero-api-banners-empty" : ""
         }`}
-        style={
-          banners.length === 0
-            ? {
-                backgroundImage: `linear-gradient(rgba(20,20,20,0.55), rgba(0,0,0,0.65)), url("${process.env.PUBLIC_URL}/images/banner.jpg")`,
-                backgroundSize: "cover",
-                backgroundPosition: "center",
-                backgroundRepeat: "no-repeat",
-              }
-            : undefined
-        }
       >
         {banners.length > 0 && (
           <Carousel
@@ -168,8 +178,12 @@ const HeroSection = () => {
                 ></div>
                 <img
                   src={b.fullImage}
-                  alt={b.BannerTitle}
+                  alt={b.BannerTitle || "Banner"}
                   className="hero-banner-img"
+                  referrerPolicy="no-referrer-when-downgrade"
+                  onError={(e) => {
+                    e.target.style.visibility = "hidden";
+                  }}
                 />
               </div>
             ))}
@@ -207,16 +221,22 @@ const HeroSection = () => {
       <section className="mhero">
         {/* SECTION 1 : Banner */}
         <div className="mhero-banner">
-          <img
-            key={mobileBannerSrc}
-            src={mobileBannerSrc}
-            alt={mobileBannerAlt}
-            className="mhero-banner-img"
-            onError={(e) => {
-              e.target.onerror = null;
-              e.target.src = fallbackBanner;
-            }}
-          />
+          {showMobilePhoto ? (
+            <img
+              key={mobileSlide.fullImage}
+              src={mobileSlide.fullImage}
+              alt={mobileSlide.BannerTitle || "Banner"}
+              className="mhero-banner-img"
+              referrerPolicy="no-referrer-when-downgrade"
+              onError={() => setMobileImgFailed(true)}
+            />
+          ) : (
+            <div
+              className="mhero-banner-img mhero-banner-fallback"
+              role="img"
+              aria-label="Welcome to Dewangan Links"
+            />
+          )}
 
           {banners.length > 1 && (
             <div className="mhero-dots">
